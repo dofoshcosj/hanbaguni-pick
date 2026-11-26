@@ -578,28 +578,6 @@
       font-weight: 700;
     }
 
-    .improve-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 12.5px;
-    }
-    .improve-item {
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border-left: 4px solid var(--accent);
-    }
-    .improve-item strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 2px;
-      color: var(--text);
-    }
-    .improve-item span {
-      color: var(--muted);
-    }
-
     .toast {
       position: fixed;
       bottom: 24px;
@@ -657,33 +635,6 @@
 
         <div class="section-title" id="currentStoreHeading" style="font-size: 15px; margin-bottom: 10px;"></div>
         <div class="menu-list" id="menuList"></div>
-      </section>
-
-      <section class="section-card">
-        <div class="section-title">
-          <span>향후 개선해야 할 점 (보완 과제)</span>
-        </div>
-        <p class="section-desc">
-          프로토타입 검증을 바탕으로 실제 서비스 고도화 및 발표 Q&A 대비용으로 정리한 개선 포인트입니다.
-        </p>
-        <div class="improve-list">
-          <div class="improve-item">
-            <strong>1. 매장 간 동선 최적화 및 조리 완료 시간 동기화</strong>
-            <span>먼 거리 매장끼리 묶이거나 한 곳의 조리가 늦어질 경우 음식 식음·지연 문제가 생길 수 있어, 반경 거리 제한과 조리 완료 타이밍 매칭 알고리즘이 필요합니다.</span>
-          </div>
-          <div class="improve-item">
-            <strong>2. 다중 매장 주문 시 부분 취소·품절 대응 UX</strong>
-            <span>여러 가게 중 한 곳에서 메뉴가 품절될 경우 전체 주문이 취소되는 대신 해당 가게만 환불·조정하거나 대체 메뉴를 제안하는 흐름이 필요합니다.</span>
-          </div>
-          <div class="improve-item">
-            <strong>3. 라이더 다중 픽업 보상 및 배달비 정산 구조 고도화</strong>
-            <span>한 건의 통합 주문이라도 라이더가 여러 매장을 경유하는 수고가 따르므로, 라이더 경유 수당과 고객 묶음 할인 간 합리적인 정산 모델 설계가 필요합니다.</span>
-          </div>
-          <div class="improve-item">
-            <strong>4. 실제 지도 API 및 실시간 소켓(WebSocket) 연동</strong>
-            <span>현재 시뮬레이션으로 구현된 경로·라이더 좌표를 실제 지도 API(카카오/네이버맵 등)와 실시간 위치 스트리밍으로 연결해야 상용화 수준에 도달할 수 있습니다.</span>
-          </div>
-        </div>
       </section>
     </div>
 
@@ -770,7 +721,7 @@
   <div class="toast" id="toastBox"></div>
 
   <script>
-    const STORAGE_KEY = "hanbaguni_pick_state_v6";
+    const STORAGE_KEY = "hanbaguni_pick_state_v8";
 
     const STORES = [
       {
