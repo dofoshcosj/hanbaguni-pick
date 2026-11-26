@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니픽 | 여러 맛집 메뉴를 한 번에</title>
+  <title>한바구니픽 | 여러 맛집 배달을 한 바구니에</title>
   <style>
     :root {
-      --primary: #ff5a36;
-      --primary-dark: #e04624;
-      --bg: #fffaf7;
+      --primary: #c93818;
+      --primary-dark: #9e290f;
+      --bg: #fffaf6;
       --card: #ffffff;
-      --text: #1f2421;
-      --muted: #6b7280;
-      --border: #ece4de;
-      --accent-soft: #fff0eb;
+      --text: #18181b;
+      --muted: #4b5563;
+      --border: #d6ccc4;
+      --accent-soft: #fdebe4;
+      --error: #b91c1c;
     }
 
     * {
@@ -26,7 +27,14 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #1d4ed8;
+      outline-offset: 2px;
     }
 
     header {
@@ -34,81 +42,94 @@
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
     }
 
     .nav-container {
-      max-width: 1080px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 16px 20px;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .logo {
       font-size: 1.35rem;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--primary-dark);
       text-decoration: none;
     }
 
-    .badge {
-      font-size: 0.78rem;
-      background-color: var(--accent-soft);
-      color: var(--primary-dark);
-      padding: 6px 12px;
-      border-radius: 999px;
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 18px;
+      font-size: 0.95rem;
       font-weight: 600;
     }
 
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
     .hero {
-      max-width: 1080px;
-      margin: 28px auto 12px;
+      max-width: 1100px;
+      margin: 24px auto 12px;
       padding: 0 20px;
     }
 
     .hero-box {
-      background: linear-gradient(135deg, #fff1eb 0%, #ffe4d9 100%);
-      border: 1px solid #ffd4c4;
-      border-radius: 20px;
-      padding: 28px 24px;
+      background-color: var(--accent-soft);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px 24px;
     }
 
     .hero-box h1 {
-      font-size: 1.7rem;
+      font-size: 1.65rem;
       margin-bottom: 8px;
+      color: var(--text);
     }
 
     .hero-box p {
-      color: #4b5563;
+      color: var(--muted);
       font-size: 0.98rem;
     }
 
     .main-grid {
-      max-width: 1080px;
-      margin: 24px auto 60px;
+      max-width: 1100px;
+      margin: 22px auto 56px;
       padding: 0 20px;
       display: grid;
-      grid-template-columns: 1.7fr 1fr;
+      grid-template-columns: 1.75fr 1fr;
       gap: 24px;
       align-items: start;
     }
 
     .section-title {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       margin-bottom: 14px;
+      color: var(--text);
     }
 
     .menu-list {
+      list-style: none;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
       gap: 14px;
     }
 
     .menu-card {
-      background: var(--card);
+      background-color: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
@@ -118,25 +139,32 @@
       gap: 12px;
     }
 
+    .food-emoji {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
     .store-tag {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--primary-dark);
-      background: var(--accent-soft);
-      padding: 4px 8px;
-      border-radius: 8px;
+      background-color: var(--accent-soft);
+      padding: 3px 8px;
+      border-radius: 6px;
       margin-bottom: 6px;
     }
 
     .menu-name {
-      font-size: 1.02rem;
+      font-size: 1.05rem;
       font-weight: 700;
       margin-bottom: 4px;
     }
 
     .menu-price {
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
     }
 
@@ -144,24 +172,23 @@
       border: none;
       border-radius: 10px;
       padding: 10px 14px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.15s ease;
     }
 
     .btn-add {
-      background-color: var(--primary);
-      color: #fff;
+      background-color: var(--primary-dark);
+      color: #ffffff;
       width: 100%;
     }
 
     .btn-add:hover {
-      background-color: var(--primary-dark);
+      background-color: #7d1e09;
     }
 
     .cart-panel {
-      background: var(--card);
+      background-color: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 20px;
@@ -169,11 +196,56 @@
       top: 84px;
     }
 
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .required-mark {
+      color: var(--error);
+      margin-left: 2px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #6b7280;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text);
+      background-color: #ffffff;
+    }
+
+    .field-hint {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-top: 6px;
+      min-height: 1.2em;
+    }
+
     .cart-empty {
       color: var(--muted);
       font-size: 0.92rem;
-      padding: 24px 0;
+      padding: 20px 0;
       text-align: center;
+    }
+
+    .cart-list {
+      list-style: none;
     }
 
     .cart-item {
@@ -191,7 +263,7 @@
     }
 
     .cart-item-info span {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--muted);
     }
 
@@ -202,17 +274,18 @@
     }
 
     .qty-btn {
-      width: 26px;
-      height: 26px;
-      border: 1px solid var(--border);
-      background: #fff;
+      width: 28px;
+      height: 28px;
+      border: 1px solid #6b7280;
+      background-color: #ffffff;
+      color: var(--text);
       border-radius: 6px;
       font-weight: 700;
       cursor: pointer;
     }
 
     .cart-summary {
-      margin-top: 16px;
+      margin-top: 14px;
       padding-top: 12px;
       border-top: 2px solid var(--border);
     }
@@ -234,12 +307,27 @@
     .btn-order {
       margin-top: 14px;
       width: 100%;
-      background-color: var(--text);
-      color: #fff;
+      background-color: #18181b;
+      color: #ffffff;
     }
 
     .btn-order:hover {
-      background-color: #374151;
+      background-color: #333338;
+    }
+
+    .order-status {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto 36px;
+      padding: 0 20px;
+      color: var(--muted);
+      font-size: 0.88rem;
     }
 
     @media (max-width: 820px) {
@@ -256,30 +344,57 @@
 <body>
   <header>
     <div class="nav-container">
-      <a href="#" class="logo">🧺 한바구니픽</a>
-      <span class="badge">멀티 매장 통합 장바구니 프로토타입</span>
+      <a href="#top" class="logo" id="top">
+        <span role="img" aria-label="바구니 아이콘">🧺</span> 한바구니픽 배달웹앱
+      </a>
+      <nav aria-label="주요 메뉴 이동">
+        <ul class="nav-links">
+          <li><a href="#menu-section">배달 메뉴</a></li>
+          <li><a href="#cart-section">합배송 장바구니</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <section class="hero">
+  <section class="hero" aria-labelledby="hero-heading">
     <div class="hero-box">
-      <h1>서로 다른 가게 메뉴도 한 바구니에 담아요</h1>
-      <p>가게마다 따로 주문하지 않고, 원하는 메뉴를 골라 한 번에 합산 금액을 확인해 보세요.</p>
+      <h1 id="hero-heading">여러 가게 배달 음식을 한 바구니에 담아 주문하세요</h1>
+      <p>가게마다 따로 결제하지 않고 메뉴를 모아서 수량과 배달비를 한눈에 확인할 수 있습니다.</p>
     </div>
   </section>
 
   <main class="main-grid">
-    <section>
-      <h2 class="section-title">추천 메뉴</h2>
-      <div id="menuList" class="menu-list"></div>
+    <section id="menu-section" aria-labelledby="menu-heading">
+      <h2 id="menu-heading" class="section-title">추천 배달 메뉴</h2>
+      <ul id="menuList" class="menu-list"></ul>
     </section>
 
-    <aside class="cart-panel">
-      <h2 class="section-title">내 장바구니 (<span id="storeCount">0</span>개 가게)</h2>
+    <aside id="cart-section" class="cart-panel" aria-labelledby="cart-heading">
+      <h2 id="cart-heading" class="section-title">
+        내 배달 장바구니 (<span id="storeCount">0</span>개 가게)
+      </h2>
+
+      <div class="form-group">
+        <label for="deliveryAddress">
+          배달 받을 주소<span class="required-mark" aria-hidden="true">*</span>
+        </label>
+        <input
+          type="text"
+          id="deliveryAddress"
+          name="deliveryAddress"
+          placeholder="예: 부산 사상구 주례로 00"
+          aria-describedby="addressHint addressError"
+          required
+        />
+        <span id="addressHint" class="field-hint">정확한 도로명 또는 지번 주소를 입력해 주세요.</span>
+        <div id="addressError" class="error-msg" role="alert"></div>
+      </div>
+
       <div id="cartItems" class="cart-empty">아직 담긴 메뉴가 없어요.</div>
+
       <div class="cart-summary">
         <div class="summary-row">
-          <span>메뉴 금액</span>
+          <span>음식 금액</span>
           <span id="subtotalText">0원</span>
         </div>
         <div class="summary-row">
@@ -290,18 +405,26 @@
           <span>총 결제 예상 금액</span>
           <span id="totalText">0원</span>
         </div>
-        <button class="btn btn-order" onclick="handleCheckout()">한 번에 주문하기</button>
+        <button type="button" class="btn btn-order" onclick="handleCheckout()">
+          한 번에 배달 주문하기
+        </button>
+        <div id="orderStatus" class="order-status" role="status" aria-live="polite"></div>
       </div>
     </aside>
   </main>
 
+  <footer>
+    <p>한바구니픽 웹앱 프로토타입 · 웹 접근성 체크리스트 반영</p>
+  </footer>
+
   <script>
     const menus = [
-      { id: 1, store: "황금반점", name: "사천짜장", price: 8500 },
-      { id: 2, store: "황금반점", name: "미니 탕수육", price: 12000 },
-      { id: 3, store: "시원한식당", name: "1인 김치찜", price: 9500 },
-      { id: 4, store: "과일청과", name: "생파인애플 스틱", price: 4500 },
-      { id: 5, store: "브루잉랩", name: "아이스 아메리카노", price: 3500 }
+      { id: 1, store: "황금반점", name: "사천짜장", emoji: "🍜", label: "짜장면 이모지", price: 8500 },
+      { id: 2, store: "황금반점", name: "미니 탕수육", emoji: "🥩", label: "고기 요리 이모지", price: 12000 },
+      { id: 3, store: "시원한식당", name: "1인 김치찜", emoji: "🍲", label: "찌개 냄비 이모지", price: 9500 },
+      { id: 4, store: "과일청과", name: "생파인애플 스틱", emoji: "🍍", label: "파인애플 이모지", price: 4500 },
+      { id: 5, store: "브루잉랩", name: "아이스 아메리카노", emoji: " iced coffee".trim() ? "🧋" : "☕", label: "음료 이모지", price: 3500 },
+      { id: 6, store: "분식공방", name: "매운 떡볶이", emoji: "🌶️", label: "매운맛 고추 이모지", price: 6000 }
     ];
 
     const cart = new Map();
@@ -315,14 +438,22 @@
       container.innerHTML = menus
         .map(
           (item) => `
-          <article class="menu-card">
+          <li class="menu-card">
             <div>
-              <span class="store-tag">${item.store}</span>
-              <div class="menu-name">${item.name}</div>
+              <span class="food-emoji" role="img" aria-label="${item.label}">${item.emoji}</span>
+              <div><span class="store-tag">${item.store}</span></div>
+              <h3 class="menu-name">${item.name}</h3>
               <div class="menu-price">${formatWon(item.price)}</div>
             </div>
-            <button class="btn btn-add" onclick="addToCart(${item.id})">장바구니 담기</button>
-          </article>
+            <button
+              type="button"
+              class="btn btn-add"
+              aria-label="${item.store} ${item.name} 장바구니 담기"
+              onclick="addToCart(${item.id})"
+            >
+              장바구니 담기
+            </button>
+          </li>
         `
         )
         .join("");
@@ -338,6 +469,7 @@
       } else {
         cart.set(id, { ...item, qty: 1 });
       }
+      document.getElementById("orderStatus").textContent = "";
       renderCart();
     }
 
@@ -361,23 +493,39 @@
         cartContainer.textContent = "아직 담긴 메뉴가 없어요.";
       } else {
         cartContainer.className = "";
-        cartContainer.innerHTML = items
-          .map(
-            (item) => `
-            <div class="cart-item">
-              <div class="cart-item-info">
-                <strong>${item.name}</strong>
-                <span>${item.store} · ${formatWon(item.price * item.qty)}</span>
-              </div>
-              <div class="qty-controls">
-                <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
-                <span>${item.qty}</span>
-                <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-              </div>
-            </div>
-          `
-          )
-          .join("");
+        cartContainer.innerHTML = `
+          <ul class="cart-list">
+            ${items
+              .map(
+                (item) => `
+              <li class="cart-item">
+                <div class="cart-item-info">
+                  <strong>
+                    <span role="img" aria-label="${item.label}">${item.emoji}</span> ${item.name}
+                  </strong>
+                  <span>${item.store} · ${formatWon(item.price * item.qty)}</span>
+                </div>
+                <div class="qty-controls">
+                  <button
+                    type="button"
+                    class="qty-btn"
+                    aria-label="${item.name} 수량 감소"
+                    onclick="changeQty(${item.id}, -1)"
+                  >-</button>
+                  <span aria-label="현재 수량 ${item.qty}개">${item.qty}</span>
+                  <button
+                    type="button"
+                    class="qty-btn"
+                    aria-label="${item.name} 수량 증가"
+                    onclick="changeQty(${item.id}, 1)"
+                  >+</button>
+                </div>
+              </li>
+            `
+              )
+              .join("")}
+          </ul>
+        `;
       }
 
       const uniqueStores = new Set(items.map((item) => item.store));
@@ -392,12 +540,27 @@
     }
 
     function handleCheckout() {
-      if (cart.size === 0) {
-        alert("먼저 메뉴를 담아주세요!");
+      const addressInput = document.getElementById("deliveryAddress");
+      const addressError = document.getElementById("addressError");
+      const orderStatus = document.getElementById("orderStatus");
+      const address = addressInput.value.trim();
+
+      addressError.textContent = "";
+      orderStatus.textContent = "";
+
+      if (!address) {
+        addressError.textContent = "배달 받을 주소를 입력해 주세요.";
+        addressInput.focus();
         return;
       }
+
+      if (cart.size === 0) {
+        addressError.textContent = "장바구니에 배달할 메뉴를 먼저 담아주세요.";
+        return;
+      }
+
       const uniqueStores = new Set(Array.from(cart.values()).map((i) => i.store));
-      alert(`총 ${uniqueStores.size}개 가게 메뉴로 주문서가 준비되었습니다!`);
+      orderStatus.textContent = `${address}로 ${uniqueStores.size}개 가게 합배송 주문서가 준비되었습니다!`;
     }
 
     renderMenus();
