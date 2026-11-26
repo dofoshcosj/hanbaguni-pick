@@ -53,22 +53,9 @@
       min-height: 100vh;
     }
 
-    /* 키보드 포커스 접근성 강화 */
     :is(a, button, input, select, [tabindex]):focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
     }
 
     /* 상단 앱바 */
@@ -601,7 +588,7 @@
       background: var(--primary-soft);
     }
 
-    /* 라이더 화면 */
+    /* 라이더 화면 (배민·쿠팡이츠 스타일 + 줄어드는 타이머) */
     .rider-shell {
       max-width: 780px;
       margin: 0 auto;
@@ -624,13 +611,36 @@
       flex-wrap: wrap;
     }
 
+    .timer-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .eta-chip {
       background: var(--primary);
       color: #ffffff;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-toggle-btn {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      font-size: 12px;
+      font-weight: 800;
       padding: 5px 11px;
       border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .timer-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.26);
     }
 
     .live-headline {
@@ -638,6 +648,13 @@
       font-weight: 900;
       margin-top: 10px;
       letter-spacing: -0.02em;
+    }
+
+    .live-sub {
+      font-size: 13px;
+      color: #d1fae5;
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
     }
 
     .progress-track-wrap {
@@ -884,10 +901,16 @@
       <div class="rider-shell">
         <div class="live-header-card">
           <div class="live-top-row">
-            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 박민수 라이더 · 순차 픽업 배달</span>
-            <span class="eta-chip" id="riderEtaTag">도착 예정 약 15분</span>
+            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 박민수 라이더 · 순차 픽업 배달 중</span>
+            <div class="timer-group">
+              <span class="eta-chip" id="riderCountdownBadge" aria-live="polite">남은 시간 15:00</span>
+              <button type="button" class="timer-toggle-btn" id="timerToggleBtn" onclick="toggleTimer()">
+                일시정지
+              </button>
+            </div>
           </div>
           <h1 class="live-headline" id="riderMainHeadline">A가게에서 픽업 중입니다</h1>
+          <p class="live-sub" id="riderSubStatus">실시간 남은 도착 시간이 1초마다 줄어들고 있습니다.</p>
 
           <div class="progress-track-wrap">
             <div class="progress-bar-bg">
@@ -985,11 +1008,59 @@
       selectedStoreId: "B",
       cart: { m1: 1, m4: 1, m6: 1 },
       riderStageIdx: 0,
+      remainingSeconds: 900,
+      timerPaused: false,
       rating: 5
     };
 
+    let timerIntervalId = null;
+
     function won(n) {
       return Number(n || 0).toLocaleString("ko-KR") + "원";
+    }
+
+    function formatCountdown(sec) {
+      const safe = Math.max(0, Number(sec || 0));
+      const m = String(Math.floor(safe / 60)).padStart(2, "0");
+      const s = String(safe % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function startCountdownLoop() {
+      if (timerIntervalId) clearInterval(timerIntervalId);
+      timerIntervalId = setInterval(() => {
+        if (state.timerPaused) return;
+        if (state.remainingSeconds > 0) {
+          state.remainingSeconds -= 1;
+          updateCountdownText();
+          if (state.remainingSeconds === 0) {
+            clearInterval(timerIntervalId);
+            switchView("done");
+          }
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      state.timerPaused = !state.timerPaused;
+      updateCountdownText();
+    }
+
+    function updateCountdownText() {
+      const badge = document.getElementById("riderCountdownBadge");
+      const btn = document.getElementById("timerToggleBtn");
+      const sub = document.getElementById("riderSubStatus");
+      if (badge) {
+        badge.textContent = `남은 시간 ${formatCountdown(state.remainingSeconds)}`;
+      }
+      if (btn) {
+        btn.textContent = state.timerPaused ? "다시 시작" : "일시정지";
+      }
+      if (sub) {
+        sub.textContent = state.timerPaused
+          ? "남은 도착 시간 카운트다운이 일시정지되었습니다."
+          : "배달이 진행되면서 남은 도착 시간이 줄어들고 있습니다.";
+      }
     }
 
     function switchView(viewName) {
@@ -1004,8 +1075,12 @@
         else btn.removeAttribute("aria-current");
       });
 
-      if (viewName === "rider") renderRiderView();
-      if (viewName === "done") renderDoneReceipt();
+      if (viewName === "rider") {
+        renderRiderView();
+        startCountdownLoop();
+      } else if (viewName === "done") {
+        renderDoneReceipt();
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1194,15 +1269,15 @@
         chipText: `${st.emoji} ${st.shortName}에서 픽업`,
         headline: `${st.shortName}에서 픽업 중입니다`,
         lineText: `${st.emoji} ${st.name}에서 음식 픽업`,
-        eta: `도착 예정 약 ${Math.max(8, 22 - idx * 6)}분`
+        secondsByStage: Math.max(180, 900 - idx * 300)
       }));
 
       stages.push({
         themeId: "B",
         chipText: "🏠 고객님께 배달 중",
         headline: "모든 매장 픽업 완료 · 고객님께 배달 중입니다",
-        lineText: "🏠 픽업 완료 후 고객님 주소로 이동 중",
-        eta: "도착 예정 약 5분"
+        lineText: "🏠 픽업 완료 후 고객님 주소로 배달 중",
+        secondsByStage: 240
       });
 
       return stages;
@@ -1210,12 +1285,17 @@
 
     function openRiderFlow() {
       state.riderStageIdx = 0;
+      const stages = buildRiderStages();
+      state.remainingSeconds = stages[0].secondsByStage;
+      state.timerPaused = false;
       switchView("rider");
     }
 
     function setRiderStage(idx) {
       const stages = buildRiderStages();
       state.riderStageIdx = Math.max(0, Math.min(idx, stages.length - 1));
+      state.remainingSeconds = stages[state.riderStageIdx].secondsByStage;
+      state.timerPaused = false;
       renderRiderView();
     }
 
@@ -1228,8 +1308,8 @@
       const pct = Math.round(((state.riderStageIdx + 1) / stages.length) * 100);
 
       document.getElementById("riderMainHeadline").textContent = cur.headline;
-      document.getElementById("riderEtaTag").textContent = cur.eta;
       document.getElementById("riderProgressBar").style.width = `${pct}%`;
+      updateCountdownText();
 
       document.getElementById("riderProgressLabels").innerHTML = stages
         .map((s, idx) => `<span>${idx + 1}. ${s.chipText}</span>`)
@@ -1259,7 +1339,7 @@
             label = "완료";
           } else if (idx === state.riderStageIdx) {
             cls = "flag-now";
-            label = "진행 중";
+            label = "배달·픽업 중";
           }
           return `
             <div class="pickup-card store-${s.themeId}">
@@ -1307,10 +1387,13 @@
     }
 
     function resetDemo() {
+      if (timerIntervalId) clearInterval(timerIntervalId);
       state = {
         selectedStoreId: "B",
         cart: { m1: 1, m4: 1, m6: 1 },
         riderStageIdx: 0,
+        remainingSeconds: 900,
+        timerPaused: false,
         rating: 5
       };
       document.getElementById("searchInput").value = "";
