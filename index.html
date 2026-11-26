@@ -352,6 +352,25 @@
       background: var(--store-color-bg);
     }
 
+    .menu-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-emoji-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--store-color-bg);
+      border: 1px solid var(--store-color-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
     .menu-info-title {
       font-size: 15px;
       font-weight: 700;
@@ -727,17 +746,17 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand-area">
-        <span class="brand-badge">PICK</span>
+        <span class="brand-badge">🛒 PICK</span>
         <span class="brand-title">한바구니 픽</span>
       </div>
 
       <div class="nav-controls">
         <nav class="screen-tabs" aria-label="화면 이동">
-          <button type="button" class="tab-btn active" data-screen="cart" onclick="goScreen('cart')">장바구니</button>
-          <button type="button" class="tab-btn" data-screen="rider" onclick="goScreen('rider')">라이더</button>
-          <button type="button" class="tab-btn" data-screen="complete" onclick="goScreen('complete')">배달완료</button>
+          <button type="button" class="tab-btn active" data-screen="cart" onclick="goScreen('cart')">🛍️ 장바구니</button>
+          <button type="button" class="tab-btn" data-screen="rider" onclick="goScreen('rider')">🛵 라이더</button>
+          <button type="button" class="tab-btn" data-screen="complete" onclick="goScreen('complete')">✅ 배달완료</button>
         </nav>
-        <button type="button" class="btn-reset" onclick="resetAll()">처음부터</button>
+        <button type="button" class="btn-reset" onclick="resetAll()">🔄 처음부터</button>
       </div>
     </div>
   </header>
@@ -750,7 +769,7 @@
           <div class="section-header">
             <h1 class="section-title">1. 매장 선택 및 메뉴 담기</h1>
           </div>
-          <p class="section-sub">가게마다 구분된 색상으로 메뉴와 장바구니를 한눈에 확인해 보세요.</p>
+          <p class="section-sub">가게별 색상과 음식 이모지로 여러 매장 메뉴를 한 번에 담아보세요.</p>
 
           <div class="store-tabs" id="storeTabs"></div>
 
@@ -779,14 +798,14 @@
 
           <div class="option-row">
             <select id="couponSelect" class="select-box" onchange="renderSummary()">
-              <option value="0">통합 주문 쿠폰 선택 안 함</option>
-              <option value="2000">한바구니 2,000원 할인 쿠폰</option>
-              <option value="3000">다매장 첫 주문 3,000원 할인</option>
+              <option value="0">🎟️ 통합 주문 쿠폰 선택 안 함</option>
+              <option value="2000">🎟️ 한바구니 2,000원 할인 쿠폰</option>
+              <option value="3000">🎟️ 다매장 첫 주문 3,000원 할인</option>
             </select>
 
             <select id="riderOptionSelect" class="select-box" onchange="renderSummary()">
-              <option value="bundled">한바구니 묶음 배달 (배달팁 2,500원)</option>
-              <option value="fast">빠른 순차 픽업 배달 (배달팁 3,500원)</option>
+              <option value="bundled">🛵 한바구니 묶음 배달 (배달팁 2,500원)</option>
+              <option value="fast">⚡ 빠른 순차 픽업 배달 (배달팁 3,500원)</option>
             </select>
           </div>
 
@@ -794,10 +813,10 @@
 
           <div class="action-stack">
             <button type="button" class="btn-primary-full" onclick="startRiderScreen()">
-              주문하고 라이더 화면 보기
+              🛵 주문하고 라이더 화면 보기
             </button>
             <button type="button" class="btn-secondary-full" onclick="goScreen('complete')">
-              배달완료 화면으로 바로 이동
+              ✅ 배달완료 화면으로 바로 이동
             </button>
           </div>
         </div>
@@ -809,7 +828,7 @@
       <div class="card rider-card">
         <div class="status-banner">
           <div>
-            <div style="font-size: 13px; color: var(--muted); font-weight: 700;">실시간 배달 진행</div>
+            <div style="font-size: 13px; color: var(--muted); font-weight: 700;">🛵 실시간 배달 진행</div>
             <div style="font-size: 18px; font-weight: 800;" id="riderStatusText">라이더가 매장 픽업 후 이동 중입니다</div>
           </div>
           <span class="status-pill" id="riderEtaBadge">도착 예정 약 12분</span>
@@ -817,7 +836,7 @@
 
         <div class="map-mock">
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700;">
-            <span>라이더: 박민수 라이더 (010-****-4821)</span>
+            <span>🛵 라이더: 박민수 라이더 (010-****-4821)</span>
             <span id="riderProgressPercent">진행률 68%</span>
           </div>
 
@@ -826,26 +845,26 @@
           </div>
 
           <div class="route-stops">
-            <span>① 매장 픽업</span>
-            <span>② 한바구니 경유</span>
-            <span>③ 고객 도착지</span>
+            <span>① 🏪 매장 픽업</span>
+            <span>② 🛍️ 한바구니 경유</span>
+            <span>③ 🏠 고객 도착지</span>
           </div>
         </div>
 
         <div class="route-step-buttons">
-          <button type="button" class="step-chip" data-step="0" onclick="setRiderStep(0)">매장 이동 중</button>
-          <button type="button" class="step-chip active" data-step="1" onclick="setRiderStep(1)">한바구니 픽업 완료</button>
-          <button type="button" class="step-chip" data-step="2" onclick="setRiderStep(2)">고객 문 앞 도착 직전</button>
+          <button type="button" class="step-chip" data-step="0" onclick="setRiderStep(0)">🏪 매장 이동 중</button>
+          <button type="button" class="step-chip active" data-step="1" onclick="setRiderStep(1)">🛍️ 한바구니 픽업 완료</button>
+          <button type="button" class="step-chip" data-step="2" onclick="setRiderStep(2)">🏠 고객 문 앞 도착 직전</button>
         </div>
 
         <div class="stop-list" id="riderStopList"></div>
 
         <div class="action-stack">
           <button type="button" class="btn-primary-full" onclick="goScreen('complete')">
-            배달완료 화면으로 넘어가기
+            ✅ 배달완료 화면으로 넘어가기
           </button>
           <button type="button" class="btn-secondary-full" onclick="goScreen('cart')">
-            장바구니로 돌아가기
+            🛍️ 장바구니로 돌아가기
           </button>
         </div>
       </div>
@@ -855,7 +874,7 @@
     <section id="screen-complete" class="screen">
       <div class="card complete-card">
         <div class="check-circle">✓</div>
-        <h1 style="font-size: 22px; font-weight: 800;">배달이 완료되었습니다</h1>
+        <h1 style="font-size: 22px; font-weight: 800;">🎉 배달이 완료되었습니다</h1>
         <p style="font-size: 14px; color: var(--muted); margin-top: 4px;">
           주문하신 한바구니 메뉴가 안전하게 전달되었습니다.
         </p>
@@ -873,10 +892,10 @@
 
         <div class="action-stack">
           <button type="button" class="btn-primary-full" onclick="resetAll()">
-            처음부터 다시 주문하기
+            🔄 처음부터 다시 주문하기
           </button>
           <button type="button" class="btn-secondary-full" onclick="goScreen('rider')">
-            라이더 화면 다시 보기
+            🛵 라이더 화면 다시 보기
           </button>
         </div>
       </div>
@@ -885,20 +904,20 @@
 
   <script>
     const STORES = [
-      { id: "A", name: "A가게 (한식)", colorHex: "#d95d39", minOrder: 12000, eta: "약 25분" },
-      { id: "B", name: "B가게 (카페)", colorHex: "#0f8a67", minOrder: 10000, eta: "약 15분" },
-      { id: "C", name: "C가게 (분식)", colorHex: "#7c4dff", minOrder: 11000, eta: "약 20분" }
+      { id: "A", name: "A가게 (한식)", emoji: "🍲", minOrder: 12000, eta: "약 25분" },
+      { id: "B", name: "B가게 (카페)", emoji: "☕", minOrder: 10000, eta: "약 15분" },
+      { id: "C", name: "C가게 (분식)", emoji: "🍢", minOrder: 11000, eta: "약 20분" }
     ];
 
     const MENUS = [
-      { id: "m1", storeId: "A", name: "묵은지 돼지김치찜 (1인)", desc: "칼칼하고 깊은 맛의 대표 한식 메뉴", price: 14500 },
-      { id: "m2", storeId: "A", name: "계란말이 추가", desc: "부드럽고 도톰하게 부친 계란말이", price: 4500 },
-      { id: "m3", storeId: "A", name: "스팸구이 사리", desc: "노릇하게 구운 스팸 추가", price: 3500 },
-      { id: "m4", storeId: "B", name: "아이스 아메리카노", desc: "고소한 원두로 추출한 깔끔한 커피", price: 3800 },
-      { id: "m5", storeId: "B", name: "바닐라빈 라떼", desc: "진한 에스프레소와 바닐라의 조화", price: 5000 },
-      { id: "m6", storeId: "B", name: "바스크 치즈케이크", desc: "꾸덕하고 진한 풍미의 수제 케이크", price: 6200 },
-      { id: "m7", storeId: "C", name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡과 매콤달콤한 국물", price: 7500 },
-      { id: "m8", storeId: "C", name: "바삭 모둠튀김", desc: "김말이, 오징어, 야채튀김 구성", price: 6000 }
+      { id: "m1", storeId: "A", emoji: "🍲", name: "묵은지 돼지김치찜 (1인)", desc: "칼칼하고 깊은 맛의 대표 한식 메뉴", price: 14500 },
+      { id: "m2", storeId: "A", emoji: "🍳", name: "계란말이 추가", desc: "부드럽고 도톰하게 부친 계란말이", price: 4500 },
+      { id: "m3", storeId: "A", emoji: "🥓", name: "스팸구이 사리", desc: "노릇하게 구운 스팸 추가", price: 3500 },
+      { id: "m4", storeId: "B", emoji: "🧊", name: "아이스 아메리카노", desc: "고소한 원두로 추출한 깔끔한 커피", price: 3800 },
+      { id: "m5", storeId: "B", emoji: "🥛", name: "바닐라빈 라떼", desc: "진한 에스프레소와 바닐라의 조화", price: 5000 },
+      { id: "m6", storeId: "B", emoji: "🍰", name: "바스크 치즈케이크", desc: "꾸덕하고 진한 풍미의 수제 케이크", price: 6200 },
+      { id: "m7", storeId: "C", emoji: "🌶️", name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡과 매콤달콤한 국물", price: 7500 },
+      { id: "m8", storeId: "C", emoji: "🍤", name: "바삭 모둠튀김", desc: "김말이, 오징어, 야채튀김 구성", price: 6000 }
     ];
 
     const RIDER_STEPS = [
@@ -970,7 +989,7 @@
             onclick="selectStore('${store.id}')"
           >
             <div class="store-card-top">
-              <span class="store-card-name">${store.name}</span>
+              <span class="store-card-name">${store.emoji} ${store.name}</span>
               <span class="store-color-dot"></span>
             </div>
             <div class="store-card-meta">최소 ${formatWon(store.minOrder)} · ${store.eta}</div>
@@ -982,7 +1001,7 @@
       const currentStore = STORES.find((s) => s.id === state.selectedStoreId);
       const titleEl = document.getElementById("selectedStoreTitle");
       titleEl.className = `section-title theme-${currentStore.id}`;
-      titleEl.innerHTML = `<span class="store-color-dot"></span>${currentStore.name} 메뉴`;
+      titleEl.innerHTML = `<span class="store-color-dot"></span>${currentStore.emoji} ${currentStore.name} 메뉴`;
     }
 
     function renderMenus() {
@@ -1007,13 +1026,16 @@
           const store = STORES.find((s) => s.id === menu.storeId);
           return `
             <div class="menu-item theme-${store.id}">
-              <div>
-                <div class="menu-info-title">
-                  <span>${menu.name}</span>
-                  ${query ? `<span class="menu-store-tag">${store.name}</span>` : ""}
+              <div class="menu-left">
+                <div class="menu-emoji-box">${menu.emoji}</div>
+                <div>
+                  <div class="menu-info-title">
+                    <span>${menu.name}</span>
+                    ${query ? `<span class="menu-store-tag">${store.emoji} ${store.name}</span>` : ""}
+                  </div>
+                  <div class="menu-info-desc">${menu.desc}</div>
+                  <div class="menu-info-price">${formatWon(menu.price)}</div>
                 </div>
-                <div class="menu-info-desc">${menu.desc}</div>
-                <div class="menu-info-price">${formatWon(menu.price)}</div>
               </div>
               <button type="button" class="btn-add" onclick="changeQty('${menu.id}', 1)">+ 담기</button>
             </div>
@@ -1054,7 +1076,7 @@
             return `
               <div class="cart-item-row">
                 <div>
-                  <strong>${item.name}</strong>
+                  <strong>${item.emoji} ${item.name}</strong>
                   <div style="font-size:12px;color:var(--muted);">${formatWon(item.price * qty)}</div>
                 </div>
                 <div class="qty-box">
@@ -1070,7 +1092,7 @@
         return `
           <div class="store-group theme-${store.id}">
             <div class="store-group-header">
-              <span><span class="store-color-dot" style="margin-right:6px;"></span>${store.name} · ${formatWon(storeSum)}</span>
+              <span><span class="store-color-dot" style="margin-right:6px;"></span>${store.emoji} ${store.name} · ${formatWon(storeSum)}</span>
               <span class="${isEnough ? "min-order-ok" : "min-order-lack"}">
                 ${isEnough ? "최소주문 충족" : formatWon(store.minOrder - storeSum) + " 부족"}
               </span>
@@ -1112,15 +1134,15 @@
       const { menuTotal, couponDiscount, deliveryFee, finalTotal } = getTotals();
       document.getElementById("summaryBox").innerHTML = `
         <div class="summary-line">
-          <span>메뉴 금액</span>
+          <span>🍽️ 메뉴 금액</span>
           <span>${formatWon(menuTotal)}</span>
         </div>
         <div class="summary-line">
-          <span>배달팁</span>
+          <span>🛵 배달팁</span>
           <span>${formatWon(deliveryFee)}</span>
         </div>
         <div class="summary-line">
-          <span>쿠폰 할인</span>
+          <span>🎟️ 쿠폰 할인</span>
           <span>-${formatWon(couponDiscount)}</span>
         </div>
         <div class="summary-total">
@@ -1159,7 +1181,7 @@
         .map(
           (s, idx) => `
           <div class="stop-item theme-${s.id}">
-            <span><span class="store-color-dot" style="margin-right:7px;"></span><strong>픽업 ${idx + 1}.</strong> ${s.name}</span>
+            <span><span class="store-color-dot" style="margin-right:7px;"></span><strong>픽업 ${idx + 1}.</strong> ${s.emoji} ${s.name}</span>
             <span class="min-order-ok">픽업 완료</span>
           </div>
         `
@@ -1174,13 +1196,13 @@
         ? items
             .map((m) => {
               const store = STORES.find((s) => s.id === m.storeId);
-              return `<div style="margin-bottom:4px;"><span class="menu-store-tag theme-${store.id}">${store.name}</span> ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</div>`;
+              return `<div style="margin-bottom:5px;"><span class="menu-store-tag theme-${store.id}">${store.emoji} ${store.name}</span> ${m.emoji} ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</div>`;
             })
             .join("")
-        : `<div>· 한바구니 통합 주문 내역</div>`;
+        : `<div>🛒 한바구니 통합 주문 내역</div>`;
 
       document.getElementById("completeSummary").innerHTML = `
-        <div style="font-weight:800;margin-bottom:8px;">주문 내역 요약</div>
+        <div style="font-weight:800;margin-bottom:8px;">🧾 주문 내역 요약</div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${itemLines}</div>
         <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:8px;">
           <span>결제 완료 금액</span>
