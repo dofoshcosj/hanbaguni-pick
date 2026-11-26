@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 장바구니 UX 프로토타입</title>
+  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 주문 & 실시간 라이더 위치 트래킹</title>
   <style>
     :root {
       --primary: #0f9d8a;
@@ -21,24 +21,20 @@
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: "Malgun Gothic", "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 48px;
+      padding-bottom: 56px;
     }
 
     header {
       background: linear-gradient(135deg, #0b7a6b 0%, #0f9d8a 60%, #17b8a2 100%);
       color: #fff;
-      padding: 20px 16px;
+      padding: 18px 16px;
       position: sticky;
       top: 0;
       z-index: 50;
@@ -46,7 +42,7 @@
     }
 
     .header-inner {
-      max-width: 1120px;
+      max-width: 1180px;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -55,43 +51,32 @@
       gap: 12px;
     }
 
-    .brand-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .brand-box { display: flex; align-items: center; gap: 12px; }
 
     .brand-logo {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
+      width: 46px; height: 46px; border-radius: 14px;
       background: rgba(255, 255, 255, 0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px;
       border: 1.5px solid rgba(255, 255, 255, 0.45);
-      text-align: center;
-      line-height: 1.15;
+      text-align: center; line-height: 1.15;
     }
 
-    .brand-title {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
+    .brand-title { font-size: 19.5px; font-weight: 800; letter-spacing: -0.3px; }
+    .brand-sub { font-size: 12px; opacity: 0.92; }
+
+    .header-controls {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
     }
 
-    .brand-sub {
-      font-size: 12.5px;
-      opacity: 0.92;
-    }
-
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+    .addr-pill {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     .reset-demo-btn {
@@ -103,28 +88,20 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-
-    .reset-demo-btn:hover {
-      background: #f0fdfa;
-      transform: translateY(-1px);
     }
 
     .container {
-      max-width: 1120px;
-      margin: 22px auto 0;
+      max-width: 1180px;
+      margin: 20px auto 0;
       padding: 0 16px;
       display: grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap: 22px;
+      grid-template-columns: 1.45fr 1.05fr;
+      gap: 20px;
       align-items: start;
     }
 
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 940px) {
+      .container { grid-template-columns: 1fr; }
     }
 
     .section-card {
@@ -146,11 +123,19 @@
       gap: 8px;
     }
 
-    .section-desc {
+    .section-desc { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+
+    .search-bar-wrap { display: flex; gap: 8px; margin-bottom: 14px; }
+
+    .search-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 14px;
+      outline: none;
     }
+    .search-input:focus { border-color: var(--primary); }
 
     .store-tabs {
       display: grid;
@@ -158,11 +143,8 @@
       gap: 10px;
       margin-bottom: 16px;
     }
-
     @media (max-width: 560px) {
-      .store-tabs {
-        grid-template-columns: 1fr;
-      }
+      .store-tabs { grid-template-columns: 1fr; }
     }
 
     .store-tab {
@@ -174,24 +156,14 @@
       cursor: pointer;
       transition: all 0.18s ease;
     }
-
     .store-tab.active {
       border-color: var(--primary);
       background: var(--primary-light);
       box-shadow: 0 0 0 2px rgba(15, 157, 138, 0.14);
     }
 
-    .store-tab-name {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-
-    .store-tab-info {
-      font-size: 11.5px;
-      color: var(--muted);
-    }
+    .store-tab-name { font-size: 14px; font-weight: 800; color: var(--text); }
+    .store-tab-info { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
 
     .store-tab-badge {
       display: inline-block;
@@ -203,256 +175,377 @@
       background: #eef2f6;
       color: #334155;
     }
+    .store-tab.active .store-tab-badge { background: var(--primary); color: #fff; }
 
-    .store-tab.active .store-tab-badge {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .menu-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .menu-list { display: flex; flex-direction: column; gap: 11px; }
 
     .menu-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px;
+      padding: 13px 14px;
       border: 1px solid var(--border);
       border-radius: 14px;
       background: #ffffff;
-      transition: border-color 0.15s ease;
     }
-
-    .menu-item:hover {
-      border-color: #b8dbd5;
-    }
+    .menu-item:hover { border-color: #b8dbd5; }
 
     .menu-emoji {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 46px; height: 46px; border-radius: 12px;
       background: #f1f5f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 23px; flex-shrink: 0;
     }
 
-    .menu-info {
-      flex: 1;
+    .menu-info { flex: 1; }
+    .menu-name { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .tag-popular {
+      font-size: 10.5px; background: #fff1eb; color: var(--accent);
+      padding: 1px 6px; border-radius: 6px; font-weight: 800;
     }
-
-    .menu-name {
-      font-size: 14.5px;
-      font-weight: 700;
-    }
-
-    .menu-desc {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .menu-price {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--primary-dark);
-      margin-top: 4px;
-    }
+    .menu-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .menu-price { font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin-top: 3px; }
 
     .add-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s ease, transform 0.1s ease;
+      background: var(--primary); color: #fff; border: none;
+      padding: 8px 13px; border-radius: 10px;
+      font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
     }
-
-    .add-btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .add-btn:active {
-      transform: scale(0.97);
-    }
+    .add-btn:hover { background: var(--primary-dark); }
 
     .gauge-box {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 13px 14px;
+      padding: 12px 14px;
       margin-bottom: 14px;
     }
 
     .gauge-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12.5px;
-      font-weight: 700;
-      margin-bottom: 7px;
+      display: flex; justify-content: space-between;
+      font-size: 12.5px; font-weight: 700; margin-bottom: 6px;
     }
 
     .gauge-track {
-      width: 100%;
-      height: 10px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
+      width: 100%; height: 9px; background: #e2e8f0;
+      border-radius: 999px; overflow: hidden;
     }
 
     .gauge-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--primary), #22c55e);
-      width: 0%;
-      transition: width 0.25s ease;
-      border-radius: 999px;
+      width: 0%; transition: width 0.25s ease; border-radius: 999px;
     }
 
-    .gauge-status {
-      font-size: 11.5px;
-      margin-top: 6px;
-      font-weight: 600;
-    }
-
-    .status-ok {
-      color: var(--success);
-    }
-
-    .status-warn {
-      color: var(--accent);
-    }
+    .gauge-status { font-size: 11.5px; margin-top: 6px; font-weight: 600; }
+    .status-ok { color: var(--success); }
+    .status-warn { color: var(--accent); }
 
     .cart-group {
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 12px 14px;
-      margin-bottom: 12px;
+      margin-bottom: 11px;
       background: #fcfdff;
     }
 
     .cart-group-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 8px;
-      margin-bottom: 8px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 7px; margin-bottom: 7px;
       border-bottom: 1px dashed #dce3ec;
-      font-size: 13.5px;
-      font-weight: 800;
+      font-size: 13.5px; font-weight: 800;
     }
 
     .cart-row {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; padding: 5px 0; font-size: 13px;
+    }
+
+    .qty-controls { display: flex; align-items: center; gap: 6px; }
+    .qty-btn {
+      width: 24px; height: 24px; border-radius: 6px;
+      border: 1px solid #cbd5e1; background: #fff; font-weight: 700; cursor: pointer;
+    }
+
+    .empty-cart {
+      text-align: center; padding: 24px 12px; color: var(--muted);
+      font-size: 13px; border: 1.5px dashed #cbd5e1; border-radius: 14px; margin-bottom: 14px;
+    }
+
+    .extra-options {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 12.5px;
+    }
+
+    .opt-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+
+    .opt-select, .opt-input {
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #fff;
+    }
+    .opt-input { flex: 1; }
+
+    .summary-box { border-top: 1px solid var(--border); padding-top: 12px; font-size: 13px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .summary-row.discount { color: var(--success); font-weight: 700; }
+    .summary-row.total {
+      font-size: 16px; font-weight: 800; margin-top: 8px;
+      padding-top: 8px; border-top: 1px solid #e2e8f0;
+    }
+
+    .checkout-btn {
+      width: 100%; margin-top: 12px; padding: 13px; border: none; border-radius: 12px;
+      background: var(--accent); color: #fff; font-size: 14.5px; font-weight: 800; cursor: pointer;
+    }
+    .checkout-btn:hover:not(:disabled) { background: #e85825; }
+    .checkout-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    /* 배민·쿠팡 스타일 실시간 라이더 위치 트래킹 카드 */
+    .rider-panel {
+      background: #ffffff;
+      border: 2px solid #0f9d8a;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 16px;
+      box-shadow: 0 10px 25px rgba(15, 157, 138, 0.12);
+    }
+
+    .rider-top-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      background: #e6f7f5;
+      border: 1px solid #b2e5de;
+      border-radius: 12px;
+      padding: 11px 13px;
+      margin-bottom: 10px;
+    }
+
+    .eta-big {
+      font-size: 17px;
+      font-weight: 900;
+      color: #0b7a6b;
+    }
+
+    .eta-sub {
+      font-size: 12px;
+      color: #1b222c;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #16a34a;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    .map-canvas {
+      position: relative;
+      width: 100%;
+      height: 195px;
+      background: #eef6f4;
+      border-radius: 14px;
+      border: 1px solid #cbe5df;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .map-road-h {
+      position: absolute; left: 0; right: 0; top: 54%; height: 14px;
+      background: #ffffff; border-top: 1px solid #d5e2df; border-bottom: 1px solid #d5e2df;
+    }
+    .map-road-v1 {
+      position: absolute; top: 0; bottom: 0; left: 32%; width: 12px;
+      background: #ffffff; border-left: 1px solid #d5e2df; border-right: 1px solid #d5e2df;
+    }
+    .map-road-v2 {
+      position: absolute; top: 0; bottom: 0; left: 68%; width: 12px;
+      background: #ffffff; border-left: 1px solid #d5e2df; border-right: 1px solid #d5e2df;
+    }
+
+    .map-route-line {
+      position: absolute;
+      top: 54%; left: 10%; right: 10%; height: 4px;
+      background: #cbd5e1;
+      transform: translateY(5px);
+      border-radius: 4px;
+    }
+
+    .map-route-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0f9d8a, #ff6b35);
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    .map-pin {
+      position: absolute;
+      top: 54%;
+      transform: translate(-50%, -120%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .pin-bubble {
+      background: #fff;
+      border: 1.5px solid #0f9d8a;
+      color: #0b7a6b;
+      padding: 2px 7px;
+      border-radius: 8px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .pin-home .pin-bubble {
+      border-color: #ff6b35;
+      color: #c2410c;
+      background: #fff7ed;
+    }
+
+    .rider-marker {
+      position: absolute;
+      top: 54%;
+      left: 10%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      transition: left 0.6s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .rider-bike {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #ff6b35; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.45);
+      border: 2px solid #fff;
+    }
+
+    .rider-label {
+      margin-top: 3px;
+      background: #1e293b;
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .rider-card-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      padding: 6px 0;
-      font-size: 13px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin-bottom: 8px;
     }
 
-    .qty-controls {
+    .call-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .call-btn:hover { background: #f1f5f9; }
+
+    .sim-controls {
       display: flex;
-      align-items: center;
       gap: 6px;
+      margin-top: 8px;
     }
 
-    .qty-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
+    .sim-btn {
+      flex: 1;
+      padding: 7px 10px;
       border: 1px solid #cbd5e1;
       background: #fff;
+      border-radius: 8px;
+      font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
     }
-
-    .qty-btn:hover {
-      background: #f1f5f9;
+    .sim-btn.primary {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
     }
 
-    .empty-cart {
-      text-align: center;
-      padding: 28px 12px;
-      color: var(--muted);
-      font-size: 13px;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 14px;
-      margin-bottom: 14px;
+    .step-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
     }
 
-    .summary-box {
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      font-size: 13px;
-    }
-
-    .summary-row {
+    .step-item {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 6px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
     }
-
-    .summary-row.discount {
-      color: var(--success);
-      font-weight: 700;
-    }
-
-    .summary-row.total {
-      font-size: 16px;
-      font-weight: 800;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #e2e8f0;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 13px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 14.5px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-
-    .checkout-btn:hover:not(:disabled) {
-      background: #e85825;
-    }
-
-    .checkout-btn:disabled {
-      background: #cbd5e1;
-      cursor: not-allowed;
-    }
-
-    .tracking-card {
+    .step-item.done {
       background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 12px;
+      border-color: #bbf7d0;
+      color: #166534;
     }
-
-    .tracking-store {
-      background: #fff;
-      border: 1px solid #dcfce7;
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-top: 8px;
-      font-size: 12.5px;
+    .step-item.active {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #9a3412;
+      font-weight: 700;
     }
 
     .toast {
@@ -472,29 +565,11 @@
       z-index: 100;
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12.5px;
-      margin-top: 8px;
-    }
-
-    th, td {
-      border: 1px solid var(--border);
-      padding: 9px 10px;
-      text-align: left;
-    }
-
-    th {
-      background: #f1f5f9;
-      font-weight: 700;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
+    th, td { border: 1px solid var(--border); padding: 9px 10px; text-align: left; }
+    th { background: #f1f5f9; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -504,11 +579,14 @@
         <div class="brand-logo">한바구니<br/>PICK</div>
         <div>
           <div class="brand-title">한바구니픽 (Hanbaguni Pick)</div>
-          <div class="brand-sub">장바구니 초기화 없는 다중 매장 통합 주문 UX 프로토타입 · 작성자: 백서연</div>
+          <div class="brand-sub">장바구니 초기화 없는 다중 매장 통합 주문 & 실시간 라이더 위치 트래킹</div>
         </div>
       </div>
       <div class="header-meta">
-        <button class="reset-demo-btn" id="resetBtn" type="button">데모 초기화</button>
+        <div class="header-controls">
+          <span class="addr-pill" id="addressDisplay" title="클릭하여 배달 주소 변경">📍 부산 사상구 주례로 45 (우리집)</span>
+          <button class="reset-demo-btn" id="resetBtn" type="button">데모 초기화</button>
+        </div>
       </div>
     </div>
   </header>
@@ -520,8 +598,12 @@
           <span>1. 매장 선택 (초기화 없이 이어 담기)</span>
         </div>
         <p class="section-desc">
-          기존 배달 앱과 달리 다른 가게 메뉴를 담아도 장바구니가 비워지지 않습니다. 가게를 전환하며 메뉴를 골라 담아보세요.
+          다른 가게로 이동해도 기존 장바구니가 삭제·초기화되지 않습니다. 여러 가게 메뉴를 한 장바구니에 담아보세요.
         </p>
+
+        <div class="search-bar-wrap">
+          <input type="text" id="menuSearchInput" class="search-input" placeholder="🔍 전체 매장 메뉴 검색 (예: 김치찜, 아메리카노, 떡볶이)" />
+        </div>
 
         <div class="store-tabs" id="storeTabs"></div>
 
@@ -531,34 +613,31 @@
 
       <section class="section-card">
         <div class="section-title">
-          <span>UX 개선 핵심 요약</span>
+          <span>기존 배달 앱 vs 한바구니픽 UX 개선 비교</span>
         </div>
-        <p class="section-desc">
-          단일 매장 강제 초기화 구조를 개선하여 1~2인 가구 및 다중 메뉴 주문 흐름을 단축했습니다.
-        </p>
         <table>
           <thead>
             <tr>
-              <th>구분</th>
+              <th>비교 항목</th>
               <th>기존 배달 앱</th>
               <th>한바구니픽 (개선안)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>타 매장 추가</td>
-              <td>기존 장바구니 강제 삭제·초기화</td>
-              <td><strong>초기화 없이 매장별 섹션 누적</strong></td>
+              <td>타 매장 메뉴 추가</td>
+              <td>기존 장바구니 강제 삭제·초기화 경고</td>
+              <td><strong>초기화 없이 매장별 섹션 누적 보관</strong></td>
             </tr>
             <tr>
               <td>최소주문금액</td>
-              <td>가게별 개별 금액 충족 필요</td>
-              <td><strong>각 매장 점주 기준 실시간 충족 안내</strong></td>
+              <td>가게별 별도 주문·결제 반복</td>
+              <td><strong>각 매장 점주 최소주문금액 실시간 검증</strong></td>
             </tr>
             <tr>
-              <td>배달팁·결제</td>
-              <td>가게별 중복 배달팁 및 반복 결제</td>
-              <td><strong>매장별 최소주문 기준 충족 시 묶음 배달팁 · 단일 결제</strong></td>
+              <td>결제 및 라이더 추적</td>
+              <td>주문 건수만큼 개별 트래킹</td>
+              <td><strong>단일 원클릭 결제 & 다중 매장 순차 픽업 실시간 지도</strong></td>
             </tr>
           </tbody>
         </table>
@@ -587,6 +666,29 @@
 
         <div id="cartContainer"></div>
 
+        <div class="extra-options">
+          <div class="opt-row">
+            <label for="couponSelect"><strong>🎟️ 통합 주문 쿠폰</strong></label>
+            <select id="couponSelect" class="opt-select">
+              <option value="0">쿠폰 선택 안함</option>
+              <option value="2000">다중 매장 첫 주문 2,000원 할인</option>
+              <option value="3000">2개 이상 매장 통합 3,000원 할인</option>
+            </select>
+          </div>
+          <div class="opt-row">
+            <label for="payMethodSelect"><strong>💳 결제 수단</strong></label>
+            <select id="payMethodSelect" class="opt-select">
+              <option value="한바구니페이">한바구니페이 (원클릭)</option>
+              <option value="카카오페이">카카오페이</option>
+              <option value="신용/체크카드">신용/체크카드</option>
+            </select>
+          </div>
+          <div class="opt-row">
+            <label for="riderRequestInput"><strong>📝 라이더 요청</strong></label>
+            <input type="text" id="riderRequestInput" class="opt-input" value="문 앞에 놓고 벨 눌러주세요" placeholder="배달 요청사항 입력" />
+          </div>
+        </div>
+
         <div class="summary-box">
           <div class="summary-row">
             <span>메뉴 합계</span>
@@ -597,8 +699,12 @@
             <span id="rawDeliveryText">0원</span>
           </div>
           <div class="summary-row discount">
-            <span>묶음 배달 할인</span>
+            <span>다중 매장 묶음 배달 할인</span>
             <span id="discountText">-0원</span>
+          </div>
+          <div class="summary-row discount">
+            <span>쿠폰 할인</span>
+            <span id="couponDiscountText">-0원</span>
           </div>
           <div class="summary-row">
             <span>최종 적용 배달팁</span>
@@ -621,36 +727,43 @@
   <div class="toast" id="toastBox"></div>
 
   <script>
-    const STORAGE_KEY = "hanbaguni_pick_state_v2";
+    const STORAGE_KEY = "hanbaguni_pick_state_v4";
 
     const STORES = [
       {
-        id: "storeA", name: "A가게 (한식)", category: "한식 · 메인", baseDelivery: 3000, minStoreOrder: 12000,
+        id: "storeA", name: "A가게 (한식)", category: "한식 · 메인", baseDelivery: 3000, minStoreOrder: 12000, prepTime: 12,
         menus: [
-          { id: "k1", name: "묵은지 돼지김치찜 (1인)", desc: "국내산 돼지고기와 숙성 묵은지, 공기밥 포함", price: 13500, emoji: "🍲" },
-          { id: "k2", name: "계란말이 추가", desc: "도톰하게 부쳐낸 부드러운 계란말이", price: 4500, emoji: "🍳" },
-          { id: "k3", name: "스팸구이 사리", desc: "노릇하게 구운 스팸 토핑 추가", price: 3500, emoji: "🥓" }
+          { id: "k1", name: "묵은지 돼지김치찜 (1인)", desc: "국내산 돼지고기와 숙성 묵은지, 공기밥 포함", price: 13500, emoji: "🍲", popular: true },
+          { id: "k2", name: "계란말이 추가", desc: "도톰하게 부쳐낸 부드러운 계란말이", price: 4500, emoji: "🍳", popular: false },
+          { id: "k3", name: "스팸구이 사리", desc: "노릇하게 구운 스팸 토핑 추가", price: 3500, emoji: "🥓", popular: false }
         ]
       },
       {
-        id: "storeB", name: "B가게 (카페)", category: "카페 · 디저트", baseDelivery: 2500, minStoreOrder: 10000,
+        id: "storeB", name: "B가게 (카페)", category: "카페 · 디저트", baseDelivery: 2500, minStoreOrder: 10000, prepTime: 7,
         menus: [
-          { id: "c1", name: "아이스 아메리카노", desc: "고소한 원두로 추출한 깔끔한 아아", price: 3800, emoji: "🧊" },
-          { id: "c2", name: "바닐라빈 라떼", desc: "천연 바닐라빈 시럽이 어우러진 라떼", price: 5000, emoji: "☕" },
-          { id: "c3", name: "바스크 치즈케이크", desc: "꾸덕하고 진한 풍미의 수제 케이크", price: 6200, emoji: "🍰" }
+          { id: "c1", name: "아이스 아메리카노", desc: "고소한 원두로 추출한 깔끔한 아아", price: 3800, emoji: "🧊", popular: true },
+          { id: "c2", name: "바닐라빈 라떼", desc: "천연 바닐라빈 시럽이 어우러진 라떼", price: 5000, emoji: "☕", popular: false },
+          { id: "c3", name: "바스크 치즈케이크", desc: "꾸덕하고 진한 풍미의 수제 케이크", price: 6200, emoji: "🍰", popular: true }
         ]
       },
       {
-        id: "storeC", name: "C가게 (분식)", category: "분식 · 사이드", baseDelivery: 2800, minStoreOrder: 10000,
+        id: "storeC", name: "C가게 (분식)", category: "분식 · 사이드", baseDelivery: 2800, minStoreOrder: 10000, prepTime: 9,
         menus: [
-          { id: "s1", name: "매콤 떡볶이", desc: "쫄깃한 쌀떡과 어묵이 어우러진 분식", price: 5500, emoji: "🍢" },
-          { id: "s2", name: "바삭 모둠튀김 (6pcs)", desc: "김말이, 고구마, 오징어튀김 구성", price: 6000, emoji: "🍤" }
+          { id: "s1", name: "매콤 떡볶이", desc: "쫄깃한 쌀떡과 어묵이 어우러진 분식", price: 5500, emoji: "🍢", popular: true },
+          { id: "s2", name: "바삭 모둠튀김 (6pcs)", desc: "김말이, 고구마, 오징어튀김 구성", price: 6000, emoji: "🍤", popular: false }
         ]
       }
     ];
 
+    let riderTimer = null;
+
     let state = {
       selectedStoreId: STORES[0].id,
+      searchQuery: "",
+      couponValue: 0,
+      payMethod: "한바구니페이",
+      riderRequest: "문 앞에 놓고 벨 눌러주세요",
+      address: "부산 사상구 주례로 45 (우리집)",
       cart: {},
       orderCompleted: null
     };
@@ -661,24 +774,16 @@
         if (saved) {
           const parsed = JSON.parse(saved);
           if (parsed && typeof parsed === "object") {
-            state = {
-              selectedStoreId: parsed.selectedStoreId || STORES[0].id,
-              cart: parsed.cart || {},
-              orderCompleted: parsed.orderCompleted || null
-            };
+            state = { ...state, ...parsed };
           }
         }
-      } catch (e) {
-        console.warn("localStorage load failed:", e);
-      }
+      } catch (e) {}
     }
 
     function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        console.warn("localStorage save failed:", e);
-      }
+      } catch (e) {}
     }
 
     function showToast(message) {
@@ -686,9 +791,7 @@
       toast.textContent = message;
       toast.classList.add("show");
       clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
+      showToast._timer = setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
     function getActiveStoreIds() {
@@ -699,11 +802,10 @@
     }
 
     function addMenuToCart(storeId, menu) {
-      if (!state.cart[storeId]) {
-        state.cart[storeId] = {};
-      }
+      if (!state.cart[storeId]) state.cart[storeId] = {};
       state.cart[storeId][menu.id] = (state.cart[storeId][menu.id] || 0) + 1;
       state.orderCompleted = null;
+      stopRiderSimulation();
       saveState();
       renderAll();
 
@@ -716,9 +818,7 @@
       const nextQty = state.cart[storeId][menuId] + delta;
       if (nextQty <= 0) {
         delete state.cart[storeId][menuId];
-        if (Object.keys(state.cart[storeId]).length === 0) {
-          delete state.cart[storeId];
-        }
+        if (Object.keys(state.cart[storeId]).length === 0) delete state.cart[storeId];
       } else {
         state.cart[storeId][menuId] = nextQty;
       }
@@ -729,7 +829,6 @@
     function calculateTotals() {
       let subtotal = 0, rawDelivery = 0;
       const activeStoreIds = getActiveStoreIds();
-      const storeSubtotals = {};
       const unmetStores = [];
 
       activeStoreIds.forEach((id) => {
@@ -742,15 +841,17 @@
           if (menu && qty > 0) sSub += menu.price * qty;
         });
         subtotal += sSub;
-        storeSubtotals[id] = sSub;
         if (sSub < store.minStoreOrder) {
           unmetStores.push({ name: store.name, need: store.minStoreOrder - sSub, min: store.minStoreOrder });
         }
       });
 
-      const discount = activeStoreIds.length === 2 ? 2000 : activeStoreIds.length >= 3 ? 4000 : 0;
-      const finalDelivery = Math.max(0, rawDelivery - discount);
-      return { activeStoreIds, storeSubtotals, unmetStores, subtotal, rawDelivery, discount, finalDelivery, totalPay: subtotal + finalDelivery };
+      const bundleDiscount = activeStoreIds.length === 2 ? 2000 : activeStoreIds.length >= 3 ? 4000 : 0;
+      const couponDiscount = activeStoreIds.length > 0 ? Number(state.couponValue || 0) : 0;
+      const finalDelivery = Math.max(0, rawDelivery - bundleDiscount);
+      const totalPay = Math.max(0, subtotal + finalDelivery - couponDiscount);
+
+      return { activeStoreIds, unmetStores, subtotal, rawDelivery, bundleDiscount, couponDiscount, finalDelivery, totalPay };
     }
 
     function renderStoreTabs() {
@@ -767,11 +868,13 @@
 
         btn.innerHTML = `
           <div class="store-tab-name">${store.name}</div>
-          <div class="store-tab-info">${store.category} · 매장최소 ${store.minStoreOrder.toLocaleString()}원</div>
+          <div class="store-tab-info">${store.category} · 최소 ${store.minStoreOrder.toLocaleString()}원</div>
           <span class="store-tab-badge">${count > 0 ? `장바구니 ${count}개` : "선택 가능"}</span>
         `;
         btn.addEventListener("click", () => {
           state.selectedStoreId = store.id;
+          state.searchQuery = "";
+          document.getElementById("menuSearchInput").value = "";
           saveState();
           renderStoreTabs();
           renderMenuList();
@@ -781,31 +884,56 @@
     }
 
     function renderMenuList() {
-      const store = STORES.find((s) => s.id === state.selectedStoreId) || STORES[0];
-      document.getElementById("currentStoreHeading").textContent = `${store.name} 메뉴 (${store.category})`;
-
       const listEl = document.getElementById("menuList");
       listEl.innerHTML = "";
+      const q = (state.searchQuery || "").trim().toLowerCase();
 
+      if (q) {
+        document.getElementById("currentStoreHeading").textContent = `🔍 '${state.searchQuery}' 전체 매장 검색 결과`;
+        let found = 0;
+        STORES.forEach((store) => {
+          store.menus.forEach((menu) => {
+            if (menu.name.toLowerCase().includes(q) || menu.desc.toLowerCase().includes(q)) {
+              found++;
+              listEl.appendChild(createMenuRow(store, menu, true));
+            }
+          });
+        });
+        if (found === 0) {
+          listEl.innerHTML = `<div class="empty-cart">검색된 메뉴가 없습니다.</div>`;
+        }
+        return;
+      }
+
+      const store = STORES.find((s) => s.id === state.selectedStoreId) || STORES[0];
+      document.getElementById("currentStoreHeading").textContent = `${store.name} 메뉴 (${store.category} · 조리 약 ${store.prepTime}분)`;
       store.menus.forEach((menu) => {
-        const row = document.createElement("div");
-        row.className = "menu-item";
-        row.innerHTML = `
-          <div class="menu-emoji">${menu.emoji}</div>
-          <div class="menu-info">
-            <div class="menu-name">${menu.name}</div>
-            <div class="menu-desc">${menu.desc}</div>
-            <div class="menu-price">${menu.price.toLocaleString()}원</div>
-          </div>
-          <button type="button" class="add-btn">+ 한바구니 담기</button>
-        `;
-        row.querySelector(".add-btn").addEventListener("click", () => addMenuToCart(store.id, menu));
-        listEl.appendChild(row);
+        listEl.appendChild(createMenuRow(store, menu, false));
       });
     }
 
+    function createMenuRow(store, menu, showStoreTag) {
+      const row = document.createElement("div");
+      row.className = "menu-item";
+      row.innerHTML = `
+        <div class="menu-emoji">${menu.emoji}</div>
+        <div class="menu-info">
+          <div class="menu-name">
+            ${menu.name}
+            ${menu.popular ? '<span class="tag-popular">인기</span>' : ''}
+            ${showStoreTag ? `<span class="tag-popular" style="background:#e6f7f5;color:#0b7a6b;">${store.name}</span>` : ''}
+          </div>
+          <div class="menu-desc">${menu.desc}</div>
+          <div class="menu-price">${menu.price.toLocaleString()}원</div>
+        </div>
+        <button type="button" class="add-btn">+ 한바구니 담기</button>
+      `;
+      row.querySelector(".add-btn").addEventListener("click", () => addMenuToCart(store.id, menu));
+      return row;
+    }
+
     function renderCartAndSummary() {
-      const { activeStoreIds, unmetStores, subtotal, rawDelivery, discount, finalDelivery, totalPay } = calculateTotals();
+      const { activeStoreIds, unmetStores, subtotal, rawDelivery, bundleDiscount, couponDiscount, finalDelivery, totalPay } = calculateTotals();
       document.getElementById("storeCountBadge").textContent = `${activeStoreIds.length}개 매장 담김`;
 
       const metCount = activeStoreIds.length - unmetStores.length;
@@ -865,7 +993,8 @@
 
       document.getElementById("subtotalText").textContent = `${subtotal.toLocaleString()}원`;
       document.getElementById("rawDeliveryText").textContent = `${rawDelivery.toLocaleString()}원`;
-      document.getElementById("discountText").textContent = `-${discount.toLocaleString()}원`;
+      document.getElementById("discountText").textContent = `-${bundleDiscount.toLocaleString()}원`;
+      document.getElementById("couponDiscountText").textContent = `-${couponDiscount.toLocaleString()}원`;
       document.getElementById("finalDeliveryText").textContent = `${finalDelivery.toLocaleString()}원`;
       document.getElementById("totalPayText").textContent = `${totalPay.toLocaleString()}원`;
 
@@ -873,12 +1002,44 @@
       const btn = document.getElementById("checkoutBtn");
       btn.disabled = !canCheckout;
       if (canCheckout) {
-        btn.textContent = `${totalPay.toLocaleString()}원 단일 원클릭 결제하기`;
+        btn.textContent = `${totalPay.toLocaleString()}원 단일 원클릭 결제하기 (${state.payMethod})`;
       } else if (activeStoreIds.length > 0) {
         btn.textContent = `${unmetStores[0].name} 최소주문금액 충족 필요`;
       } else {
         btn.textContent = "매장별 최소주문금액 충족 후 결제하기";
       }
+    }
+
+    function getDeliveryStageInfo(order) {
+      const stores = order.stores;
+      const totalSteps = stores.length + 2;
+      const step = Math.min(order.currentStep, totalSteps);
+      const progressPct = Math.round((step / totalSteps) * 100);
+      const riderLeftPct = 10 + Math.round((step / totalSteps) * 80);
+
+      let headline = "";
+      let subline = "";
+      let remainMin = Math.max(0, order.etaMinutes - Math.round((step / totalSteps) * order.etaMinutes));
+
+      if (step === 0) {
+        headline = `${remainMin}분 후 도착 예정 · 라이더 픽업 이동 중`;
+        subline = `라이더가 [${stores[0].name}]으로 향하고 있습니다.`;
+      } else if (step <= stores.length) {
+        const pickedStore = stores[step - 1];
+        if (step < stores.length) {
+          headline = `${remainMin}분 후 도착 예정 · [${pickedStore.name}] 픽업 완료`;
+          subline = `다음 경유지 [${stores[step].name}]로 이동 중입니다.`;
+        } else {
+          headline = `${remainMin}분 후 도착 예정 · 전 매장 픽업 완료 및 배달 중`;
+          subline = `모든 음식(${stores.length}곳)을 싣고 고객님 댁으로 이동 중입니다.`;
+        }
+      } else {
+        headline = `배달 완료!`;
+        subline = `요청사항 "${order.riderRequest}" 반영 완료`;
+        remainMin = 0;
+      }
+
+      return { step, totalSteps, progressPct, riderLeftPct, headline, subline, remainMin };
     }
 
     function renderTracking() {
@@ -888,36 +1049,191 @@
         return;
       }
 
-      const { stores, totalPay, orderId, etaMinutes } = state.orderCompleted;
-      const storeCards = stores
-        .map(
-          (s, idx) => `
-          <div class="tracking-store">
-            <strong>[${idx + 1}차 픽업] ${s.name}</strong> · 조리 완료 및 순차 픽업 예정
+      const order = state.orderCompleted;
+      const info = getDeliveryStageInfo(order);
+
+      const storePinsHtml = order.stores.map((s, idx) => {
+        const pinLeft = 10 + Math.round(((idx + 1) / info.totalSteps) * 80);
+        const isPicked = info.step >= idx + 1;
+        return `
+          <div class="map-pin" style="left: ${pinLeft}%;">
+            <div class="pin-bubble">${isPicked ? '✅' : '🏪'} ${s.name}</div>
           </div>
-        `
-        )
-        .join("");
+        `;
+      }).join("");
+
+      const timelineHtml = order.stores.map((s, idx) => {
+        const targetStep = idx + 1;
+        let cls = "";
+        let badge = "조리 중";
+        if (info.step > targetStep) { cls = "done"; badge = "픽업 완료"; }
+        else if (info.step === targetStep) { cls = "active"; badge = "방금 픽업 완료"; }
+        else if (info.step === targetStep - 1) { cls = "active"; badge = "라이더 이동 중"; }
+        return `
+          <div class="step-item ${cls}">
+            <span><strong>[${idx + 1}차 픽업]</strong> ${s.name}</span>
+            <span>${badge}</span>
+          </div>
+        `;
+      }).join("");
 
       area.innerHTML = `
-        <div class="tracking-card">
-          <div style="font-weight:800; color:var(--success); font-size:14px;">
-            통합 주문 완료! (주문번호: ${orderId})
+        <div class="rider-panel">
+          <div class="rider-top-banner">
+            <div>
+              <div class="eta-big">${info.headline}</div>
+              <div class="eta-sub">${info.subline}</div>
+            </div>
+            <span class="live-badge"><span class="live-dot"></span> ${info.step >= info.totalSteps ? "도착 완료" : "실시간 위치"}</span>
           </div>
-          <div style="font-size:12.5px; margin-top:4px;">
-            결제 금액: <strong>${totalPay.toLocaleString()}원</strong> · 예상 도착 시간: <strong>약 ${etaMinutes}분 후</strong>
+
+          <div class="rider-card-box">
+            <div>
+              <strong>🛵 김한바 라이더</strong> · 전기바이크 (050-****-8821)<br/>
+              <span style="color:var(--muted); font-size:11px;">주문번호 ${order.orderId} · ${order.totalPay.toLocaleString()}원 결제완료</span>
+            </div>
+            <button type="button" class="call-btn" id="callRiderBtn">📞 라이더 연락</button>
           </div>
-          ${storeCards}
+
+          <div class="map-canvas">
+            <div class="map-road-h"></div>
+            <div class="map-road-v1"></div>
+            <div class="map-road-v2"></div>
+            <div class="map-route-line">
+              <div class="map-route-progress" style="width: ${info.progressPct}%;"></div>
+            </div>
+
+            <div class="map-pin" style="left: 10%;">
+              <div class="pin-bubble">🚩 출발</div>
+            </div>
+            ${storePinsHtml}
+            <div class="map-pin pin-home" style="left: 90%;">
+              <div class="pin-bubble">🏠 우리집</div>
+            </div>
+
+            <div class="rider-marker" style="left: ${info.riderLeftPct}%;">
+              <div class="rider-bike">🛵</div>
+              <div class="rider-label">${info.remainMin === 0 ? "도착!" : `${info.remainMin}분 남음`}</div>
+            </div>
+          </div>
+
+          <div class="step-timeline">
+            ${timelineHtml}
+            <div class="step-item ${info.step >= info.totalSteps ? "done" : ""}">
+              <span><strong>[도착지]</strong> ${order.address}</span>
+              <span>${info.step >= info.totalSteps ? "배달 완료" : "이동 중"}</span>
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <button type="button" class="sim-btn primary" id="nextStepBtn">⏭️ 다음 구간 이동 (시연용)</button>
+            <button type="button" class="sim-btn" id="autoSimBtn">${riderTimer ? "⏸️ 자동 이동 일시정지" : "▶️ 실시간 자동 주행"}</button>
+          </div>
         </div>
       `;
+
+      document.getElementById("callRiderBtn").addEventListener("click", () => {
+        showToast("안심번호(050-****-8821)로 라이더 연결을 시도합니다.");
+      });
+
+      document.getElementById("nextStepBtn").addEventListener("click", () => {
+        advanceRiderStep();
+      });
+
+      document.getElementById("autoSimBtn").addEventListener("click", () => {
+        if (riderTimer) {
+          stopRiderSimulation();
+          renderTracking();
+        } else {
+          startRiderSimulation();
+        }
+      });
+    }
+
+    function advanceRiderStep() {
+      if (!state.orderCompleted) return;
+      const totalSteps = state.orderCompleted.stores.length + 2;
+      if (state.orderCompleted.currentStep < totalSteps) {
+        state.orderCompleted.currentStep += 1;
+        saveState();
+        renderTracking();
+        if (state.orderCompleted.currentStep === totalSteps) {
+          stopRiderSimulation();
+          showToast("라이더가 배달을 완료했습니다!");
+        }
+      } else {
+        stopRiderSimulation();
+      }
+    }
+
+    function startRiderSimulation() {
+      stopRiderSimulation();
+      riderTimer = setInterval(() => {
+        if (!state.orderCompleted) {
+          stopRiderSimulation();
+          return;
+        }
+        const totalSteps = state.orderCompleted.stores.length + 2;
+        if (state.orderCompleted.currentStep >= totalSteps) {
+          stopRiderSimulation();
+          renderTracking();
+          return;
+        }
+        advanceRiderStep();
+      }, 2500);
+      renderTracking();
+    }
+
+    function stopRiderSimulation() {
+      if (riderTimer) {
+        clearInterval(riderTimer);
+        riderTimer = null;
+      }
     }
 
     function renderAll() {
+      document.getElementById("addressDisplay").textContent = `📍 ${state.address}`;
+      document.getElementById("couponSelect").value = String(state.couponValue || 0);
+      document.getElementById("payMethodSelect").value = state.payMethod || "한바구니페이";
+      document.getElementById("riderRequestInput").value = state.riderRequest || "";
+
       renderStoreTabs();
       renderMenuList();
       renderCartAndSummary();
       renderTracking();
     }
+
+    document.getElementById("menuSearchInput").addEventListener("input", (e) => {
+      state.searchQuery = e.target.value;
+      renderMenuList();
+    });
+
+    document.getElementById("couponSelect").addEventListener("change", (e) => {
+      state.couponValue = Number(e.target.value);
+      saveState();
+      renderCartAndSummary();
+    });
+
+    document.getElementById("payMethodSelect").addEventListener("change", (e) => {
+      state.payMethod = e.target.value;
+      saveState();
+      renderCartAndSummary();
+    });
+
+    document.getElementById("riderRequestInput").addEventListener("input", (e) => {
+      state.riderRequest = e.target.value;
+      saveState();
+    });
+
+    document.getElementById("addressDisplay").addEventListener("click", () => {
+      const nextAddr = prompt("배달받을 주소를 입력하세요:", state.address);
+      if (nextAddr && nextAddr.trim()) {
+        state.address = nextAddr.trim();
+        saveState();
+        renderAll();
+        showToast("배달 주소가 변경되었습니다.");
+      }
+    });
 
     document.getElementById("checkoutBtn").addEventListener("click", () => {
       const totals = calculateTotals();
@@ -930,17 +1246,26 @@
       state.orderCompleted = {
         orderId: "HB-" + Math.floor(100000 + Math.random() * 900000),
         totalPay: totals.totalPay,
-        etaMinutes: 28 + selectedStores.length * 4,
+        etaMinutes: 24 + selectedStores.length * 4,
+        currentStep: 0,
+        address: state.address,
+        riderRequest: state.riderRequest,
         stores: selectedStores.map((s) => ({ name: s.name }))
       };
       saveState();
-      renderTracking();
-      showToast("다중 매장 통합 결제가 완료되었습니다!");
+      startRiderSimulation();
+      showToast("결제 완료! 라이더 실시간 위치 추적을 시작합니다.");
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
+      stopRiderSimulation();
       state = {
         selectedStoreId: STORES[0].id,
+        searchQuery: "",
+        couponValue: 0,
+        payMethod: "한바구니페이",
+        riderRequest: "문 앞에 놓고 벨 눌러주세요",
+        address: "부산 사상구 주례로 45 (우리집)",
         cart: {},
         orderCompleted: null
       };
@@ -951,6 +1276,9 @@
 
     loadState();
     renderAll();
+    if (state.orderCompleted && state.orderCompleted.currentStep < state.orderCompleted.stores.length + 2) {
+      startRiderSimulation();
+    }
   </script>
 </body>
 </html>
