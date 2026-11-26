@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니 픽 — 장바구니 초기화 없는 다중 매장 통합 배달 플랫폼</title>
+  <title>한바구니 픽 — 다중 매장 통합 배달 웹앱</title>
   <style>
     :root {
       --primary: #007a5e;
-      --primary-dark: #004f3d;
+      --primary-dark: #004736;
       --primary-soft: #e6f7f2;
-      --bg: #f1f5f4;
+      --bg: #f3f6f5;
       --surface: #ffffff;
-      --line: #c9d7d3;
+      --line: #cbd8d4;
       --text: #0f1715;
-      --sub: #3a4c46;
+      --sub: #3b4d47;
       --danger: #b91c1c;
       --danger-bg: #fef2f2;
       --focus-ring: #1d4ed8;
       --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.11);
-      --shadow-lg: 0 22px 48px rgba(15, 23, 42, 0.16);
+      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.12);
       --r-xl: 24px;
       --r-lg: 18px;
       --r-md: 14px;
@@ -31,7 +30,7 @@
       --a-line: #f0b7a6;
 
       --b-main: #007a5e;
-      --b-dark: #004f3d;
+      --b-dark: #004736;
       --b-bg: #e7f8f3;
       --b-line: #a3dacb;
 
@@ -92,8 +91,8 @@
     .appbar {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(255, 255, 255, 0.96);
+      z-index: 60;
+      background: rgba(255, 255, 255, 0.97);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
@@ -112,7 +111,7 @@
     .brand-box {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .brand-badge {
@@ -122,7 +121,7 @@
       font-weight: 900;
       padding: 5px 11px;
       border-radius: 999px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
 
     .brand-name {
@@ -132,22 +131,15 @@
       color: var(--text);
     }
 
-    .nav-cluster {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .step-tabs {
-      display: flex;
-      background: #e1ebe8;
+    .nav-group {
+      display: inline-flex;
+      background: #e2ece9;
       padding: 4px;
       border-radius: 14px;
       gap: 4px;
     }
 
-    .nav-pill {
+    .nav-btn {
       border: none;
       background: transparent;
       color: var(--text);
@@ -159,13 +151,12 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.15s ease, color 0.15s ease;
     }
 
-    .nav-pill.active {
+    .nav-btn.active {
       background: var(--surface);
       color: var(--primary-dark);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.09);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .pill-count {
@@ -196,88 +187,7 @@
     .page-wrap {
       max-width: 1320px;
       margin: 0 auto;
-      padding: 22px 24px 72px;
-    }
-
-    /* 히어로 일러스트 배너 */
-    .hero-banner {
-      background: linear-gradient(125deg, #063b2e 0%, #0b5e4a 55%, #12785f 100%);
-      color: #ffffff;
-      border-radius: var(--r-xl);
-      padding: 24px 28px;
-      margin-bottom: 22px;
-      display: grid;
-      grid-template-columns: 1.35fr 0.85fr;
-      gap: 20px;
-      align-items: center;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
-
-    @media (max-width: 860px) {
-      .hero-banner {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 800;
-      padding: 5px 12px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-
-    .hero-title {
-      font-size: 24px;
-      font-weight: 900;
-      line-height: 1.3;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-
-    .hero-desc {
-      font-size: 14px;
-      color: #e2f7f0;
-      max-width: 580px;
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .hero-chip {
-      background: #ffffff;
-      color: #063b2e;
-      font-size: 12px;
-      font-weight: 900;
-      padding: 6px 12px;
-      border-radius: 10px;
-    }
-
-    .hero-art-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .hero-art-img {
-      width: 100%;
-      max-width: 340px;
-      height: auto;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      padding: 8px;
+      padding: 20px 24px 72px;
     }
 
     .view {
@@ -288,10 +198,63 @@
       display: block;
     }
 
-    /* 1단계 장바구니 그리드 */
+    /* 배달 앱 상단 배너 */
+    .promo-strip {
+      background: linear-gradient(125deg, #063b2e 0%, #0b5e4a 58%, #12785f 100%);
+      color: #ffffff;
+      border-radius: var(--r-xl);
+      padding: 22px 26px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-md);
+    }
+
+    .promo-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 11px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .promo-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .promo-sub {
+      font-size: 13.5px;
+      color: #dff7f0;
+      margin-top: 4px;
+    }
+
+    .promo-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .promo-chip {
+      background: #ffffff;
+      color: #063b2e;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 7px 13px;
+      border-radius: 11px;
+    }
+
+    /* 주문 & 장바구니 그리드 */
     .cart-layout {
       display: grid;
-      grid-template-columns: 1.32fr 1fr;
+      grid-template-columns: 1.34fr 1fr;
       gap: 22px;
       align-items: start;
     }
@@ -333,7 +296,7 @@
       display: inline-block;
     }
 
-    /* 매장 선택 카드 (스토어 일러스트 포함) */
+    /* 매장 선택 카드 */
     .store-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -351,11 +314,11 @@
       border: 1.5px solid var(--s-line);
       border-top: 5px solid var(--s-main);
       border-radius: var(--r-lg);
-      padding: 14px;
+      padding: 13px;
       background: #ffffff;
       cursor: pointer;
       text-align: left;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -378,10 +341,10 @@
       gap: 10px;
     }
 
-    .store-art {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
+    .store-photo {
+      width: 54px;
+      height: 54px;
+      border-radius: 13px;
       object-fit: cover;
       border: 1px solid var(--s-line);
       background: var(--s-bg);
@@ -405,7 +368,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 2px;
     }
 
     .store-state-tag {
@@ -495,9 +457,9 @@
       gap: 14px;
     }
 
-    .menu-img {
-      width: 82px;
-      height: 82px;
+    .menu-photo {
+      width: 92px;
+      height: 92px;
       border-radius: 16px;
       object-fit: cover;
       border: 1px solid var(--s-line);
@@ -612,8 +574,8 @@
     }
 
     .cart-thumb {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 11px;
       object-fit: cover;
       border: 1px solid var(--s-line);
@@ -698,7 +660,7 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #ffffff;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 79, 61, 0.22);
+      box-shadow: 0 8px 20px rgba(0, 71, 54, 0.22);
     }
 
     .cta-outline {
@@ -713,8 +675,8 @@
       cursor: pointer;
     }
 
-    /* 2단계: 실시간 라이더 관제 화면 */
-    .rider-shell {
+    /* 실시간 배달 현황 화면 (고객 전용) */
+    .tracking-shell {
       max-width: 880px;
       margin: 0 auto;
     }
@@ -733,7 +695,6 @@
       font-size: 13.5px;
       font-weight: 800;
       flex-wrap: wrap;
-      box-shadow: var(--shadow-sm);
     }
 
     .alert-pill {
@@ -788,6 +749,30 @@
       border-radius: 999px;
     }
 
+    .speed-group {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 3px;
+      border-radius: 999px;
+      gap: 3px;
+    }
+
+    .speed-btn {
+      border: none;
+      background: transparent;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: #ffffff;
+      color: #09261f;
+    }
+
     .timer-toggle-btn {
       background: #ffffff;
       color: #0d2620;
@@ -824,13 +809,12 @@
 
     .progress-bar-fill {
       height: 100%;
-      width: 25%;
+      width: 0%;
       border-radius: 999px;
       background: linear-gradient(90deg, #f97316, #34d399, #818cf8);
-      transition: width 0.4s ease;
+      transition: width 0.3s linear;
     }
 
-    /* 고품질 일러스트 지도 */
     .map-card {
       background: #e7f2ee;
       border: 1.5px solid var(--line);
@@ -870,7 +854,7 @@
     .moto-marker {
       position: absolute;
       transform: translate(-50%, -50%);
-      transition: left 0.7s ease, top 0.7s ease;
+      transition: left 0.45s linear, top 0.45s linear;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -894,37 +878,13 @@
       width: 46px;
       height: 46px;
       border-radius: 50%;
-      background: #004f3d;
+      background: #004736;
       border: 3px solid #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      box-shadow: 0 8px 18px rgba(0, 79, 61, 0.35);
-    }
-
-    .stage-switcher {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .stage-btn {
-      border: 1.5px solid var(--line);
-      background: #ffffff;
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 800;
-      padding: 7px 13px;
-      border-radius: 999px;
-      cursor: pointer;
-    }
-
-    .stage-btn.active {
-      background: var(--text);
-      color: #ffffff;
-      border-color: var(--text);
+      box-shadow: 0 8px 18px rgba(0, 71, 54, 0.35);
     }
 
     .timeline-list {
@@ -961,19 +921,24 @@
     .flag-now { background: #fef3c7; color: #78350f; }
     .flag-next { background: #e2e8f0; color: #1e293b; }
 
-    /* 3단계: 배달완료 화면 */
+    /* 배달완료 영수증 화면 */
     .done-shell {
       max-width: 760px;
       margin: 0 auto;
       text-align: center;
     }
 
-    .done-art {
-      width: 170px;
-      height: 130px;
-      object-fit: contain;
-      margin: 0 auto 10px;
-      display: block;
+    .done-icon-box {
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
     }
 
     .cleared-cart-note {
@@ -1058,45 +1023,43 @@
         <span class="brand-name"><span aria-hidden="true">🛒</span> 한바구니 픽</span>
       </div>
 
-      <div class="nav-cluster">
-        <nav class="step-tabs" aria-label="주요 화면 단계">
-          <button type="button" class="nav-pill active" data-view="cart" onclick="switchView('cart')" aria-current="page">
-            <span aria-hidden="true">🛍️</span> 장바구니 <span class="pill-count" id="navCartBadge">3</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <nav class="nav-group" aria-label="배달 웹앱 화면 전환">
+          <button type="button" class="nav-btn active" id="tabOrder" onclick="switchView('cart')" aria-current="page">
+            <span aria-hidden="true">🛍️</span> 매장/장바구니 <span class="pill-count" id="navCartBadge">3</span>
           </button>
-          <button type="button" class="nav-pill" data-view="rider" onclick="switchView('rider')">
-            <span aria-hidden="true">🛵</span> 라이더 실시간
+          <button type="button" class="nav-btn" id="tabTracking" onclick="switchView('tracking')">
+            <span aria-hidden="true">🛵</span> 배달 현황
           </button>
-          <button type="button" class="nav-pill" data-view="done" onclick="completeDelivery()">
-            <span aria-hidden="true">✅</span> 배달완료
+          <button type="button" class="nav-btn" id="tabDone" onclick="switchView('done')">
+            <span aria-hidden="true">🧾</span> 주문내역/완료
           </button>
         </nav>
+
         <button type="button" class="reset-btn" onclick="resetDemo()" aria-label="샘플 메뉴로 처음부터 다시 시작">
-          <span aria-hidden="true">🔄</span> 처음부터
+          <span aria-hidden="true">🔄</span> 초기화
         </button>
       </div>
     </div>
   </header>
 
   <main class="page-wrap" id="mainContent" tabindex="-1">
-    <!-- 상단 히어로 일러스트 배너 -->
-    <section class="hero-banner" aria-label="한바구니 픽 핵심 가치 안내">
-      <div>
-        <span class="hero-eyebrow"><span aria-hidden="true">✨</span> 기존 장바구니 강제 삭제·초기화 완벽 해결</span>
-        <h1 class="hero-title">다른 가게 메뉴를 담아도 이전 메뉴가 지워지지 않는 한바구니 통합 주문</h1>
-        <p class="hero-desc">
-          원픽김치찜과 카페인중독 메뉴를 한 장바구니에 이어 담고, 단 한 번의 결제로 라이더의 순차 픽업부터 배달 완료 후 장바구니 자동 비움까지 경험하세요.
-        </p>
-        <div class="hero-stats">
-          <span class="hero-chip" id="heroStoreStatus">현재 2개 매장 통합 담김</span>
-          <span class="hero-chip">반경 1.5km 최대 3개 매장 지원</span>
-          <span class="hero-chip">웹 접근성 7대 표준 준수</span>
+    <!-- 1. 매장 선택 & 한바구니 장바구니 화면 -->
+    <section id="view-cart" class="view active" aria-labelledby="cartMainTitle">
+      <div class="promo-strip">
+        <div>
+          <span class="promo-tag">장바구니 초기화 없는 다중 매장 통합 배달</span>
+          <h1 class="promo-title">다른 가게 메뉴를 담아도 이전 메뉴가 지워지지 않아요</h1>
+          <p class="promo-sub">
+            원픽김치찜과 카페인중독 메뉴를 한 장바구니에 이어 담고, 한 번의 결제로 함께 배달받으세요.
+          </p>
+        </div>
+        <div class="promo-badges">
+          <span class="promo-chip" id="heroStoreStatus">현재 2개 매장 통합 담김</span>
+          <span class="promo-chip">반경 1.5km 최대 3개 매장</span>
         </div>
       </div>
-      <div class="hero-art-box" id="heroArtMount"></div>
-    </section>
 
-    <!-- 1. 장바구니 화면 -->
-    <section id="view-cart" class="view active" aria-labelledby="cartMainTitle">
       <div class="cart-layout">
         <div class="panel">
           <h2 class="panel-title" id="cartMainTitle">1. 매장 선택 및 메뉴 이어 담기</h2>
@@ -1154,8 +1117,8 @@
             <div>
               <label for="deliveryModeSelect" class="field-label">배달 방식 선택</label>
               <select id="deliveryModeSelect" class="styled-select" onchange="renderBill()">
-                <option value="bundle">한바구니 묶음 배달 (배달팁 2,500원)</option>
-                <option value="express">빠른 순차 픽업 배달 (배달팁 3,500원)</option>
+                <option value="bundle">한바구니 묶음 배달 (배달팁 2,500원 · 약 15분)</option>
+                <option value="express">빠른 순차 픽업 배달 (배달팁 3,500원 · 약 10분)</option>
               </select>
             </div>
           </div>
@@ -1164,34 +1127,36 @@
           <p class="notice-msg" id="cartNotice" role="status" aria-live="polite"></p>
 
           <div class="cta-col">
-            <button type="button" class="cta-primary" onclick="openRiderFlow()">
-              <span aria-hidden="true">🛵</span> 한 번에 주문하고 실시간 배달 보기
-            </button>
-            <button type="button" class="cta-outline" onclick="completeDelivery()">
-              <span aria-hidden="true">✅</span> 즉시 배달완료 처리하고 완료 화면 보기
+            <button type="button" class="cta-primary" onclick="placeOrder()">
+              <span aria-hidden="true">💳</span> 한 번에 결제하고 배달 현황 보기
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. 실시간 라이더 화면 -->
-    <section id="view-rider" class="view" aria-labelledby="riderMainHeadline">
-      <div class="rider-shell">
+    <!-- 2. 고객용 실시간 배달 현황 화면 -->
+    <section id="view-tracking" class="view" aria-labelledby="riderMainHeadline">
+      <div class="tracking-shell">
         <div class="live-alert-banner" role="status" aria-live="polite">
           <div style="display:flex;align-items:center;gap:9px;">
             <span class="alert-pill" id="liveAlertPill">실시간 알림</span>
             <span id="liveAlertText">주문 접수 완료 · 매장에서 조리를 시작했습니다.</span>
           </div>
-          <span style="font-size:12px;color:#a7f3d0;" id="autoStepHint">실시간 자동 진행 중</span>
+          <span style="font-size:12px;color:#a7f3d0;" id="autoStepHint">남은 시간 실시간 연동 중</span>
         </div>
 
         <div class="live-header-card">
           <div class="live-top-row">
-            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 박민수 라이더 · 다매장 순차 픽업</span>
+            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 한바구니 라이더 · 다중 매장 순차 픽업</span>
             <div class="time-badges">
               <span class="elapsed-chip" id="elapsedTimeBadge">경과 00:00</span>
-              <span class="eta-chip" id="riderCountdownBadge">남은 시간 15:00</span>
+              <span class="eta-chip" id="riderCountdownBadge">도착까지 15:00</span>
+              <div class="speed-group" role="group" aria-label="배달 시간 진행 배속 선택">
+                <button type="button" class="speed-btn active" data-speed="1" onclick="setSimSpeed(1)">1배속</button>
+                <button type="button" class="speed-btn" data-speed="15" onclick="setSimSpeed(15)">15배속</button>
+                <button type="button" class="speed-btn" data-speed="60" onclick="setSimSpeed(60)">60배속(시연)</button>
+              </div>
               <button
                 type="button"
                 class="timer-toggle-btn"
@@ -1204,7 +1169,7 @@
             </div>
           </div>
           <h2 class="live-headline" id="riderMainHeadline">매장에서 음식을 조리 중입니다</h2>
-          <p class="live-sub" id="riderSubStatus">조리가 완료되면 라이더가 순서대로 픽업합니다.</p>
+          <p class="live-sub" id="riderSubStatus">도착 예정 시간이 지나면 배달이 완료되고 장바구니가 자동으로 비워집니다.</p>
 
           <div class="progress-track-wrap">
             <div class="progress-bar-bg">
@@ -1215,11 +1180,11 @@
 
         <div class="map-card">
           <div class="map-top-bar">
-            <span><span aria-hidden="true">🗺️</span> 실시간 라이더 이동 경로 지도</span>
+            <span><span aria-hidden="true">🗺️</span> 실시간 배달 경로 지도</span>
             <span style="color:var(--primary-dark);" id="riderLocationLabel">A가게(원픽김치찜) 조리 진행 중</span>
           </div>
           <div class="map-canvas">
-            <svg class="map-svg" viewBox="0 0 760 250" role="img" aria-label="A가게(원픽김치찜), B가게(카페인중독), 고객 도착지를 잇는 실시간 라이더 이동 경로 일러스트 지도">
+            <svg class="map-svg" viewBox="0 0 760 250" role="img" aria-label="A가게(원픽김치찜), B가게(카페인중독), 고객 도착지를 잇는 실시간 배달 이동 경로 지도">
               <rect x="0" y="0" width="760" height="250" fill="#edf6f3" />
               <path d="M 0 218 Q 220 202, 460 222 T 760 210 L 760 250 L 0 250 Z" fill="#bae6fd" opacity="0.65" />
               <path d="M 0 185 L 760 185" stroke="#d4e3de" stroke-width="16" />
@@ -1238,10 +1203,10 @@
               <text x="120" y="164" font-size="11" fill="#822509" text-anchor="middle" font-weight="bold">A가게(원픽김치찜)</text>
 
               <rect x="347" y="88" width="76" height="46" rx="12" fill="#007a5e" />
-              <polygon points="343,90 385,66 427,90" fill="#004f3d" />
+              <polygon points="343,90 385,66 427,90" fill="#004736" />
               <text x="385" y="116" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="bold">B 카페</text>
               <rect x="329" y="140" width="112" height="24" rx="12" fill="#ffffff" stroke="#007a5e" stroke-width="1.5" />
-              <text x="385" y="156" font-size="11" fill="#004f3d" text-anchor="middle" font-weight="bold">B가게(카페인중독)</text>
+              <text x="385" y="156" font-size="11" fill="#004736" text-anchor="middle" font-weight="bold">B가게(카페인중독)</text>
 
               <rect x="607" y="68" width="76" height="46" rx="12" fill="#5230db" />
               <polygon points="603,70 645,46 687,70" fill="#391ba8" />
@@ -1259,25 +1224,21 @@
 
         <div class="panel">
           <h2 class="panel-title">실시간 주문 · 픽업 · 배달 진행 현황</h2>
-          <div class="stage-switcher" id="riderStageButtons" role="group" aria-label="배달 진행 단계 선택"></div>
           <ul class="timeline-list" id="riderPickupCards" aria-live="polite"></ul>
 
           <div class="cta-col">
-            <button type="button" class="cta-primary" onclick="completeDelivery()">
-              <span aria-hidden="true">✅</span> 지금 배달완료 처리 (장바구니 자동 비움)
-            </button>
             <button type="button" class="cta-outline" onclick="switchView('cart')">
-              <span aria-hidden="true">🛍️</span> 장바구니로 돌아가기
+              <span aria-hidden="true">🛍️</span> 메뉴/장바구니 화면으로 돌아가기
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. 배달완료 화면 -->
+    <!-- 3. 배달완료 영수증 화면 -->
     <section id="view-done" class="view" aria-labelledby="doneHeading">
       <div class="panel done-shell">
-        <div id="doneArtMount"></div>
+        <div class="done-icon-box" aria-hidden="true">🎉</div>
         <h2 style="font-size:23px;font-weight:900;" id="doneHeading">배달이 완료되었습니다!</h2>
         <p style="font-size:14px;color:var(--sub);margin-top:4px;">
           여러 매장에서 함께 담은 한바구니 메뉴가 문 앞에 안전하게 도착했습니다.
@@ -1310,108 +1271,79 @@
   </main>
 
   <script>
-    function makeIllustration(type) {
-      const svgs = {
-        hero: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="360" height="220">
-            <rect width="360" height="220" rx="22" fill="#e6f7f2"/>
-            <rect x="24" y="28" width="110" height="74" rx="14" fill="#fff3ee" stroke="#b83b14" stroke-width="2.5"/>
-            <polygon points="20,30 79,10 138,30" fill="#b83b14"/>
-            <text x="79" y="64" font-size="28" text-anchor="middle">🍲</text>
-            <text x="79" y="88" font-size="12" font-weight="bold" fill="#822509" text-anchor="middle">A 원픽김치찜</text>
-            <rect x="226" y="28" width="110" height="74" rx="14" fill="#e7f8f3" stroke="#007a5e" stroke-width="2.5"/>
-            <polygon points="222,30 281,10 340,30" fill="#007a5e"/>
-            <text x="281" y="64" font-size="28" text-anchor="middle">☕</text>
-            <text x="281" y="88" font-size="12" font-weight="bold" fill="#004f3d" text-anchor="middle">B 카페인중독</text>
-            <path d="M 105 106 Q 130 145, 155 150" fill="none" stroke="#007a5e" stroke-width="3.5" stroke-dasharray="6 4"/>
-            <path d="M 255 106 Q 230 145, 205 150" fill="none" stroke="#007a5e" stroke-width="3.5" stroke-dasharray="6 4"/>
-            <rect x="115" y="132" width="130" height="68" rx="18" fill="#004f3d"/>
-            <text x="180" y="164" font-size="26" text-anchor="middle">🛒✨</text>
-            <text x="180" y="186" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">삭제 없이 한바구니!</text>
-          </svg>
-        `,
-        storeA: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-            <rect width="120" height="120" rx="24" fill="#ffe6de"/>
-            <polygon points="18,46 60,22 102,46" fill="#b83b14"/>
-            <rect x="24" y="46" width="72" height="54" rx="10" fill="#ffffff" stroke="#b83b14" stroke-width="3"/>
-            <text x="60" y="82" font-size="34" text-anchor="middle">🍲</text>
-          </svg>
-        `,
-        storeB: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-            <rect width="120" height="120" rx="24" fill="#dcf7ef"/>
-            <polygon points="18,46 60,22 102,46" fill="#007a5e"/>
-            <rect x="24" y="46" width="72" height="54" rx="10" fill="#ffffff" stroke="#007a5e" stroke-width="3"/>
-            <text x="60" y="82" font-size="34" text-anchor="middle">☕</text>
-          </svg>
-        `,
-        storeC: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-            <rect width="120" height="120" rx="24" fill="#efe8ff"/>
-            <polygon points="18,46 60,22 102,46" fill="#5230db"/>
-            <rect x="24" y="46" width="72" height="54" rx="10" fill="#ffffff" stroke="#5230db" stroke-width="3"/>
-            <text x="60" y="82" font-size="34" text-anchor="middle">🍢</text>
-          </svg>
-        `,
-        done: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 170" width="240" height="170">
-            <rect width="240" height="170" rx="24" fill="#e6f7f2"/>
-            <circle cx="120" cy="84" r="56" fill="#ffffff" stroke="#007a5e" stroke-width="3"/>
-            <text x="120" y="86" font-size="42" text-anchor="middle">🛍️🎉</text>
-            <rect x="68" y="114" width="104" height="26" rx="13" fill="#004f3d"/>
-            <text x="120" y="131" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">통합 배달 완료!</text>
-          </svg>
-        `
-      };
-      return "data:image/svg+xml;utf8," + encodeURIComponent((svgs[type] || "").trim());
-    }
-
-    function svgFood(emoji, accentEmoji, c1, c2) {
-      const xml = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+    function makeFoodPhoto(mainEmoji, subEmoji, bg1, bg2, plateColor) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
           <defs>
-            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="${c1}"/>
-              <stop offset="100%" stop-color="${c2}"/>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bg1}"/>
+              <stop offset="100%" stop-color="${bg2}"/>
             </linearGradient>
+            <radialGradient id="shadow" cx="50%" cy="55%" r="42%">
+              <stop offset="0%" stop-color="rgba(0,0,0,0.2)"/>
+              <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
           </defs>
-          <rect width="160" height="160" rx="32" fill="url(#bg)"/>
-          <circle cx="80" cy="84" r="54" fill="rgba(255,255,255,0.88)"/>
-          <circle cx="80" cy="84" r="44" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="2" stroke-dasharray="5 4"/>
-          <text x="80" y="102" font-size="58" text-anchor="middle">${emoji}</text>
-          <circle cx="126" cy="36" r="18" fill="#ffffff"/>
-          <text x="126" y="43" font-size="20" text-anchor="middle">${accentEmoji}</text>
+          <rect width="240" height="240" rx="36" fill="url(#g)"/>
+          <ellipse cx="120" cy="138" rx="84" ry="70" fill="url(#shadow)"/>
+          <circle cx="120" cy="124" r="78" fill="#ffffff" stroke="${plateColor}" stroke-width="5"/>
+          <circle cx="120" cy="124" r="64" fill="#fafafa" stroke="rgba(0,0,0,0.06)" stroke-width="2"/>
+          <text x="120" y="148" font-size="84" text-anchor="middle">${mainEmoji}</text>
+          <circle cx="182" cy="56" r="24" fill="#ffffff" stroke="${plateColor}" stroke-width="2.5"/>
+          <text x="182" y="65" font-size="26" text-anchor="middle">${subEmoji}</text>
         </svg>
       `.trim();
-      return "data:image/svg+xml;utf8," + encodeURIComponent(xml);
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
     }
 
     const STORES = [
-      { id: "A", name: "A가게 (원픽김치찜)", shortName: "A가게", art: makeIllustration("storeA"), minOrder: 12000, eta: "약 25분" },
-      { id: "B", name: "B가게 (카페인중독)", shortName: "B가게", art: makeIllustration("storeB"), minOrder: 10000, eta: "약 15분" },
-      { id: "C", name: "C가게 (분식당)", shortName: "C가게", art: makeIllustration("storeC"), minOrder: 11000, eta: "약 20분" }
+      {
+        id: "A",
+        name: "A가게 (원픽김치찜)",
+        shortName: "A가게",
+        photo: makeFoodPhoto("🍲", "🔥", "#ffdfd4", "#ffbba6", "#b83b14"),
+        minOrder: 12000,
+        eta: "약 25분"
+      },
+      {
+        id: "B",
+        name: "B가게 (카페인중독)",
+        shortName: "B가게",
+        photo: makeFoodPhoto("☕", "🍰", "#d6f5ec", "#aee8d7", "#007a5e"),
+        minOrder: 10000,
+        eta: "약 15분"
+      },
+      {
+        id: "C",
+        name: "C가게 (분식당)",
+        shortName: "C가게",
+        photo: makeFoodPhoto("🍢", "🌶️", "#ece3ff", "#d4c2ff", "#5230db"),
+        minOrder: 11000,
+        eta: "약 20분"
+      }
     ];
 
     const MENUS = [
-      { id: "m1", storeId: "A", img: svgFood("🍲", "🔥", "#ffe6de", "#ffc9b8"), name: "묵은지 돼지김치찜 (1인)", desc: "국내산 묵은지와 두툼한 앞다리살을 푹 끓인 대표 한식", price: 14500 },
-      { id: "m2", storeId: "A", img: svgFood("🍳", "✨", "#fff0d4", "#ffdfa3"), name: "왕 계란말이 추가", desc: "김치찜과 찰떡궁합인 폭신폭신 수제 계란말이", price: 4500 },
-      { id: "m3", storeId: "A", img: svgFood("🥓", "🍚", "#ffe2dc", "#ffc2b5"), name: "노릇 스팸구이 사리", desc: "겉바속촉으로 구워낸 스팸 4조각 토핑", price: 3500 },
-      { id: "m4", storeId: "B", img: svgFood("🧊", "☕", "#dcf7ef", "#b9ecdc"), name: "아이스 아메리카노", desc: "고소하고 산미 적은 스페셜티 블렌드 커피", price: 3800 },
-      { id: "m5", storeId: "B", img: svgFood("🥛", "🌿", "#e7f9f3", "#c8efe2"), name: "바닐라빈 크림 라떼", desc: "마다가스카르 바닐라빈 시럽이 들어간 시그니처 라떼", price: 5000 },
-      { id: "m6", storeId: "B", img: svgFood("🍰", "🍓", "#fff2de", "#ffe0b3"), name: "바스크 치즈케이크", desc: "진한 크림치즈 풍미가 가득한 꾸덕한 디저트", price: 6200 },
-      { id: "m7", storeId: "C", img: svgFood("🌶️", "🍢", "#f0e7ff", "#dccaff"), name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡에 중독성 강한 특제 매콤달콤 소스", price: 7500 },
-      { id: "m8", storeId: "C", img: svgFood("🍤", "🥟", "#f5efff", "#e4d4ff"), name: "바삭 모둠튀김", desc: "김말이, 통오징어, 고구마, 야채튀김 4종 세트", price: 6000 }
+      { id: "m1", storeId: "A", img: makeFoodPhoto("🍲", "🥩", "#ffe6de", "#ffc7b5", "#b83b14"), name: "묵은지 돼지김치찜 (1인)", desc: "국내산 묵은지와 두툼한 앞다리살을 푹 끓인 대표 한식", price: 14500 },
+      { id: "m2", storeId: "A", img: makeFoodPhoto("🍳", "✨", "#fff1d6", "#ffdfa3", "#b83b14"), name: "왕 계란말이 추가", desc: "김치찜과 찰떡궁합인 폭신폭신 수제 계란말이", price: 4500 },
+      { id: "m3", storeId: "A", img: makeFoodPhoto("🥓", "🍚", "#ffe2dc", "#ffc2b5", "#b83b14"), name: "노릇 스팸구이 사리", desc: "겉바속촉으로 구워낸 스팸 4조각 토핑", price: 3500 },
+      { id: "m4", storeId: "B", img: makeFoodPhoto("🧊", "☕", "#dcf7ef", "#b9ecdc", "#007a5e"), name: "아이스 아메리카노", desc: "고소하고 산미 적은 스페셜티 블렌드 커피", price: 3800 },
+      { id: "m5", storeId: "B", img: makeFoodPhoto("🥛", "🌿", "#e7f9f3", "#c8efe2", "#007a5e"), name: "바닐라빈 크림 라떼", desc: "마다가스카르 바닐라빈 시럽이 들어간 시그니처 라떼", price: 5000 },
+      { id: "m6", storeId: "B", img: makeFoodPhoto("🍰", "🍓", "#fff2de", "#ffe0b3", "#007a5e"), name: "바스크 치즈케이크", desc: "진한 크림치즈 풍미가 가득한 꾸덕한 디저트", price: 6200 },
+      { id: "m7", storeId: "C", img: makeFoodPhoto("🌶️", "🍢", "#f0e7ff", "#dccaff", "#5230db"), name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡에 중독성 강한 특제 매콤달콤 소스", price: 7500 },
+      { id: "m8", storeId: "C", img: makeFoodPhoto("🍤", "🥟", "#f5efff", "#e4d4ff", "#5230db"), name: "바삭 모둠튀김", desc: "김말이, 통오징어, 고구마, 야채튀김 4종 세트", price: 6000 }
     ];
 
     let state = {
       selectedStoreId: "B",
       cart: { m1: 1, m4: 1, m6: 1 },
+      activeOrder: null,
       completedOrder: null,
-      riderStageIdx: 0,
+      totalDeliverySeconds: 900,
       remainingSeconds: 900,
       elapsedSeconds: 0,
-      stageTick: 0,
+      simSpeed: 1,
+      riderStageIdx: 0,
       timerPaused: false,
       rating: 5
     };
@@ -1423,19 +1355,10 @@
     }
 
     function formatTime(sec) {
-      const safe = Math.max(0, Number(sec || 0));
+      const safe = Math.max(0, Math.ceil(Number(sec || 0)));
       const m = String(Math.floor(safe / 60)).padStart(2, "0");
       const s = String(safe % 60).padStart(2, "0");
       return `${m}:${s}`;
-    }
-
-    function mountStaticIllustrations() {
-      document.getElementById("heroArtMount").innerHTML = `
-        <img class="hero-art-img" src="${makeIllustration("hero")}" alt="A가게 원픽김치찜과 B가게 카페인중독 메뉴가 삭제 없이 하나의 한바구니로 합쳐지는 일러스트" />
-      `;
-      document.getElementById("doneArtMount").innerHTML = `
-        <img class="done-art" src="${makeIllustration("done")}" alt="한바구니 통합 배달 완료 축하 일러스트" />
-      `;
     }
 
     function validateAddress() {
@@ -1451,7 +1374,7 @@
       return true;
     }
 
-    function snapshotCurrentOrder() {
+    function buildOrderSnapshot() {
       const chosen = MENUS.filter((m) => (state.cart[m.id] || 0) > 0).map((m) => {
         const st = STORES.find((s) => s.id === m.storeId);
         const qty = state.cart[m.id];
@@ -1464,49 +1387,79 @@
           subtotal: m.price * qty
         };
       });
-
-      if (!chosen.length) return;
+      if (!chosen.length) return null;
 
       const { total } = calcTotals();
       const addr = (document.getElementById("addressInput").value || "").trim() || "부산시 사상구 주례로 45";
-      state.completedOrder = {
-        address: addr,
-        items: chosen,
-        total
-      };
+      return { address: addr, items: chosen, total };
     }
 
-    function completeDelivery() {
+    function finalizeDelivery() {
       if (timerIntervalId) clearInterval(timerIntervalId);
+      state.remainingSeconds = 0;
 
-      if (Object.keys(state.cart).length > 0) {
-        snapshotCurrentOrder();
-        state.cart = {};
-        document.getElementById("cartNotice").textContent = "이전 주문 배달이 완료되어 장바구니가 자동으로 비워졌습니다.";
-        renderCartView();
+      const snapshot = state.activeOrder || buildOrderSnapshot();
+      if (snapshot) {
+        state.completedOrder = snapshot;
       }
 
+      state.activeOrder = null;
+      state.cart = {};
+      document.getElementById("cartNotice").textContent = "배달이 완료되어 장바구니가 자동으로 비워졌습니다.";
+      renderCartView();
       switchView("done");
+    }
+
+    function getStageFromProgress(progress) {
+      if (progress < 0.28) return 0;
+      if (progress < 0.56) return 1;
+      if (progress < 0.78) return 2;
+      return 3;
+    }
+
+    function getInterpolatedMotoPosition(progress) {
+      const p = Math.max(0, Math.min(1, progress));
+      if (p <= 0.25) {
+        return { x: 16, y: 52 };
+      } else if (p <= 0.65) {
+        const t = (p - 0.25) / 0.40;
+        const x = 16 + (50 - 16) * t;
+        const y = 52 - Math.sin(t * Math.PI) * 16 - 3 * t;
+        return { x: x.toFixed(1), y: y.toFixed(1) };
+      } else {
+        const t = (p - 0.65) / 0.35;
+        const x = 50 + (83 - 50) * t;
+        const y = 49 - 9 * t;
+        return { x: x.toFixed(1), y: y.toFixed(1) };
+      }
+    }
+
+    function setSimSpeed(speed) {
+      state.simSpeed = speed;
+      document.querySelectorAll(".speed-btn").forEach((btn) => {
+        btn.classList.toggle("active", Number(btn.dataset.speed) === speed);
+      });
+      updateTimeBadges();
     }
 
     function startCountdownLoop() {
       if (timerIntervalId) clearInterval(timerIntervalId);
       timerIntervalId = setInterval(() => {
         if (state.timerPaused) return;
-        state.elapsedSeconds += 1;
-        state.stageTick += 1;
-        if (state.remainingSeconds > 0) state.remainingSeconds -= 1;
-        updateTimeBadges();
 
-        if (state.stageTick >= 4) {
-          state.stageTick = 0;
-          const stages = buildRiderStages();
-          if (state.riderStageIdx < stages.length - 1) {
-            state.riderStageIdx += 1;
-            renderRiderView();
-          } else {
-            completeDelivery();
-          }
+        state.elapsedSeconds = Math.min(state.totalDeliverySeconds, state.elapsedSeconds + state.simSpeed);
+        state.remainingSeconds = Math.max(0, state.totalDeliverySeconds - state.elapsedSeconds);
+
+        const progress = state.elapsedSeconds / state.totalDeliverySeconds;
+        state.riderStageIdx = getStageFromProgress(progress);
+
+        renderTrackingView();
+
+        if (state.remainingSeconds <= 0) {
+          clearInterval(timerIntervalId);
+          setTimeout(() => {
+            finalizeDelivery();
+          }, 500);
         }
       }, 1000);
     }
@@ -1522,13 +1475,17 @@
       const btn = document.getElementById("timerToggleBtn");
       const hint = document.getElementById("autoStepHint");
 
-      if (remainBadge) remainBadge.textContent = `남은 시간 ${formatTime(state.remainingSeconds)}`;
+      if (remainBadge) remainBadge.textContent = `도착까지 ${formatTime(state.remainingSeconds)}`;
       if (elapsedBadge) elapsedBadge.textContent = `경과 ${formatTime(state.elapsedSeconds)}`;
       if (btn) {
         btn.textContent = state.timerPaused ? "다시 재생" : "일시정지";
         btn.setAttribute("aria-pressed", String(state.timerPaused));
       }
-      if (hint) hint.textContent = state.timerPaused ? "일시정지됨" : "실시간 자동 진행 중";
+      if (hint) {
+        hint.textContent = state.timerPaused
+          ? "일시정지됨"
+          : `${state.simSpeed}배속 실시간 진행 중`;
+      }
     }
 
     function switchView(viewName) {
@@ -1536,15 +1493,28 @@
       const target = document.getElementById("view-" + viewName);
       if (target) target.classList.add("active");
 
-      document.querySelectorAll(".nav-pill").forEach((btn) => {
-        const isCurrent = btn.dataset.view === viewName;
-        btn.classList.toggle("active", isCurrent);
-        if (isCurrent) btn.setAttribute("aria-current", "page");
-        else btn.removeAttribute("aria-current");
+      const tabOrder = document.getElementById("tabOrder");
+      const tabTracking = document.getElementById("tabTracking");
+      const tabDone = document.getElementById("tabDone");
+
+      [tabOrder, tabTracking, tabDone].forEach((b) => {
+        b.classList.remove("active");
+        b.removeAttribute("aria-current");
       });
 
-      if (viewName === "rider") {
-        renderRiderView();
+      if (viewName === "cart") {
+        tabOrder.classList.add("active");
+        tabOrder.setAttribute("aria-current", "page");
+      } else if (viewName === "tracking") {
+        tabTracking.classList.add("active");
+        tabTracking.setAttribute("aria-current", "page");
+      } else if (viewName === "done") {
+        tabDone.classList.add("active");
+        tabDone.setAttribute("aria-current", "page");
+      }
+
+      if (viewName === "tracking") {
+        renderTrackingView();
         startCountdownLoop();
       } else {
         if (timerIntervalId) clearInterval(timerIntervalId);
@@ -1571,7 +1541,7 @@
             onclick="selectStore('${st.id}')"
           >
             <div class="store-banner-wrap">
-              <img class="store-art" src="${st.art}" alt="${st.name} 매장 일러스트" />
+              <img class="store-photo" src="${st.photo}" alt="${st.name} 대표 음식 사진" />
               <div>
                 <div class="store-tile-head">${st.name}</div>
                 <div class="store-tile-sub">최소 ${won(st.minOrder)} · ${st.eta}</div>
@@ -1610,7 +1580,7 @@
         return `
           <li class="menu-card store-${st.id}">
             <div class="menu-main">
-              <img class="menu-img" src="${m.img}" alt="${m.name} 음식 일러스트" />
+              <img class="menu-photo" src="${m.img}" alt="${m.name} 음식 사진" />
               <div>
                 <div class="menu-name-row">
                   <span>${m.name}</span>
@@ -1748,86 +1718,73 @@
           alertPill: "조리중 알림",
           alertText: `${first.name} 및 주문 매장에서 음식을 조리하고 있습니다.`,
           headline: "주문 접수 완료 · 매장에서 조리 중입니다",
-          sub: "맛있게 조리 중이에요. 잠시 후 라이더가 첫 번째 매장으로 출발합니다.",
+          sub: "조리가 완료되면 라이더가 첫 번째 매장에서 픽업을 시작합니다.",
           locLabel: `${first.name} 조리 진행 중`,
-          motoTag: "조리중",
-          motoX: "16%",
-          motoY: "52%",
-          remainSec: 900
+          motoTag: "조리중"
         },
         {
           themeId: first.id,
-          chipText: `✅ ${first.shortName} 준비완료 · 픽업`,
-          alertPill: "준비완료 알림",
-          alertText: `${first.name} 음식 준비 완료! 라이더가 ${first.shortName}에서 픽업했습니다.`,
-          headline: `${first.shortName} 준비완료 · 첫 번째 픽업 완료`,
-          sub: `라이더가 ${first.shortName} 음식을 싣고 다음 매장(${second.shortName})으로 이동 중입니다.`,
+          chipText: `✅ ${first.shortName} 픽업 완료`,
+          alertPill: "1차 픽업 알림",
+          alertText: `${first.name} 음식 픽업 완료! ${second.name}으로 이동 중입니다.`,
+          headline: `${first.shortName} 픽업 완료 · 다음 매장으로 이동 중`,
+          sub: `라이더가 ${first.shortName} 음식을 싣고 ${second.name}으로 향하고 있습니다.`,
           locLabel: `${first.shortName} 픽업 완료 → ${second.shortName} 이동 중`,
-          motoTag: `${first.shortName} 픽업완료`,
-          motoX: "34%",
-          motoY: "33%",
-          remainSec: 620
+          motoTag: `${first.shortName} 픽업완료`
         },
         {
           themeId: second.id,
-          chipText: `🛍️ ${second.shortName} 픽업완료`,
-          alertPill: "픽업완료 알림",
+          chipText: `🛍️ ${second.shortName} 픽업 완료`,
+          alertPill: "전체 픽업 알림",
           alertText: `${second.name} 픽업 완료! 모든 주문 음식이 한바구니에 모였습니다.`,
-          headline: `${second.shortName} 픽업완료 · 모든 매장 픽업 끝!`,
-          sub: "모든 매장 픽업을 마치고 고객님 주소지로 출발합니다.",
-          locLabel: `${second.shortName} 픽업 완료 · 출발 준비`,
-          motoTag: "전체 픽업완료",
-          motoX: "51%",
-          motoY: "49%",
-          remainSec: 360
+          headline: `${second.shortName} 픽업 완료 · 고객님 주소지로 출발!`,
+          sub: "모든 매장 픽업을 마치고 고객님 도착지로 출발합니다.",
+          locLabel: `${second.shortName} 픽업 완료 · 고객 도착지 출발`,
+          motoTag: "전체 픽업완료"
         },
         {
           themeId: "B",
           chipText: "🛵 고객님께 배달중",
           alertPill: "배달중 알림",
-          alertText: "라이더가 고객님 주소지로 빠르게 배달 중입니다! 곧 도착합니다.",
+          alertText: "라이더가 고객님 주소지 인근을 주행 중입니다! 도착 예정 시간에 맞춰 전달됩니다.",
           headline: "고객님께 배달 중입니다 · 곧 도착 예정!",
-          sub: "잠시 후 배달이 완료되면 장바구니가 자동으로 비워지고 완료 화면으로 전환됩니다.",
+          sub: "도착 예정 시간(00:00)이 되면 배달이 완료되고 장바구니가 자동으로 비워집니다.",
           locLabel: "고객 도착지 인근 주행 중",
-          motoTag: "배달중 · 곧 도착",
-          motoX: "77%",
-          motoY: "42%",
-          remainSec: 120
+          motoTag: "배달중 · 곧 도착"
         }
       ];
     }
 
-    function openRiderFlow() {
+    function placeOrder() {
       if (!validateAddress()) {
         document.getElementById("addressInput").focus();
         return;
       }
-      if (Object.keys(state.cart).length === 0) {
+      const snap = buildOrderSnapshot();
+      if (!snap) {
         document.getElementById("cartNotice").textContent = "장바구니가 비어 있습니다. 메뉴를 1개 이상 담아주세요!";
         return;
       }
-      snapshotCurrentOrder();
-      state.riderStageIdx = 0;
+      state.activeOrder = snap;
+
+      const mode = document.getElementById("deliveryModeSelect").value;
+      const totalSec = mode === "express" ? 600 : 900;
+
+      state.totalDeliverySeconds = totalSec;
+      state.remainingSeconds = totalSec;
       state.elapsedSeconds = 0;
-      state.stageTick = 0;
-      state.remainingSeconds = 900;
+      state.riderStageIdx = 0;
       state.timerPaused = false;
-      switchView("rider");
+      switchView("tracking");
     }
 
-    function setRiderStage(idx) {
+    function renderTrackingView() {
       const stages = buildRiderStages();
-      state.riderStageIdx = Math.max(0, Math.min(idx, stages.length - 1));
-      state.stageTick = 0;
-      state.remainingSeconds = stages[state.riderStageIdx].remainSec;
-      state.timerPaused = false;
-      renderRiderView();
-    }
+      const progress = Math.max(0, Math.min(1, state.elapsedSeconds / state.totalDeliverySeconds));
+      state.riderStageIdx = getStageFromProgress(progress);
 
-    function renderRiderView() {
-      const stages = buildRiderStages();
       const cur = stages[state.riderStageIdx];
-      const pct = Math.round(((state.riderStageIdx + 1) / stages.length) * 100);
+      const pct = Math.round(progress * 100);
 
       document.getElementById("liveAlertPill").textContent = cur.alertPill;
       document.getElementById("liveAlertText").textContent = cur.alertText;
@@ -1836,23 +1793,13 @@
       document.getElementById("riderLocationLabel").textContent = cur.locLabel;
       document.getElementById("riderProgressBar").style.width = `${pct}%`;
 
+      const pos = getInterpolatedMotoPosition(progress);
       const moto = document.getElementById("motoMarker");
-      moto.style.left = cur.motoX;
-      moto.style.top = cur.motoY;
-      document.getElementById("motoStatusTag").textContent = cur.motoTag;
+      moto.style.left = `${pos.x}%`;
+      moto.style.top = `${pos.y}%`;
+      document.getElementById("motoStatusTag").textContent = `${cur.motoTag} (${formatTime(state.remainingSeconds)})`;
 
       updateTimeBadges();
-
-      document.getElementById("riderStageButtons").innerHTML = stages.map((s, idx) => `
-        <button
-          type="button"
-          class="stage-btn ${idx === state.riderStageIdx ? "active" : ""}"
-          aria-pressed="${idx === state.riderStageIdx}"
-          onclick="setRiderStage(${idx})"
-        >
-          ${idx + 1}. ${s.chipText}
-        </button>
-      `).join("");
 
       document.getElementById("riderPickupCards").innerHTML = stages.map((s, idx) => {
         let cls = "flag-next";
@@ -1886,7 +1833,7 @@
               <td><span class="store-pill-mini store-${item.storeId}">${item.storeName}</span></td>
               <td>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <img src="${item.img}" alt="${item.name} 영수증 일러스트" style="width:30px;height:30px;border-radius:7px;object-fit:cover;" />
+                  <img src="${item.img}" alt="${item.name} 영수증 음식 사진" style="width:32px;height:32px;border-radius:8px;object-fit:cover;" />
                   <span>${item.name}</span>
                 </div>
               </td>
@@ -1933,14 +1880,17 @@
       state = {
         selectedStoreId: "B",
         cart: { m1: 1, m4: 1, m6: 1 },
+        activeOrder: null,
         completedOrder: null,
-        riderStageIdx: 0,
+        totalDeliverySeconds: 900,
         remainingSeconds: 900,
         elapsedSeconds: 0,
-        stageTick: 0,
+        simSpeed: 1,
+        riderStageIdx: 0,
         timerPaused: false,
         rating: 5
       };
+      setSimSpeed(1);
       document.getElementById("searchInput").value = "";
       document.getElementById("addressInput").value = "부산시 사상구 주례로 45 경남정보대 앞";
       validateAddress();
@@ -1954,7 +1904,6 @@
       switchView("cart");
     }
 
-    mountStaticIllustrations();
     renderStoreGrid();
     renderMenuList();
     renderCartView();
