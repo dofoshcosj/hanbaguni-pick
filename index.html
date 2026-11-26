@@ -9,16 +9,19 @@
       --primary: #007a5e;
       --primary-dark: #004736;
       --primary-soft: #e6f7f2;
-      --bg: #f3f6f5;
+      --bg: #f1f5f4;
       --surface: #ffffff;
+      --surface-subtle: #f8faf9;
       --line: #cbd8d4;
       --text: #0f1715;
       --sub: #3b4d47;
       --danger: #b91c1c;
       --danger-bg: #fef2f2;
+      --success-bg: #dcfce7;
+      --success-text: #14532d;
       --focus-ring: #1d4ed8;
-      --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.12);
+      --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.11);
       --r-xl: 24px;
       --r-lg: 18px;
       --r-md: 14px;
@@ -26,7 +29,7 @@
       /* 매장별 고유 테마 컬러 (WCAG AA 4.5:1 이상 명도 대비 확보) */
       --a-main: #b83b14;
       --a-dark: #822509;
-      --a-bg: #fff3ee;
+      --a-bg: #fff4f0;
       --a-line: #f0b7a6;
 
       --b-main: #007a5e;
@@ -36,7 +39,7 @@
 
       --c-main: #5230db;
       --c-dark: #391ba8;
-      --c-bg: #f1edff;
+      --c-bg: #f2efff;
       --c-line: #c5b7fc;
     }
 
@@ -48,7 +51,10 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(0, 122, 94, 0.07), transparent 36%),
+        radial-gradient(circle at 92% 8%, rgba(82, 48, 219, 0.06), transparent 34%),
+        var(--bg);
       color: var(--text);
       line-height: 1.55;
       min-height: 100vh;
@@ -57,7 +63,7 @@
     /* 2. 키보드 접근성: 본문 바로가기 & 명확한 포커스 표시 */
     .skip-link {
       position: absolute;
-      top: -56px;
+      top: -60px;
       left: 16px;
       background: var(--primary-dark);
       color: #ffffff;
@@ -92,7 +98,7 @@
       position: sticky;
       top: 0;
       z-index: 60;
-      background: rgba(255, 255, 255, 0.97);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
@@ -177,6 +183,7 @@
       padding: 8px 13px;
       border-radius: 11px;
       cursor: pointer;
+      transition: background 0.15s ease;
     }
 
     .reset-btn:hover {
@@ -203,14 +210,28 @@
       background: linear-gradient(125deg, #063b2e 0%, #0b5e4a 58%, #12785f 100%);
       color: #ffffff;
       border-radius: var(--r-xl);
-      padding: 22px 26px;
-      margin-bottom: 20px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
       flex-wrap: wrap;
       box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promo-strip::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+      pointer-events: none;
     }
 
     .promo-tag {
@@ -219,7 +240,7 @@
       border: 1px solid rgba(255, 255, 255, 0.28);
       font-size: 12px;
       font-weight: 800;
-      padding: 4px 11px;
+      padding: 4px 12px;
       border-radius: 999px;
       margin-bottom: 8px;
     }
@@ -228,18 +249,21 @@
       font-size: 22px;
       font-weight: 900;
       line-height: 1.3;
+      letter-spacing: -0.02em;
     }
 
     .promo-sub {
       font-size: 13.5px;
-      color: #dff7f0;
-      margin-top: 4px;
+      color: #e4faf3;
+      margin-top: 5px;
     }
 
     .promo-badges {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
 
     .promo-chip {
@@ -247,14 +271,15 @@
       color: #063b2e;
       font-size: 12px;
       font-weight: 900;
-      padding: 7px 13px;
-      border-radius: 11px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
     /* 주문 & 장바구니 그리드 */
     .cart-layout {
       display: grid;
-      grid-template-columns: 1.34fr 1fr;
+      grid-template-columns: 1.35fr 1fr;
       gap: 22px;
       align-items: start;
     }
@@ -273,6 +298,15 @@
       padding: 22px;
     }
 
+    .panel-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
     .panel-title {
       font-size: 18px;
       font-weight: 900;
@@ -282,6 +316,10 @@
       gap: 8px;
       margin-bottom: 14px;
       color: var(--text);
+    }
+
+    .panel-header-row .panel-title {
+      margin-bottom: 0;
     }
 
     .store-A { --s-main: var(--a-main); --s-dark: var(--a-dark); --s-bg: var(--a-bg); --s-line: var(--a-line); }
@@ -318,7 +356,7 @@
       background: #ffffff;
       cursor: pointer;
       text-align: left;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -386,6 +424,44 @@
       border-color: var(--s-dark);
     }
 
+    /* 검색 및 필터 바 */
+    .filter-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1 1 260px;
+    }
+
+    .view-mode-switch {
+      display: inline-flex;
+      background: var(--surface-subtle);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .mode-pill-btn {
+      border: none;
+      background: transparent;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .mode-pill-btn.active {
+      background: var(--primary-dark);
+      color: #ffffff;
+    }
+
     /* 4. 폼 접근성 */
     .field-label {
       display: block;
@@ -444,11 +520,12 @@
       border: 1.5px solid var(--s-line);
       border-left: 5px solid var(--s-main);
       background: #ffffff;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, transform 0.15s ease;
     }
 
     .menu-card:hover {
       background: var(--s-bg);
+      transform: translateY(-1px);
     }
 
     .menu-main {
@@ -458,8 +535,8 @@
     }
 
     .menu-photo {
-      width: 92px;
-      height: 92px;
+      width: 88px;
+      height: 88px;
       border-radius: 16px;
       object-fit: cover;
       border: 1px solid var(--s-line);
@@ -486,17 +563,42 @@
       border: 1px solid var(--s-line);
     }
 
+    .menu-badge-hot {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #78350f;
+    }
+
     .menu-desc {
       font-size: 12.5px;
       color: var(--sub);
       margin-top: 3px;
     }
 
+    .menu-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
     .menu-price {
       font-size: 15px;
       font-weight: 900;
       color: var(--s-dark);
-      margin-top: 6px;
+    }
+
+    .in-cart-pill {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: var(--primary-soft);
+      padding: 2px 8px;
+      border-radius: 999px;
     }
 
     .add-btn {
@@ -509,6 +611,11 @@
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+
+    .add-btn:hover {
+      opacity: 0.92;
     }
 
     /* 통합 장바구니 영역 */
@@ -539,8 +646,8 @@
       font-weight: 800;
       padding: 3px 9px;
       border-radius: 999px;
-      background: #dcfce7;
-      color: #14532d;
+      background: var(--success-bg);
+      color: var(--success-text);
       white-space: nowrap;
     }
 
@@ -610,7 +717,7 @@
     }
 
     .bill-box {
-      background: #f8faf9;
+      background: var(--surface-subtle);
       border: 1px solid var(--line);
       border-radius: 15px;
       padding: 15px;
@@ -917,7 +1024,7 @@
       white-space: nowrap;
     }
 
-    .flag-done { background: #dcfce7; color: #14532d; }
+    .flag-done { background: var(--success-bg); color: var(--success-text); }
     .flag-now { background: #fef3c7; color: #78350f; }
     .flag-next { background: #e2e8f0; color: #1e293b; }
 
@@ -944,9 +1051,9 @@
     .cleared-cart-note {
       display: inline-block;
       margin-top: 8px;
-      background: #e6f7f2;
+      background: var(--primary-soft);
       border: 1.5px solid #8fd8c3;
-      color: #004736;
+      color: var(--primary-dark);
       font-size: 12.5px;
       font-weight: 800;
       padding: 5px 14px;
@@ -955,7 +1062,7 @@
 
     .order-receipt {
       text-align: left;
-      background: #f8faf9;
+      background: var(--surface-subtle);
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 18px;
@@ -986,8 +1093,8 @@
     }
 
     .receipt-table th {
-      background: #e6f7f2;
-      color: #004736;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
       font-weight: 800;
     }
 
@@ -1065,23 +1172,38 @@
           <h2 class="panel-title" id="cartMainTitle">1. 매장 선택 및 메뉴 이어 담기</h2>
           <div class="store-grid" id="storeGrid" role="group" aria-label="매장 목록"></div>
 
-          <label for="searchInput" class="field-label">전체 매장 메뉴 검색</label>
-          <input
-            type="text"
-            id="searchInput"
-            class="text-input"
-            style="margin-bottom:14px;"
-            placeholder="메뉴 이름을 검색해 보세요 (예: 김치찜, 아메리카노, 치즈케이크, 떡볶이)"
-            oninput="renderMenuList()"
-          />
+          <div class="filter-toolbar">
+            <div class="search-wrap">
+              <label for="searchInput" class="field-label">전체 매장 메뉴 검색</label>
+              <input
+                type="text"
+                id="searchInput"
+                class="text-input"
+                placeholder="메뉴 이름을 검색해 보세요 (예: 김치찜, 아메리카노, 치즈케이크, 떡볶이)"
+                oninput="renderMenuList()"
+              />
+            </div>
+
+            <div>
+              <span class="field-label" id="menuScopeLabel">보기 범위</span>
+              <div class="view-mode-switch" role="group" aria-labelledby="menuScopeLabel">
+                <button type="button" class="mode-pill-btn active" id="scopeStoreBtn" aria-pressed="true" onclick="setMenuScope('store')">
+                  선택 매장만
+                </button>
+                <button type="button" class="mode-pill-btn" id="scopeAllBtn" aria-pressed="false" onclick="setMenuScope('all')">
+                  전체 메뉴 보기
+                </button>
+              </div>
+            </div>
+          </div>
 
           <h2 class="panel-title" id="activeStoreHeading"></h2>
           <ul class="menu-stack" id="menuList" aria-live="polite"></ul>
         </div>
 
         <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <h2 class="panel-title" style="margin-bottom:0;">2. 한바구니 통합 장바구니</h2>
+          <div class="panel-header-row">
+            <h2 class="panel-title">2. 한바구니 통합 장바구니</h2>
             <span id="cartCountTag" class="badge-ok">총 0개</span>
           </div>
 
@@ -1324,18 +1446,19 @@
     ];
 
     const MENUS = [
-      { id: "m1", storeId: "A", img: makeFoodPhoto("🍲", "🥩", "#ffe6de", "#ffc7b5", "#b83b14"), name: "묵은지 돼지김치찜 (1인)", desc: "국내산 묵은지와 두툼한 앞다리살을 푹 끓인 대표 한식", price: 14500 },
-      { id: "m2", storeId: "A", img: makeFoodPhoto("🍳", "✨", "#fff1d6", "#ffdfa3", "#b83b14"), name: "왕 계란말이 추가", desc: "김치찜과 찰떡궁합인 폭신폭신 수제 계란말이", price: 4500 },
-      { id: "m3", storeId: "A", img: makeFoodPhoto("🥓", "🍚", "#ffe2dc", "#ffc2b5", "#b83b14"), name: "노릇 스팸구이 사리", desc: "겉바속촉으로 구워낸 스팸 4조각 토핑", price: 3500 },
-      { id: "m4", storeId: "B", img: makeFoodPhoto("🧊", "☕", "#dcf7ef", "#b9ecdc", "#007a5e"), name: "아이스 아메리카노", desc: "고소하고 산미 적은 스페셜티 블렌드 커피", price: 3800 },
-      { id: "m5", storeId: "B", img: makeFoodPhoto("🥛", "🌿", "#e7f9f3", "#c8efe2", "#007a5e"), name: "바닐라빈 크림 라떼", desc: "마다가스카르 바닐라빈 시럽이 들어간 시그니처 라떼", price: 5000 },
-      { id: "m6", storeId: "B", img: makeFoodPhoto("🍰", "🍓", "#fff2de", "#ffe0b3", "#007a5e"), name: "바스크 치즈케이크", desc: "진한 크림치즈 풍미가 가득한 꾸덕한 디저트", price: 6200 },
-      { id: "m7", storeId: "C", img: makeFoodPhoto("🌶️", "🍢", "#f0e7ff", "#dccaff", "#5230db"), name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡에 중독성 강한 특제 매콤달콤 소스", price: 7500 },
-      { id: "m8", storeId: "C", img: makeFoodPhoto("🍤", "🥟", "#f5efff", "#e4d4ff", "#5230db"), name: "바삭 모둠튀김", desc: "김말이, 통오징어, 고구마, 야채튀김 4종 세트", price: 6000 }
+      { id: "m1", storeId: "A", img: makeFoodPhoto("🍲", "🥩", "#ffe6de", "#ffc7b5", "#b83b14"), name: "묵은지 돼지김치찜 (1인)", desc: "국내산 묵은지와 두툼한 앞다리살을 푹 끓인 대표 한식", price: 14500, hot: true },
+      { id: "m2", storeId: "A", img: makeFoodPhoto("🍳", "✨", "#fff1d6", "#ffdfa3", "#b83b14"), name: "왕 계란말이 추가", desc: "김치찜과 찰떡궁합인 폭신폭신 수제 계란말이", price: 4500, hot: false },
+      { id: "m3", storeId: "A", img: makeFoodPhoto("🥓", "🍚", "#ffe2dc", "#ffc2b5", "#b83b14"), name: "노릇 스팸구이 사리", desc: "겉바속촉으로 구워낸 스팸 4조각 토핑", price: 3500, hot: false },
+      { id: "m4", storeId: "B", img: makeFoodPhoto("🧊", "☕", "#dcf7ef", "#b9ecdc", "#007a5e"), name: "아이스 아메리카노", desc: "고소하고 산미 적은 스페셜티 블렌드 커피", price: 3800, hot: true },
+      { id: "m5", storeId: "B", img: makeFoodPhoto("🥛", "🌿", "#e7f9f3", "#c8efe2", "#007a5e"), name: "바닐라빈 크림 라떼", desc: "마다가스카르 바닐라빈 시럽이 들어간 시그니처 라떼", price: 5000, hot: false },
+      { id: "m6", storeId: "B", img: makeFoodPhoto("🍰", "🍓", "#fff2de", "#ffe0b3", "#007a5e"), name: "바스크 치즈케이크", desc: "진한 크림치즈 풍미가 가득한 꾸덕한 디저트", price: 6200, hot: true },
+      { id: "m7", storeId: "C", img: makeFoodPhoto("🌶️", "🍢", "#f0e7ff", "#dccaff", "#5230db"), name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡에 중독성 강한 특제 매콤달콤 소스", price: 7500, hot: true },
+      { id: "m8", storeId: "C", img: makeFoodPhoto("🍤", "🥟", "#f5efff", "#e4d4ff", "#5230db"), name: "바삭 모둠튀김", desc: "김말이, 통오징어, 고구마, 야채튀김 4종 세트", price: 6000, hot: false }
     ];
 
     let state = {
       selectedStoreId: "B",
+      menuScope: "store",
       cart: { m1: 1, m4: 1, m6: 1 },
       activeOrder: null,
       completedOrder: null,
@@ -1374,6 +1497,21 @@
       return true;
     }
 
+    function setMenuScope(scope) {
+      state.menuScope = scope;
+      const storeBtn = document.getElementById("scopeStoreBtn");
+      const allBtn = document.getElementById("scopeAllBtn");
+      const isAll = scope === "all";
+
+      storeBtn.classList.toggle("active", !isAll);
+      storeBtn.setAttribute("aria-pressed", String(!isAll));
+      allBtn.classList.toggle("active", isAll);
+      allBtn.setAttribute("aria-pressed", String(isAll));
+
+      renderStoreGrid();
+      renderMenuList();
+    }
+
     function buildOrderSnapshot() {
       const chosen = MENUS.filter((m) => (state.cart[m.id] || 0) > 0).map((m) => {
         const st = STORES.find((s) => s.id === m.storeId);
@@ -1407,6 +1545,7 @@
       state.cart = {};
       document.getElementById("cartNotice").textContent = "배달이 완료되어 장바구니가 자동으로 비워졌습니다.";
       renderCartView();
+      renderMenuList();
       switchView("done");
     }
 
@@ -1525,6 +1664,10 @@
 
     function selectStore(storeId) {
       state.selectedStoreId = storeId;
+      if (state.menuScope === "all") {
+        setMenuScope("store");
+        return;
+      }
       renderStoreGrid();
       renderMenuList();
     }
@@ -1532,7 +1675,7 @@
     function renderStoreGrid() {
       const grid = document.getElementById("storeGrid");
       grid.innerHTML = STORES.map((st) => {
-        const active = st.id === state.selectedStoreId;
+        const active = state.menuScope === "store" && st.id === state.selectedStoreId;
         return `
           <button
             type="button"
@@ -1557,14 +1700,21 @@
 
       const current = STORES.find((s) => s.id === state.selectedStoreId);
       const heading = document.getElementById("activeStoreHeading");
-      heading.className = `panel-title store-${current.id}`;
-      heading.innerHTML = `<span class="color-chip" aria-hidden="true"></span> ${current.name} 메뉴 목록`;
+      if (state.menuScope === "all") {
+        heading.className = "panel-title";
+        heading.innerHTML = `<span class="color-chip" aria-hidden="true"></span> 전체 매장 메뉴 한눈에 보기`;
+      } else {
+        heading.className = `panel-title store-${current.id}`;
+        heading.innerHTML = `<span class="color-chip" aria-hidden="true"></span> ${current.name} 메뉴 목록`;
+      }
     }
 
     function renderMenuList() {
       const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+      const showAllStores = Boolean(q) || state.menuScope === "all";
+
       const items = MENUS.filter((m) => {
-        const storeMatch = q ? true : m.storeId === state.selectedStoreId;
+        const storeMatch = showAllStores ? true : m.storeId === state.selectedStoreId;
         const textMatch = !q || m.name.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q);
         return storeMatch && textMatch;
       });
@@ -1577,6 +1727,7 @@
 
       box.innerHTML = items.map((m) => {
         const st = STORES.find((s) => s.id === m.storeId);
+        const qtyInCart = state.cart[m.id] || 0;
         return `
           <li class="menu-card store-${st.id}">
             <div class="menu-main">
@@ -1584,10 +1735,14 @@
               <div>
                 <div class="menu-name-row">
                   <span>${m.name}</span>
-                  ${q ? `<span class="store-pill-mini">${st.name}</span>` : ""}
+                  ${showAllStores ? `<span class="store-pill-mini">${st.name}</span>` : ""}
+                  ${m.hot ? `<span class="menu-badge-hot">인기 메뉴</span>` : ""}
                 </div>
                 <div class="menu-desc">${m.desc}</div>
-                <div class="menu-price">${won(m.price)}</div>
+                <div class="menu-meta-row">
+                  <span class="menu-price">${won(m.price)}</span>
+                  ${qtyInCart > 0 ? `<span class="in-cart-pill">장바구니 ${qtyInCart}개 담김</span>` : ""}
+                </div>
               </div>
             </div>
             <button type="button" class="add-btn" onclick="updateQty('${m.id}', 1)" aria-label="${m.name} 기존 장바구니에 이어 담기">
@@ -1610,6 +1765,7 @@
         ? `기존 메뉴 삭제 없이 [${targetStore.name}] ${targetMenu.name} (${Math.max(0, next)}개) 반영 완료!`
         : "";
       renderCartView();
+      renderMenuList();
     }
 
     function renderCartView() {
@@ -1813,7 +1969,7 @@
         }
         return `
           <li class="timeline-card store-${s.themeId}">
-            <span><strong>${idx + 1}단계 · ${s.chipText}</strong> — ${s.alertText}</span>
+            <span><span aria-hidden="true">•</span> <strong>${idx + 1}단계 · ${s.chipText}</strong> — ${s.alertText}</span>
             <span class="state-flag ${cls}">${label}</span>
           </li>
         `;
@@ -1879,6 +2035,7 @@
       if (timerIntervalId) clearInterval(timerIntervalId);
       state = {
         selectedStoreId: "B",
+        menuScope: "store",
         cart: { m1: 1, m4: 1, m6: 1 },
         activeOrder: null,
         completedOrder: null,
@@ -1891,6 +2048,7 @@
         rating: 5
       };
       setSimSpeed(1);
+      setMenuScope("store");
       document.getElementById("searchInput").value = "";
       document.getElementById("addressInput").value = "부산시 사상구 주례로 45 경남정보대 앞";
       validateAddress();
