@@ -19,7 +19,7 @@
       --shadow: 0 10px 28px rgba(16, 40, 32, 0.07);
       --radius: 16px;
 
-      /* 가게별 고유 컬러 변수 */
+      /* 가게별 고유 컬러 */
       --store-a: #d95d39;
       --store-a-dark: #b44525;
       --store-a-bg: #fff2ed;
@@ -84,7 +84,6 @@
       font-size: 12px;
       padding: 4px 9px;
       border-radius: 999px;
-      letter-spacing: 0.02em;
     }
 
     .brand-title {
@@ -216,7 +215,7 @@
       margin-bottom: 14px;
     }
 
-    /* 가게별 테마 클래스 (A, B, C) */
+    /* 가게별 테마 */
     .theme-A {
       --store-color: var(--store-a);
       --store-color-dark: var(--store-a-dark);
@@ -238,7 +237,7 @@
       --store-color-border: var(--store-c-border);
     }
 
-    /* 매장 선택 카드 */
+    /* 매장 탭 */
     .store-tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -253,7 +252,6 @@
     }
 
     .store-card {
-      position: relative;
       border: 1.5px solid var(--store-color-border);
       border-top: 4px solid var(--store-color);
       border-radius: 13px;
@@ -273,7 +271,6 @@
       background: var(--store-color-bg);
       border-color: var(--store-color);
       border-top-width: 5px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
     }
 
     .store-card-top {
@@ -321,14 +318,13 @@
       font-size: 14px;
       margin-bottom: 14px;
       outline: none;
-      transition: border-color 0.15s ease;
     }
 
     .search-input:focus {
       border-color: var(--store-color, var(--primary));
     }
 
-    /* 메뉴 리스트 */
+    /* 메뉴 리스트 & 음식 이미지 */
     .menu-list {
       display: flex;
       flex-direction: column;
@@ -358,16 +354,13 @@
       gap: 12px;
     }
 
-    .menu-emoji-box {
-      width: 46px;
-      height: 46px;
+    .food-thumb {
+      width: 60px;
+      height: 60px;
       border-radius: 12px;
-      background: var(--store-color-bg);
+      object-fit: cover;
       border: 1px solid var(--store-color-border);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+      background: var(--store-color-bg);
       flex-shrink: 0;
     }
 
@@ -476,6 +469,21 @@
       font-size: 13px;
     }
 
+    .cart-item-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .cart-mini-thumb {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--store-color-border);
+      background: #fff;
+    }
+
     .qty-box {
       display: inline-flex;
       align-items: center;
@@ -580,9 +588,9 @@
       background: var(--primary-light);
     }
 
-    /* 2. 라이더 화면 */
+    /* 2. 라이더 화면 (배민·쿠팡이츠 순차 픽업 스타일) */
     .rider-card {
-      max-width: 760px;
+      max-width: 780px;
       margin: 0 auto;
     }
 
@@ -604,13 +612,13 @@
       color: #fff;
       font-size: 12px;
       font-weight: 800;
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: 999px;
     }
 
     .map-mock {
       position: relative;
-      height: 210px;
+      height: 190px;
       border-radius: 14px;
       background: linear-gradient(135deg, #e7f3ef 0%, #d8ebe4 100%);
       border: 1px solid var(--border);
@@ -624,7 +632,7 @@
 
     .route-track {
       position: relative;
-      height: 9px;
+      height: 10px;
       background: #ffffff;
       border-radius: 999px;
       margin: auto 0;
@@ -633,7 +641,7 @@
 
     .route-fill {
       height: 100%;
-      width: 68%;
+      width: 55%;
       background: linear-gradient(90deg, var(--store-a), var(--store-b), var(--store-c));
       border-radius: 999px;
       transition: width 0.3s ease;
@@ -644,6 +652,8 @@
       justify-content: space-between;
       font-size: 12px;
       font-weight: 700;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .route-step-buttons {
@@ -657,7 +667,7 @@
       border: 1px solid var(--border);
       background: #fff;
       border-radius: 999px;
-      padding: 6px 12px;
+      padding: 7px 13px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
@@ -669,24 +679,48 @@
       border-color: var(--accent);
     }
 
-    .stop-list {
+    .timeline-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 18px;
     }
 
-    .stop-item {
+    .timeline-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px 14px;
-      border: 1.5px solid var(--store-color-border);
-      border-left: 4px solid var(--store-color);
-      background: var(--store-color-bg);
-      border-radius: 10px;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--store-color-border, var(--border));
+      border-left: 4px solid var(--store-color, var(--primary));
+      background: var(--store-color-bg, #f8faf9);
+      border-radius: 12px;
       font-size: 13px;
-      color: var(--store-color-dark);
+      color: var(--store-color-dark, var(--text));
+    }
+
+    .step-state-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .step-done {
+      background: #dff5ee;
+      color: var(--primary-dark);
+    }
+
+    .step-current {
+      background: #fff0e6;
+      color: #c84b14;
+    }
+
+    .step-waiting {
+      background: #eef2f1;
+      color: var(--muted);
     }
 
     /* 3. 배달완료 화면 */
@@ -769,7 +803,7 @@
           <div class="section-header">
             <h1 class="section-title">1. 매장 선택 및 메뉴 담기</h1>
           </div>
-          <p class="section-sub">가게별 색상과 음식 이모지로 여러 매장 메뉴를 한 번에 담아보세요.</p>
+          <p class="section-sub">가게별 색상, 이모지, 음식 이미지로 여러 매장 메뉴를 한 번에 담아보세요.</p>
 
           <div class="store-tabs" id="storeTabs"></div>
 
@@ -823,41 +857,33 @@
       </div>
     </section>
 
-    <!-- 화면 2: 라이더 화면 -->
+    <!-- 화면 2: 라이더 화면 (배민·쿠팡이츠 순차 픽업 흐름) -->
     <section id="screen-rider" class="screen">
       <div class="card rider-card">
         <div class="status-banner">
           <div>
             <div style="font-size: 13px; color: var(--muted); font-weight: 700;">🛵 실시간 배달 진행</div>
-            <div style="font-size: 18px; font-weight: 800;" id="riderStatusText">라이더가 매장 픽업 후 이동 중입니다</div>
+            <div style="font-size: 18px; font-weight: 800;" id="riderStatusText">A가게에서 픽업 완료 · B가게에서 픽업 중</div>
           </div>
-          <span class="status-pill" id="riderEtaBadge">도착 예정 약 12분</span>
+          <span class="status-pill" id="riderEtaBadge">도착 예정 약 14분</span>
         </div>
 
         <div class="map-mock">
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700;">
-            <span>🛵 라이더: 박민수 라이더 (010-****-4821)</span>
-            <span id="riderProgressPercent">진행률 68%</span>
+            <span>🛵 라이더: 박민수 라이더 (순차 픽업 배달 중)</span>
+            <span id="riderProgressPercent">진행률 55%</span>
           </div>
 
           <div class="route-track">
             <div class="route-fill" id="routeFill"></div>
           </div>
 
-          <div class="route-stops">
-            <span>① 🏪 매장 픽업</span>
-            <span>② 🛍️ 한바구니 경유</span>
-            <span>③ 🏠 고객 도착지</span>
-          </div>
+          <div class="route-stops" id="routeStopsLabels"></div>
         </div>
 
-        <div class="route-step-buttons">
-          <button type="button" class="step-chip" data-step="0" onclick="setRiderStep(0)">🏪 매장 이동 중</button>
-          <button type="button" class="step-chip active" data-step="1" onclick="setRiderStep(1)">🛍️ 한바구니 픽업 완료</button>
-          <button type="button" class="step-chip" data-step="2" onclick="setRiderStep(2)">🏠 고객 문 앞 도착 직전</button>
-        </div>
+        <div class="route-step-buttons" id="riderStepButtons"></div>
 
-        <div class="stop-list" id="riderStopList"></div>
+        <div class="timeline-list" id="riderTimelineList"></div>
 
         <div class="action-stack">
           <button type="button" class="btn-primary-full" onclick="goScreen('complete')">
@@ -903,38 +929,101 @@
   </main>
 
   <script>
+    function makeFoodSvg(emoji, bg1, bg2) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bg1}"/>
+              <stop offset="100%" stop-color="${bg2}"/>
+            </linearGradient>
+          </defs>
+          <rect width="120" height="120" rx="24" fill="url(#g)"/>
+          <circle cx="60" cy="62" r="38" fill="rgba(255,255,255,0.65)"/>
+          <text x="60" y="75" font-size="44" text-anchor="middle">${emoji}</text>
+        </svg>
+      `.trim();
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
     const STORES = [
-      { id: "A", name: "A가게 (한식)", emoji: "🍲", minOrder: 12000, eta: "약 25분" },
-      { id: "B", name: "B가게 (카페)", emoji: "☕", minOrder: 10000, eta: "약 15분" },
-      { id: "C", name: "C가게 (분식)", emoji: "🍢", minOrder: 11000, eta: "약 20분" }
+      { id: "A", name: "A가게 (한식)", shortName: "A가게", emoji: "🍲", minOrder: 12000, eta: "약 25분" },
+      { id: "B", name: "B가게 (카페)", shortName: "B가게", emoji: "☕", minOrder: 10000, eta: "약 15분" },
+      { id: "C", name: "C가게 (분식)", shortName: "C가게", emoji: "🍢", minOrder: 11000, eta: "약 20분" }
     ];
 
     const MENUS = [
-      { id: "m1", storeId: "A", emoji: "🍲", name: "묵은지 돼지김치찜 (1인)", desc: "칼칼하고 깊은 맛의 대표 한식 메뉴", price: 14500 },
-      { id: "m2", storeId: "A", emoji: "🍳", name: "계란말이 추가", desc: "부드럽고 도톰하게 부친 계란말이", price: 4500 },
-      { id: "m3", storeId: "A", emoji: "🥓", name: "스팸구이 사리", desc: "노릇하게 구운 스팸 추가", price: 3500 },
-      { id: "m4", storeId: "B", emoji: "🧊", name: "아이스 아메리카노", desc: "고소한 원두로 추출한 깔끔한 커피", price: 3800 },
-      { id: "m5", storeId: "B", emoji: "🥛", name: "바닐라빈 라떼", desc: "진한 에스프레소와 바닐라의 조화", price: 5000 },
-      { id: "m6", storeId: "B", emoji: "🍰", name: "바스크 치즈케이크", desc: "꾸덕하고 진한 풍미의 수제 케이크", price: 6200 },
-      { id: "m7", storeId: "C", emoji: "🌶️", name: "매콤 국물떡볶이", desc: "쫄깃한 밀떡과 매콤달콤한 국물", price: 7500 },
-      { id: "m8", storeId: "C", emoji: "🍤", name: "바삭 모둠튀김", desc: "김말이, 오징어, 야채튀김 구성", price: 6000 }
-    ];
-
-    const RIDER_STEPS = [
       {
-        label: "라이더가 첫 번째 매장으로 이동 중입니다",
-        eta: "도착 예정 약 18분",
-        percent: 32
+        id: "m1",
+        storeId: "A",
+        emoji: "🍲",
+        img: makeFoodSvg("🍲", "#ffe5dc", "#ffd0c0"),
+        name: "묵은지 돼지김치찜 (1인)",
+        desc: "칼칼하고 깊은 맛의 대표 한식 메뉴",
+        price: 14500
       },
       {
-        label: "라이더가 매장 픽업 후 고객님께 이동 중입니다",
-        eta: "도착 예정 약 12분",
-        percent: 68
+        id: "m2",
+        storeId: "A",
+        emoji: "🍳",
+        img: makeFoodSvg("🍳", "#fff0d6", "#ffe0ad"),
+        name: "계란말이 추가",
+        desc: "부드럽고 도톰하게 부친 계란말이",
+        price: 4500
       },
       {
-        label: "라이더가 도착지 근처에 거의 다다랐습니다",
-        eta: "도착 예정 약 3분",
-        percent: 94
+        id: "m3",
+        storeId: "A",
+        emoji: "🥓",
+        img: makeFoodSvg("🥓", "#ffe3de", "#ffc7be"),
+        name: "스팸구이 사리",
+        desc: "노릇하게 구운 스팸 추가",
+        price: 3500
+      },
+      {
+        id: "m4",
+        storeId: "B",
+        emoji: "🧊",
+        img: makeFoodSvg("🧊", "#dff5ee", "#c2ebd9"),
+        name: "아이스 아메리카노",
+        desc: "고소한 원두로 추출한 깔끔한 커피",
+        price: 3800
+      },
+      {
+        id: "m5",
+        storeId: "B",
+        emoji: "🥛",
+        img: makeFoodSvg("🥛", "#eaf7f2", "#cfece1"),
+        name: "바닐라빈 라떼",
+        desc: "진한 에스프레소와 바닐라의 조화",
+        price: 5000
+      },
+      {
+        id: "m6",
+        storeId: "B",
+        emoji: "🍰",
+        img: makeFoodSvg("🍰", "#fff3e0", "#ffe2ba"),
+        name: "바스크 치즈케이크",
+        desc: "꾸덕하고 진한 풍미의 수제 케이크",
+        price: 6200
+      },
+      {
+        id: "m7",
+        storeId: "C",
+        emoji: "🌶️",
+        img: makeFoodSvg("🌶️", "#f1e8ff", "#dfd0ff"),
+        name: "매콤 국물떡볶이",
+        desc: "쫄깃한 밀떡과 매콤달콤한 국물",
+        price: 7500
+      },
+      {
+        id: "m8",
+        storeId: "C",
+        emoji: "🍤",
+        img: makeFoodSvg("🍤", "#f5efff", "#e6d8ff"),
+        name: "바삭 모둠튀김",
+        desc: "김말이, 오징어, 야채튀김 구성",
+        price: 6000
       }
     ];
 
@@ -945,7 +1034,7 @@
         m4: 1,
         m6: 1
       },
-      riderStep: 1,
+      riderStepIndex: 1,
       rating: 5
     };
 
@@ -954,9 +1043,7 @@
     }
 
     function goScreen(screenName) {
-      document.querySelectorAll(".screen").forEach((el) => {
-        el.classList.remove("active");
-      });
+      document.querySelectorAll(".screen").forEach((el) => el.classList.remove("active"));
       const target = document.getElementById("screen-" + screenName);
       if (target) target.classList.add("active");
 
@@ -965,7 +1052,7 @@
       });
 
       if (screenName === "rider") {
-        renderRiderStops();
+        renderRiderFlow();
       } else if (screenName === "complete") {
         renderCompleteSummary();
       }
@@ -1027,10 +1114,10 @@
           return `
             <div class="menu-item theme-${store.id}">
               <div class="menu-left">
-                <div class="menu-emoji-box">${menu.emoji}</div>
+                <img class="food-thumb" src="${menu.img}" alt="${menu.name}" />
                 <div>
                   <div class="menu-info-title">
-                    <span>${menu.name}</span>
+                    <span>${menu.emoji} ${menu.name}</span>
                     ${query ? `<span class="menu-store-tag">${store.emoji} ${store.name}</span>` : ""}
                   </div>
                   <div class="menu-info-desc">${menu.desc}</div>
@@ -1075,9 +1162,12 @@
             const qty = state.cart[item.id];
             return `
               <div class="cart-item-row">
-                <div>
-                  <strong>${item.emoji} ${item.name}</strong>
-                  <div style="font-size:12px;color:var(--muted);">${formatWon(item.price * qty)}</div>
+                <div class="cart-item-left">
+                  <img class="cart-mini-thumb" src="${item.img}" alt="${item.name}" />
+                  <div>
+                    <strong>${item.emoji} ${item.name}</strong>
+                    <div style="font-size:12px;color:var(--muted);">${formatWon(item.price * qty)}</div>
+                  </div>
                 </div>
                 <div class="qty-box">
                   <button type="button" class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
@@ -1117,9 +1207,7 @@
       let menuTotal = 0;
       Object.entries(state.cart).forEach(([menuId, qty]) => {
         const menu = MENUS.find((m) => m.id === menuId);
-        if (menu && qty > 0) {
-          menuTotal += menu.price * qty;
-        }
+        if (menu && qty > 0) menuTotal += menu.price * qty;
       });
 
       const couponDiscount = menuTotal > 0 ? Number(document.getElementById("couponSelect").value || 0) : 0;
@@ -1152,40 +1240,96 @@
       `;
     }
 
+    function getOrderedStores() {
+      const active = STORES.filter((s) =>
+        MENUS.some((m) => m.storeId === s.id && (state.cart[m.id] || 0) > 0)
+      );
+      return active.length >= 2 ? active : [STORES[0], STORES[1]];
+    }
+
+    function buildRiderSteps() {
+      const orderedStores = getOrderedStores();
+      const steps = orderedStores.map((store, idx) => ({
+        id: `pickup-${idx}`,
+        themeId: store.id,
+        buttonText: `${store.emoji} ${store.shortName}에서 픽업`,
+        headline: `${store.shortName}에서 픽업 중입니다`,
+        timelineText: `${store.emoji} ${store.name}에서 음식 픽업`,
+        eta: `도착 예정 약 ${Math.max(8, 22 - idx * 6)}분`
+      }));
+
+      steps.push({
+        id: "delivering",
+        themeId: "B",
+        buttonText: "🏠 고객님께 배달 중",
+        headline: "픽업 완료! 고객님 주소로 이동 중입니다",
+        timelineText: "🏠 모든 매장 픽업 완료 후 고객님께 이동 중",
+        eta: "도착 예정 약 5분"
+      });
+
+      return steps;
+    }
+
     function startRiderScreen() {
-      setRiderStep(1);
+      state.riderStepIndex = 0;
       goScreen("rider");
     }
 
-    function setRiderStep(stepIdx) {
-      state.riderStep = stepIdx;
-      const info = RIDER_STEPS[stepIdx] || RIDER_STEPS[1];
-      document.getElementById("riderStatusText").textContent = info.label;
-      document.getElementById("riderEtaBadge").textContent = info.eta;
-      document.getElementById("riderProgressPercent").textContent = `진행률 ${info.percent}%`;
-      document.getElementById("routeFill").style.width = `${info.percent}%`;
-
-      document.querySelectorAll(".step-chip").forEach((btn) => {
-        btn.classList.toggle("active", Number(btn.dataset.step) === stepIdx);
-      });
-      renderRiderStops();
+    function setRiderStepIndex(idx) {
+      const steps = buildRiderSteps();
+      state.riderStepIndex = Math.max(0, Math.min(idx, steps.length - 1));
+      renderRiderFlow();
     }
 
-    function renderRiderStops() {
-      const activeStores = STORES.filter((s) =>
-        MENUS.some((m) => m.storeId === s.id && (state.cart[m.id] || 0) > 0)
-      );
-      const stops = activeStores.length ? activeStores : STORES;
+    function renderRiderFlow() {
+      const steps = buildRiderSteps();
+      if (state.riderStepIndex >= steps.length) {
+        state.riderStepIndex = steps.length - 1;
+      }
+      const current = steps[state.riderStepIndex];
+      const percent = Math.round(((state.riderStepIndex + 1) / steps.length) * 100);
 
-      document.getElementById("riderStopList").innerHTML = stops
+      document.getElementById("riderStatusText").textContent = current.headline;
+      document.getElementById("riderEtaBadge").textContent = current.eta;
+      document.getElementById("riderProgressPercent").textContent = `진행률 ${percent}%`;
+      document.getElementById("routeFill").style.width = `${percent}%`;
+
+      document.getElementById("routeStopsLabels").innerHTML = steps
+        .map((st, idx) => `<span>${idx + 1}. ${st.buttonText}</span>`)
+        .join("");
+
+      document.getElementById("riderStepButtons").innerHTML = steps
         .map(
-          (s, idx) => `
-          <div class="stop-item theme-${s.id}">
-            <span><span class="store-color-dot" style="margin-right:7px;"></span><strong>픽업 ${idx + 1}.</strong> ${s.emoji} ${s.name}</span>
-            <span class="min-order-ok">픽업 완료</span>
-          </div>
+          (st, idx) => `
+          <button
+            type="button"
+            class="step-chip ${idx === state.riderStepIndex ? "active" : ""}"
+            onclick="setRiderStepIndex(${idx})"
+          >
+            ${st.buttonText}
+          </button>
         `
         )
+        .join("");
+
+      document.getElementById("riderTimelineList").innerHTML = steps
+        .map((st, idx) => {
+          let badgeClass = "step-waiting";
+          let badgeLabel = "대기 중";
+          if (idx < state.riderStepIndex) {
+            badgeClass = "step-done";
+            badgeLabel = "완료";
+          } else if (idx === state.riderStepIndex) {
+            badgeClass = "step-current";
+            badgeLabel = "진행 중";
+          }
+          return `
+            <div class="timeline-row theme-${st.themeId}">
+              <span><strong>단계 ${idx + 1}.</strong> ${st.timelineText}</span>
+              <span class="step-state-badge ${badgeClass}">${badgeLabel}</span>
+            </div>
+          `;
+        })
         .join("");
     }
 
@@ -1196,13 +1340,19 @@
         ? items
             .map((m) => {
               const store = STORES.find((s) => s.id === m.storeId);
-              return `<div style="margin-bottom:5px;"><span class="menu-store-tag theme-${store.id}">${store.emoji} ${store.name}</span> ${m.emoji} ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</div>`;
+              return `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                  <img src="${m.img}" alt="${m.name}" style="width:28px;height:28px;border-radius:6px;object-fit:cover;" />
+                  <span class="menu-store-tag theme-${store.id}">${store.emoji} ${store.name}</span>
+                  <span>${m.emoji} ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</span>
+                </div>
+              `;
             })
             .join("")
         : `<div>🛒 한바구니 통합 주문 내역</div>`;
 
       document.getElementById("completeSummary").innerHTML = `
-        <div style="font-weight:800;margin-bottom:8px;">🧾 주문 내역 요약</div>
+        <div style="font-weight:800;margin-bottom:10px;">🧾 주문 내역 요약</div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${itemLines}</div>
         <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:8px;">
           <span>결제 완료 금액</span>
@@ -1226,7 +1376,7 @@
           m4: 1,
           m6: 1
         },
-        riderStep: 1,
+        riderStepIndex: 1,
         rating: 5
       };
       document.getElementById("menuSearch").value = "";
