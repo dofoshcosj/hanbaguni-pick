@@ -3,40 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니 픽 — 통합 장바구니 및 실시간 배달</title>
+  <title>한바구니 픽 — 통합 장바구니 및 실시간 순차 배달</title>
   <style>
     :root {
-      --primary: #009b77;
-      --primary-dark: #006d53;
+      --primary: #008566;
+      --primary-dark: #005c46;
       --primary-soft: #e6f7f2;
-      --bg: #f4f7f6;
+      --bg: #f3f6f5;
       --surface: #ffffff;
-      --line: #dce5e2;
-      --text: #141c19;
-      --sub: #4d5f59;
-      --danger: #c91e3a;
+      --line: #d4e0dc;
+      --text: #111916;
+      --sub: #42544e;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
       --focus-ring: #1d4ed8;
-      --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.05);
-      --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.1);
+      --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 14px 32px rgba(15, 23, 42, 0.12);
       --r-lg: 20px;
       --r-md: 14px;
-      --r-sm: 10px;
 
-      /* 가게별 고유 컬러 */
-      --a-main: #d6532e;
-      --a-dark: #9e3518;
-      --a-bg: #fff2ed;
-      --a-line: #f5c3b3;
+      /* 매장별 고유 컬러 (명도 대비 4.5:1 이상 확보) */
+      --a-main: #c2411c;
+      --a-dark: #8c2b0f;
+      --a-bg: #fff3ee;
+      --a-line: #f3bfb0;
 
-      --b-main: #009b77;
-      --b-dark: #00684f;
+      --b-main: #008566;
+      --b-dark: #005c46;
       --b-bg: #e7f8f3;
-      --b-line: #b2e5d6;
+      --b-line: #addfd0;
 
-      --c-main: #6d4aff;
-      --c-dark: #4928d6;
-      --c-bg: #f2eeff;
-      --c-line: #d2c4ff;
+      --c-main: #5b38e6;
+      --c-dark: #3f21b8;
+      --c-bg: #f1edff;
+      --c-line: #cdc0ff;
     }
 
     * {
@@ -53,9 +53,17 @@
       min-height: 100vh;
     }
 
+    /* 2. 키보드 접근성: 명확한 포커스 표시 */
     :is(a, button, input, select, [tabindex]):focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
 
     /* 상단 앱바 */
@@ -63,7 +71,7 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.97);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
     }
@@ -89,9 +97,10 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #ffffff;
       font-weight: 900;
-      font-size: 13px;
+      font-size: 12px;
       padding: 5px 10px;
       border-radius: 999px;
+      letter-spacing: 0.03em;
     }
 
     .logo-text {
@@ -109,7 +118,7 @@
 
     .step-nav {
       display: flex;
-      background: #eaf0ee;
+      background: #e6eeeb;
       padding: 4px;
       border-radius: 12px;
       gap: 4px;
@@ -121,7 +130,7 @@
       color: var(--sub);
       font-size: 13px;
       font-weight: 800;
-      padding: 7px 13px;
+      padding: 7px 14px;
       border-radius: 9px;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -161,17 +170,11 @@
 
     .view.active {
       display: block;
-      animation: viewFade 0.2s ease;
-    }
-
-    @keyframes viewFade {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .cart-layout {
       display: grid;
-      grid-template-columns: 1.32fr 1fr;
+      grid-template-columns: 1.3fr 1fr;
       gap: 20px;
       align-items: start;
     }
@@ -200,7 +203,7 @@
       margin-bottom: 12px;
     }
 
-    /* 가게별 테마 */
+    /* 매장 테마 */
     .store-A {
       --s-main: var(--a-main);
       --s-dark: var(--a-dark);
@@ -252,7 +255,7 @@
       background: #ffffff;
       cursor: pointer;
       text-align: left;
-      transition: all 0.15s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .store-tile:hover {
@@ -299,29 +302,49 @@
       border-color: var(--s-main);
     }
 
-    /* 검색 입력 */
+    /* 4. 폼 접근성 */
     .field-label {
       display: block;
       font-size: 13px;
       font-weight: 800;
       color: var(--text);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
-    .search-box {
+    .req-mark {
+      color: var(--danger);
+      font-weight: 900;
+      margin-left: 2px;
+    }
+
+    .text-input,
+    .styled-select {
       width: 100%;
-      padding: 11px 14px;
+      padding: 10px 13px;
       border: 1.5px solid var(--line);
-      border-radius: 12px;
+      border-radius: 11px;
       font-size: 14px;
-      background: #fafcfc;
-      margin-bottom: 14px;
+      background: #ffffff;
       color: var(--text);
     }
 
-    .search-box:focus {
-      background: #ffffff;
-      border-color: var(--s-main, var(--primary));
+    .text-input:focus,
+    .styled-select:focus {
+      border-color: var(--primary-dark);
+    }
+
+    .text-input[aria-invalid="true"] {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .error-text {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-top: 4px;
+      min-height: 18px;
     }
 
     /* 메뉴 리스트 */
@@ -341,7 +364,6 @@
       border: 1px solid var(--s-line);
       border-left: 4px solid var(--s-main);
       background: #ffffff;
-      transition: background 0.15s ease;
     }
 
     .menu-card:hover {
@@ -406,7 +428,6 @@
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s ease;
     }
 
     .add-btn:hover {
@@ -451,7 +472,7 @@
       font-weight: 800;
       padding: 3px 8px;
       border-radius: 999px;
-      background: #ffe4e6;
+      background: #fee2e2;
       color: var(--danger);
       white-space: nowrap;
     }
@@ -500,22 +521,11 @@
       padding: 0 5px;
     }
 
-    .select-group {
+    .form-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 11px;
       margin: 14px 0;
-    }
-
-    .styled-select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--line);
-      border-radius: 11px;
-      font-size: 13px;
-      font-weight: 700;
-      background: #ffffff;
-      color: var(--text);
     }
 
     .bill-box {
@@ -569,7 +579,7 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #ffffff;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(0, 155, 119, 0.24);
+      box-shadow: 0 6px 16px rgba(0, 133, 102, 0.25);
     }
 
     .cta-outline {
@@ -588,14 +598,44 @@
       background: var(--primary-soft);
     }
 
-    /* 라이더 화면 (배민·쿠팡이츠 스타일 + 줄어드는 타이머) */
+    /* ============================================================
+       배민 · 쿠팡이츠 스타일 실시간 라이더 관제 화면
+       ============================================================ */
     .rider-shell {
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
+    /* 실시간 알람 토스트 배너 */
+    .live-alert-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #111827;
+      color: #ffffff;
+      border-left: 5px solid #10b981;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .alert-pill {
+      background: #059669;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* 상단 도착 시간 & 경과 시간 카드 */
     .live-header-card {
-      background: linear-gradient(135deg, #0f2922 0%, #164236 100%);
+      background: linear-gradient(135deg, #0d2620 0%, #154035 100%);
       color: #ffffff;
       border-radius: var(--r-lg);
       padding: 20px;
@@ -611,7 +651,7 @@
       flex-wrap: wrap;
     }
 
-    .timer-group {
+    .time-badges {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -619,7 +659,7 @@
     }
 
     .eta-chip {
-      background: var(--primary);
+      background: #047857;
       color: #ffffff;
       font-size: 13px;
       font-weight: 900;
@@ -628,23 +668,29 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .timer-toggle-btn {
-      background: rgba(255, 255, 255, 0.16);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.35);
+    .elapsed-chip {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ecfdf5;
       font-size: 12px;
       font-weight: 800;
       padding: 5px 11px;
       border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-toggle-btn {
+      background: #ffffff;
+      color: #0d2620;
+      border: none;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 12px;
+      border-radius: 999px;
       cursor: pointer;
     }
 
-    .timer-toggle-btn:hover {
-      background: rgba(255, 255, 255, 0.26);
-    }
-
     .live-headline {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 900;
       margin-top: 10px;
       letter-spacing: -0.02em;
@@ -654,42 +700,107 @@
       font-size: 13px;
       color: #d1fae5;
       margin-top: 4px;
-      font-variant-numeric: tabular-nums;
     }
 
+    /* 실시간 라이더 오토바이 지도 트랙 */
+    .map-card {
+      background: #e9f2ef;
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-lg);
+      padding: 14px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .map-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .map-canvas {
+      position: relative;
+      width: 100%;
+      height: 210px;
+      background: #f5faf8;
+      border-radius: 14px;
+      border: 1px solid #cde0da;
+      overflow: hidden;
+    }
+
+    .map-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* 오토바이 라이더 마커 */
+    .moto-marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      transition: left 0.7s ease, top 0.7s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .moto-bubble {
+      background: #111827;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      margin-bottom: 4px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .moto-icon-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #008566;
+      border: 3px solid #ffffff;
+      box-shadow: 0 6px 16px rgba(0, 133, 102, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+    }
+
+    /* 진행률 바 */
     .progress-track-wrap {
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
     .progress-bar-bg {
       height: 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.22);
       overflow: hidden;
     }
 
     .progress-bar-fill {
       height: 100%;
-      width: 33%;
+      width: 20%;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--a-main), var(--b-main), var(--c-main));
-      transition: width 0.3s ease;
+      background: linear-gradient(90deg, #f97316, #10b981, #8b5cf6);
+      transition: width 0.35s ease;
     }
 
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: #f1f5f9;
-      margin-top: 8px;
-      font-weight: 700;
-    }
-
+    /* 단계 버튼 & 상세 타임라인 카드 */
     .stage-switcher {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
       margin-bottom: 14px;
     }
@@ -700,7 +811,7 @@
       color: var(--text);
       font-size: 12px;
       font-weight: 800;
-      padding: 8px 13px;
+      padding: 7px 12px;
       border-radius: 999px;
       cursor: pointer;
     }
@@ -711,14 +822,15 @@
       border-color: var(--text);
     }
 
-    .pickup-cards {
+    .timeline-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-bottom: 16px;
     }
 
-    .pickup-card {
+    .timeline-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -796,13 +908,13 @@
       font-size: 28px;
       border: none;
       background: transparent;
-      color: #cbd5e1;
+      color: #94a3b8;
       cursor: pointer;
     }
 
     .star-item.active,
     .star-item:hover {
-      color: #d97706;
+      color: #b45309;
     }
   </style>
 </head>
@@ -820,7 +932,7 @@
             <span aria-hidden="true">🛍️</span> 장바구니
           </button>
           <button type="button" class="nav-pill" data-view="rider" onclick="switchView('rider')">
-            <span aria-hidden="true">🛵</span> 라이더
+            <span aria-hidden="true">🛵</span> 라이더 실시간
           </button>
           <button type="button" class="nav-pill" data-view="done" onclick="switchView('done')">
             <span aria-hidden="true">✅</span> 배달완료
@@ -845,7 +957,8 @@
           <input
             type="text"
             id="searchInput"
-            class="search-box"
+            class="text-input"
+            style="margin-bottom:14px;"
             placeholder="메뉴 이름을 검색해 보세요 (예: 김치찜, 아메리카노, 떡볶이)"
             oninput="renderMenuList()"
           />
@@ -862,7 +975,24 @@
 
           <div id="cartGroups" aria-live="polite"></div>
 
-          <div class="select-group">
+          <div class="form-stack">
+            <div>
+              <label for="addressInput" class="field-label">
+                배달 받을 주소 <span class="req-mark" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="addressInput"
+                class="text-input"
+                value="부산시 사상구 주례로 45 경남정보대 앞"
+                required
+                aria-required="true"
+                aria-describedby="addressError"
+                oninput="validateAddress()"
+              />
+              <span id="addressError" class="error-text" role="alert"></span>
+            </div>
+
             <div>
               <label for="couponSelect" class="field-label">할인 쿠폰 선택</label>
               <select id="couponSelect" class="styled-select" onchange="renderBill()">
@@ -886,7 +1016,7 @@
 
           <div class="cta-col">
             <button type="button" class="cta-primary" onclick="openRiderFlow()">
-              <span aria-hidden="true">🛵</span> 주문하고 라이더 화면 보기
+              <span aria-hidden="true">🛵</span> 주문하고 실시간 배달 보기
             </button>
             <button type="button" class="cta-outline" onclick="switchView('done')">
               <span aria-hidden="true">✅</span> 배달완료 화면으로 넘어가기
@@ -896,38 +1026,99 @@
       </div>
     </section>
 
-    <!-- 2. 라이더 화면 -->
+    <!-- 2. 실시간 라이더 화면 (조리중 -> 준비완료 -> 픽업완료 -> 배달중 -> 완료 자동전환) -->
     <section id="view-rider" class="view" aria-labelledby="riderMainHeadline">
       <div class="rider-shell">
+        <!-- 실시간 상태 알람 배너 -->
+        <div class="live-alert-banner" role="status" aria-live="polite">
+          <div style="display:flex;align-items:center;gap:9px;">
+            <span class="alert-pill" id="liveAlertPill">실시간 알림</span>
+            <span id="liveAlertText">주문 접수 완료 · 매장에서 조리를 시작했습니다.</span>
+          </div>
+          <span style="font-size:12px;color:#a7f3d0;" id="autoStepHint">자동 진행 중</span>
+        </div>
+
+        <!-- 상단 도착 예정 및 시간 경과 카드 -->
         <div class="live-header-card">
           <div class="live-top-row">
-            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 박민수 라이더 · 순차 픽업 배달 중</span>
-            <div class="timer-group">
-              <span class="eta-chip" id="riderCountdownBadge" aria-live="polite">남은 시간 15:00</span>
+            <span style="font-size:13px;font-weight:800;"><span aria-hidden="true">🛵</span> 박민수 라이더 · 한바구니 순차 픽업</span>
+            <div class="time-badges">
+              <span class="elapsed-chip" id="elapsedTimeBadge">경과 00:00</span>
+              <span class="eta-chip" id="riderCountdownBadge">남은 시간 15:00</span>
               <button type="button" class="timer-toggle-btn" id="timerToggleBtn" onclick="toggleTimer()">
                 일시정지
               </button>
             </div>
           </div>
-          <h1 class="live-headline" id="riderMainHeadline">A가게에서 픽업 중입니다</h1>
-          <p class="live-sub" id="riderSubStatus">실시간 남은 도착 시간이 1초마다 줄어들고 있습니다.</p>
+          <h1 class="live-headline" id="riderMainHeadline">매장에서 음식을 조리 중입니다</h1>
+          <p class="live-sub" id="riderSubStatus">조리가 완료되면 라이더가 순서대로 픽업합니다.</p>
 
           <div class="progress-track-wrap">
             <div class="progress-bar-bg">
               <div class="progress-bar-fill" id="riderProgressBar"></div>
             </div>
-            <div class="progress-labels" id="riderProgressLabels"></div>
           </div>
         </div>
 
+        <!-- 실시간 라이더 오토바이 이동 지도 -->
+        <div class="map-card">
+          <div class="map-top-bar">
+            <span><span aria-hidden="true">🗺️</span> 실시간 라이더 위치 안내</span>
+            <span style="color:var(--primary-dark);" id="riderLocationLabel">A가게(한식) 방향으로 이동 중</span>
+          </div>
+          <div class="map-canvas">
+            <svg class="map-svg" viewBox="0 0 760 210" role="img" aria-label="매장 A, 매장 B, 고객 도착지를 잇는 실시간 라이더 이동 경로 지도">
+              <!-- 배경 도로망 -->
+              <rect x="0" y="0" width="760" height="210" fill="#eef6f3" />
+              <path d="M 0 165 L 760 165" stroke="#d9e7e2" stroke-width="14" />
+              <path d="M 210 0 L 210 210" stroke="#d9e7e2" stroke-width="12" />
+              <path d="M 520 0 L 520 210" stroke="#d9e7e2" stroke-width="12" />
+
+              <!-- 배달 경로 점선 -->
+              <path
+                d="M 110 120 Q 250 45, 380 110 T 650 95"
+                fill="none"
+                stroke="#008566"
+                stroke-width="5"
+                stroke-dasharray="10 8"
+              />
+
+              <!-- A가게 핀 -->
+              <circle cx="110" cy="120" r="18" fill="#c2411c" />
+              <text x="110" y="125" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="bold">A</text>
+              <rect x="64" y="146" width="92" height="24" rx="12" fill="#ffffff" stroke="#c2411c" stroke-width="1.5" />
+              <text x="110" y="162" font-size="11" fill="#8c2b0f" text-anchor="middle" font-weight="bold">A가게(한식)</text>
+
+              <!-- B가게 핀 -->
+              <circle cx="380" cy="110" r="18" fill="#008566" />
+              <text x="380" y="115" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="bold">B</text>
+              <rect x="334" y="136" width="92" height="24" rx="12" fill="#ffffff" stroke="#008566" stroke-width="1.5" />
+              <text x="380" y="152" font-size="11" fill="#005c46" text-anchor="middle" font-weight="bold">B가게(카페)</text>
+
+              <!-- 도착지 핀 -->
+              <circle cx="650" cy="95" r="19" fill="#5b38e6" />
+              <text x="650" y="100" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="bold">집</text>
+              <rect x="604" y="122" width="92" height="24" rx="12" fill="#ffffff" stroke="#5b38e6" stroke-width="1.5" />
+              <text x="650" y="138" font-size="11" fill="#3f21b8" text-anchor="middle" font-weight="bold">고객 도착지</text>
+            </svg>
+
+            <!-- 움직이는 라이더 오토바이 마커 -->
+            <div class="moto-marker" id="motoMarker" style="left: 14%; top: 57%;">
+              <span class="moto-bubble" id="motoStatusTag">조리 대기중</span>
+              <div class="moto-icon-circle" aria-hidden="true">🛵</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 단계 전환 버튼 및 조리/픽업/배달 타임라인 -->
         <div class="panel">
-          <h2 class="panel-title">픽업 및 배달 단계 확인</h2>
-          <div class="stage-switcher" id="riderStageButtons" role="group" aria-label="배달 진행 단계"></div>
-          <div class="pickup-cards" id="riderPickupCards" aria-live="polite"></div>
+          <h2 class="panel-title">실시간 주문 · 픽업 · 배달 진행 현황</h2>
+          <div class="stage-switcher" id="riderStageButtons" role="group" aria-label="배달 진행 단계 선택"></div>
+          <ul class="timeline-list" id="riderPickupCards" aria-live="polite"></ul>
 
           <div class="cta-col">
             <button type="button" class="cta-primary" onclick="switchView('done')">
-              <span aria-hidden="true">✅</span> 배달완료 화면으로 넘어가기
+              <span aria-hidden="true">✅</span> 지금 배달완료 화면 보기
             </button>
             <button type="button" class="cta-outline" onclick="switchView('cart')">
               <span aria-hidden="true">🛍️</span> 장바구니로 돌아가기
@@ -941,14 +1132,14 @@
     <section id="view-done" class="view" aria-labelledby="doneHeading">
       <div class="panel done-shell">
         <div class="done-badge" aria-hidden="true">✓</div>
-        <h1 style="font-size:22px;font-weight:900;" id="doneHeading">배달이 완료되었습니다</h1>
+        <h1 style="font-size:22px;font-weight:900;" id="doneHeading">배달이 완료되었습니다!</h1>
         <p style="font-size:14px;color:var(--sub);margin-top:4px;">
-          주문하신 한바구니 메뉴가 모두 도착했습니다.
+          주문하신 한바구니 메뉴가 문 앞에 안전하게 도착했습니다.
         </p>
 
         <div class="order-receipt" id="doneReceipt"></div>
 
-        <p style="font-size:14px;font-weight:800;" id="ratingPrompt">이번 배달은 어떠셨나요?</p>
+        <p style="font-size:14px;font-weight:800;" id="ratingPrompt">이번 한바구니 배달은 어떠셨나요?</p>
         <div class="star-row" id="starRow" role="group" aria-labelledby="ratingPrompt">
           <button type="button" class="star-item active" onclick="rateOrder(1)" aria-label="별점 1점">★</button>
           <button type="button" class="star-item active" onclick="rateOrder(2)" aria-label="별점 2점">★</button>
@@ -962,7 +1153,7 @@
             <span aria-hidden="true">🔄</span> 처음부터 다시 주문하기
           </button>
           <button type="button" class="cta-outline" onclick="switchView('rider')">
-            <span aria-hidden="true">🛵</span> 라이더 화면 다시 보기
+            <span aria-hidden="true">🛵</span> 라이더 실시간 화면 다시 보기
           </button>
         </div>
       </div>
@@ -980,7 +1171,7 @@
             </linearGradient>
           </defs>
           <rect width="140" height="140" rx="28" fill="url(#bg)"/>
-          <circle cx="70" cy="72" r="44" fill="rgba(255,255,255,0.75)"/>
+          <circle cx="70" cy="72" r="44" fill="rgba(255,255,255,0.78)"/>
           <text x="70" y="88" font-size="52" text-anchor="middle">${emoji}</text>
         </svg>
       `.trim();
@@ -1009,6 +1200,8 @@
       cart: { m1: 1, m4: 1, m6: 1 },
       riderStageIdx: 0,
       remainingSeconds: 900,
+      elapsedSeconds: 0,
+      stageTick: 0,
       timerPaused: false,
       rating: 5
     };
@@ -1019,21 +1212,46 @@
       return Number(n || 0).toLocaleString("ko-KR") + "원";
     }
 
-    function formatCountdown(sec) {
+    function formatTime(sec) {
       const safe = Math.max(0, Number(sec || 0));
       const m = String(Math.floor(safe / 60)).padStart(2, "0");
       const s = String(safe % 60).padStart(2, "0");
       return `${m}:${s}`;
     }
 
+    function validateAddress() {
+      const input = document.getElementById("addressInput");
+      const err = document.getElementById("addressError");
+      if (!input.value.trim()) {
+        input.setAttribute("aria-invalid", "true");
+        err.textContent = "배달 받을 주소를 입력해 주세요. (예: 부산시 사상구 주례로 45)";
+        return false;
+      }
+      input.removeAttribute("aria-invalid");
+      err.textContent = "";
+      return true;
+    }
+
     function startCountdownLoop() {
       if (timerIntervalId) clearInterval(timerIntervalId);
       timerIntervalId = setInterval(() => {
         if (state.timerPaused) return;
+
+        state.elapsedSeconds += 1;
+        state.stageTick += 1;
         if (state.remainingSeconds > 0) {
           state.remainingSeconds -= 1;
-          updateCountdownText();
-          if (state.remainingSeconds === 0) {
+        }
+        updateTimeBadges();
+
+        // 4초마다 조리중 -> 준비완료 -> 픽업완료 -> 배달중 -> 배달완료 자동 진행
+        if (state.stageTick >= 4) {
+          state.stageTick = 0;
+          const stages = buildRiderStages();
+          if (state.riderStageIdx < stages.length - 1) {
+            state.riderStageIdx += 1;
+            renderRiderView();
+          } else {
             clearInterval(timerIntervalId);
             switchView("done");
           }
@@ -1043,24 +1261,19 @@
 
     function toggleTimer() {
       state.timerPaused = !state.timerPaused;
-      updateCountdownText();
+      updateTimeBadges();
     }
 
-    function updateCountdownText() {
-      const badge = document.getElementById("riderCountdownBadge");
+    function updateTimeBadges() {
+      const remainBadge = document.getElementById("riderCountdownBadge");
+      const elapsedBadge = document.getElementById("elapsedTimeBadge");
       const btn = document.getElementById("timerToggleBtn");
-      const sub = document.getElementById("riderSubStatus");
-      if (badge) {
-        badge.textContent = `남은 시간 ${formatCountdown(state.remainingSeconds)}`;
-      }
-      if (btn) {
-        btn.textContent = state.timerPaused ? "다시 시작" : "일시정지";
-      }
-      if (sub) {
-        sub.textContent = state.timerPaused
-          ? "남은 도착 시간 카운트다운이 일시정지되었습니다."
-          : "배달이 진행되면서 남은 도착 시간이 줄어들고 있습니다.";
-      }
+      const hint = document.getElementById("autoStepHint");
+
+      if (remainBadge) remainBadge.textContent = `남은 시간 ${formatTime(state.remainingSeconds)}`;
+      if (elapsedBadge) elapsedBadge.textContent = `경과 ${formatTime(state.elapsedSeconds)}`;
+      if (btn) btn.textContent = state.timerPaused ? "다시 재생" : "일시정지";
+      if (hint) hint.textContent = state.timerPaused ? "일시정지됨" : "실시간 자동 진행 중";
     }
 
     function switchView(viewName) {
@@ -1078,8 +1291,9 @@
       if (viewName === "rider") {
         renderRiderView();
         startCountdownLoop();
-      } else if (viewName === "done") {
-        renderDoneReceipt();
+      } else {
+        if (timerIntervalId) clearInterval(timerIntervalId);
+        if (viewName === "done") renderDoneReceipt();
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -1264,29 +1478,74 @@
 
     function buildRiderStages() {
       const stores = getPickupStores();
-      const stages = stores.map((st, idx) => ({
-        themeId: st.id,
-        chipText: `${st.emoji} ${st.shortName}에서 픽업`,
-        headline: `${st.shortName}에서 픽업 중입니다`,
-        lineText: `${st.emoji} ${st.name}에서 음식 픽업`,
-        secondsByStage: Math.max(180, 900 - idx * 300)
-      }));
+      const first = stores[0];
+      const second = stores[1] || stores[0];
 
-      stages.push({
-        themeId: "B",
-        chipText: "🏠 고객님께 배달 중",
-        headline: "모든 매장 픽업 완료 · 고객님께 배달 중입니다",
-        lineText: "🏠 픽업 완료 후 고객님 주소로 배달 중",
-        secondsByStage: 240
-      });
-
-      return stages;
+      return [
+        {
+          themeId: first.id,
+          chipText: "🔥 매장 조리중",
+          alertPill: "조리중 알림",
+          alertText: `${first.name} 및 주문 매장에서 음식을 조리하고 있습니다.`,
+          headline: "주문 접수 완료 · 매장에서 조리 중입니다",
+          sub: "맛있게 조리 중이에요. 잠시 후 라이더가 첫 번째 매장으로 출발합니다.",
+          locLabel: `${first.name} 조리 진행 중`,
+          motoTag: "조리중",
+          motoX: "14%",
+          motoY: "57%",
+          remainSec: 900
+        },
+        {
+          themeId: first.id,
+          chipText: `✅ ${first.shortName} 준비완료 · 픽업`,
+          alertPill: "준비완료 알림",
+          alertText: `${first.name} 음식 준비 완료! 라이더가 ${first.shortName}에서 픽업했습니다.`,
+          headline: `${first.shortName} 준비완료 · 첫 번째 픽업 완료`,
+          sub: `라이더가 ${first.shortName} 음식을 싣고 다음 매장(${second.shortName})으로 이동 중입니다.`,
+          locLabel: `${first.shortName} 픽업 완료 → ${second.shortName} 이동 중`,
+          motoTag: `${first.shortName} 픽업완료`,
+          motoX: "33%",
+          motoY: "36%",
+          remainSec: 620
+        },
+        {
+          themeId: second.id,
+          chipText: `🛍️ ${second.shortName} 픽업완료`,
+          alertPill: "픽업완료 알림",
+          alertText: `${second.name} 픽업 완료! 모든 주문 음식이 한바구니에 모였습니다.`,
+          headline: `${second.shortName} 픽업완료 · 모든 매장 픽업 끝!`,
+          sub: "모든 매장 픽업을 마치고 고객님 주소지로 출발합니다.",
+          locLabel: `${second.shortName} 픽업 완료 · 출발 준비`,
+          motoTag: "전체 픽업완료",
+          motoX: "52%",
+          motoY: "52%",
+          remainSec: 360
+        },
+        {
+          themeId: "B",
+          chipText: "🛵 고객님께 배달중",
+          alertPill: "배달중 알림",
+          alertText: "라이더가 고객님 주소지로 빠르게 배달 중입니다! 곧 도착합니다.",
+          headline: "고객님께 배달 중입니다 · 곧 도착 예정!",
+          sub: "잠시 후 배달이 완료되면 완료 화면으로 자동 전환됩니다.",
+          locLabel: "고객 도착지 인근 주행 중",
+          motoTag: "배달중 · 곧 도착",
+          motoX: "78%",
+          motoY: "45%",
+          remainSec: 120
+        }
+      ];
     }
 
     function openRiderFlow() {
+      if (!validateAddress()) {
+        document.getElementById("addressInput").focus();
+        return;
+      }
       state.riderStageIdx = 0;
-      const stages = buildRiderStages();
-      state.remainingSeconds = stages[0].secondsByStage;
+      state.elapsedSeconds = 0;
+      state.stageTick = 0;
+      state.remainingSeconds = 900;
       state.timerPaused = false;
       switchView("rider");
     }
@@ -1294,26 +1553,30 @@
     function setRiderStage(idx) {
       const stages = buildRiderStages();
       state.riderStageIdx = Math.max(0, Math.min(idx, stages.length - 1));
-      state.remainingSeconds = stages[state.riderStageIdx].secondsByStage;
+      state.stageTick = 0;
+      state.remainingSeconds = stages[state.riderStageIdx].remainSec;
       state.timerPaused = false;
       renderRiderView();
     }
 
     function renderRiderView() {
       const stages = buildRiderStages();
-      if (state.riderStageIdx >= stages.length) {
-        state.riderStageIdx = stages.length - 1;
-      }
       const cur = stages[state.riderStageIdx];
       const pct = Math.round(((state.riderStageIdx + 1) / stages.length) * 100);
 
+      document.getElementById("liveAlertPill").textContent = cur.alertPill;
+      document.getElementById("liveAlertText").textContent = cur.alertText;
       document.getElementById("riderMainHeadline").textContent = cur.headline;
+      document.getElementById("riderSubStatus").textContent = cur.sub;
+      document.getElementById("riderLocationLabel").textContent = cur.locLabel;
       document.getElementById("riderProgressBar").style.width = `${pct}%`;
-      updateCountdownText();
 
-      document.getElementById("riderProgressLabels").innerHTML = stages
-        .map((s, idx) => `<span>${idx + 1}. ${s.chipText}</span>`)
-        .join("");
+      const moto = document.getElementById("motoMarker");
+      moto.style.left = cur.motoX;
+      moto.style.top = cur.motoY;
+      document.getElementById("motoStatusTag").textContent = cur.motoTag;
+
+      updateTimeBadges();
 
       document.getElementById("riderStageButtons").innerHTML = stages
         .map(
@@ -1324,7 +1587,7 @@
             aria-pressed="${idx === state.riderStageIdx}"
             onclick="setRiderStage(${idx})"
           >
-            ${s.chipText}
+            ${idx + 1}. ${s.chipText}
           </button>
         `
         )
@@ -1336,16 +1599,16 @@
           let label = "대기 중";
           if (idx < state.riderStageIdx) {
             cls = "flag-done";
-            label = "완료";
+            label = "완료됨";
           } else if (idx === state.riderStageIdx) {
             cls = "flag-now";
-            label = "배달·픽업 중";
+            label = "현재 진행 중";
           }
           return `
-            <div class="pickup-card store-${s.themeId}">
-              <span><strong>${idx + 1}단계.</strong> ${s.lineText}</span>
+            <li class="timeline-card store-${s.themeId}">
+              <span><strong>${idx + 1}단계 · ${s.chipText}</strong> — ${s.alertText}</span>
               <span class="state-flag ${cls}">${label}</span>
-            </div>
+            </li>
           `;
         })
         .join("");
@@ -1353,6 +1616,7 @@
 
     function renderDoneReceipt() {
       const { total } = calcTotals();
+      const addr = (document.getElementById("addressInput").value || "").trim() || "부산시 사상구 주례로 45";
       const chosen = MENUS.filter((m) => (state.cart[m.id] || 0) > 0);
       const htmlRows = chosen.length
         ? chosen
@@ -1370,11 +1634,12 @@
         : `<div>한바구니 통합 주문 내역</div>`;
 
       document.getElementById("doneReceipt").innerHTML = `
-        <div style="font-weight:900;margin-bottom:10px;">주문 내역</div>
+        <div style="font-weight:900;margin-bottom:6px;">배달 완료 영수증</div>
+        <div style="font-size:12px;color:var(--sub);margin-bottom:10px;">배달지: ${addr}</div>
         <div style="font-size:13px;color:var(--sub);margin-bottom:10px;">${htmlRows}</div>
         <div style="display:flex;justify-content:space-between;font-weight:900;border-top:1px solid var(--line);padding-top:8px;">
-          <span>결제 완료 금액</span>
-          <span style="color:var(--primary-dark);">${won(total > 0 ? total : 24800)}</span>
+          <span>총 결제 완료 금액</span>
+          <span style="color:var(--primary-dark);">${won(total > 0 ? total : 27000)}</span>
         </div>
       `;
     }
@@ -1393,10 +1658,14 @@
         cart: { m1: 1, m4: 1, m6: 1 },
         riderStageIdx: 0,
         remainingSeconds: 900,
+        elapsedSeconds: 0,
+        stageTick: 0,
         timerPaused: false,
         rating: 5
       };
       document.getElementById("searchInput").value = "";
+      document.getElementById("addressInput").value = "부산시 사상구 주례로 45 경남정보대 앞";
+      validateAddress();
       document.getElementById("couponSelect").value = "0";
       document.getElementById("deliveryModeSelect").value = "bundle";
       document.getElementById("cartNotice").textContent = "초기 상태로 되돌렸습니다.";
