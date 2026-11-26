@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 주문 & 실시간 라이더 위치 트래킹</title>
+  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 주문 & 실시간 배달 트래킹</title>
   <style>
     :root {
       --primary: #0f9d8a;
@@ -313,7 +313,6 @@
     .checkout-btn:hover:not(:disabled) { background: #e85825; }
     .checkout-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-    /* 배민·쿠팡 스타일 실시간 라이더 위치 트래킹 카드 */
     .rider-panel {
       background: #ffffff;
       border: 2px solid #0f9d8a;
@@ -336,7 +335,7 @@
     }
 
     .eta-big {
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 900;
       color: #0b7a6b;
     }
@@ -369,6 +368,37 @@
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    .stage-pills {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 520px) {
+      .stage-pills { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stage-pill {
+      padding: 7px 6px;
+      border-radius: 9px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+    .stage-pill.done {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #86efac;
+    }
+    .stage-pill.current {
+      background: #fff1eb;
+      color: #c2410c;
+      border-color: #fdba74;
     }
 
     .map-canvas {
@@ -548,6 +578,28 @@
       font-weight: 700;
     }
 
+    .improve-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+    .improve-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+    }
+    .improve-item strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 2px;
+      color: var(--text);
+    }
+    .improve-item span {
+      color: var(--muted);
+    }
+
     .toast {
       position: fixed;
       bottom: 24px;
@@ -566,10 +618,6 @@
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
-    th, td { border: 1px solid var(--border); padding: 9px 10px; text-align: left; }
-    th { background: #f1f5f9; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -579,7 +627,7 @@
         <div class="brand-logo">한바구니<br/>PICK</div>
         <div>
           <div class="brand-title">한바구니픽 (Hanbaguni Pick)</div>
-          <div class="brand-sub">장바구니 초기화 없는 다중 매장 통합 주문 & 실시간 라이더 위치 트래킹</div>
+          <div class="brand-sub">장바구니 초기화 없는 다중 매장 통합 주문 & 실시간 배달 트래킹</div>
         </div>
       </div>
       <div class="header-meta">
@@ -613,34 +661,29 @@
 
       <section class="section-card">
         <div class="section-title">
-          <span>기존 배달 앱 vs 한바구니픽 UX 개선 비교</span>
+          <span>향후 개선해야 할 점 (보완 과제)</span>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>비교 항목</th>
-              <th>기존 배달 앱</th>
-              <th>한바구니픽 (개선안)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>타 매장 메뉴 추가</td>
-              <td>기존 장바구니 강제 삭제·초기화 경고</td>
-              <td><strong>초기화 없이 매장별 섹션 누적 보관</strong></td>
-            </tr>
-            <tr>
-              <td>최소주문금액</td>
-              <td>가게별 별도 주문·결제 반복</td>
-              <td><strong>각 매장 점주 최소주문금액 실시간 검증</strong></td>
-            </tr>
-            <tr>
-              <td>결제 및 라이더 추적</td>
-              <td>주문 건수만큼 개별 트래킹</td>
-              <td><strong>단일 원클릭 결제 & 다중 매장 순차 픽업 실시간 지도</strong></td>
-            </tr>
-          </tbody>
-        </table>
+        <p class="section-desc">
+          프로토타입 검증을 바탕으로 실제 서비스 고도화 및 발표 Q&A 대비용으로 정리한 개선 포인트입니다.
+        </p>
+        <div class="improve-list">
+          <div class="improve-item">
+            <strong>1. 매장 간 동선 최적화 및 조리 완료 시간 동기화</strong>
+            <span>먼 거리 매장끼리 묶이거나 한 곳의 조리가 늦어질 경우 음식 식음·지연 문제가 생길 수 있어, 반경 거리 제한과 조리 완료 타이밍 매칭 알고리즘이 필요합니다.</span>
+          </div>
+          <div class="improve-item">
+            <strong>2. 다중 매장 주문 시 부분 취소·품절 대응 UX</strong>
+            <span>여러 가게 중 한 곳에서 메뉴가 품절될 경우 전체 주문이 취소되는 대신 해당 가게만 환불·조정하거나 대체 메뉴를 제안하는 흐름이 필요합니다.</span>
+          </div>
+          <div class="improve-item">
+            <strong>3. 라이더 다중 픽업 보상 및 배달비 정산 구조 고도화</strong>
+            <span>한 건의 통합 주문이라도 라이더가 여러 매장을 경유하는 수고가 따르므로, 라이더 경유 수당과 고객 묶음 할인 간 합리적인 정산 모델 설계가 필요합니다.</span>
+          </div>
+          <div class="improve-item">
+            <strong>4. 실제 지도 API 및 실시간 소켓(WebSocket) 연동</strong>
+            <span>현재 시뮬레이션으로 구현된 경로·라이더 좌표를 실제 지도 API(카카오/네이버맵 등)와 실시간 위치 스트리밍으로 연결해야 상용화 수준에 도달할 수 있습니다.</span>
+          </div>
+        </div>
       </section>
     </div>
 
@@ -727,7 +770,7 @@
   <div class="toast" id="toastBox"></div>
 
   <script>
-    const STORAGE_KEY = "hanbaguni_pick_state_v4";
+    const STORAGE_KEY = "hanbaguni_pick_state_v5";
 
     const STORES = [
       {
@@ -1019,27 +1062,35 @@
 
       let headline = "";
       let subline = "";
-      let remainMin = Math.max(0, order.etaMinutes - Math.round((step / totalSteps) * order.etaMinutes));
+      let remainMin = Math.max(1, order.etaMinutes - Math.round((step / totalSteps) * order.etaMinutes));
+      let stageCode = "prep";
 
       if (step === 0) {
-        headline = `${remainMin}분 후 도착 예정 · 라이더 픽업 이동 중`;
-        subline = `라이더가 [${stores[0].name}]으로 향하고 있습니다.`;
+        stageCode = "prep";
+        headline = `음식 준비중 · ${remainMin}분 후 도착 예정`;
+        subline = `선택한 ${stores.length}개 매장에서 음식을 조리 중이며 라이더가 배차되었습니다.`;
       } else if (step <= stores.length) {
+        stageCode = "pickup";
         const pickedStore = stores[step - 1];
         if (step < stores.length) {
-          headline = `${remainMin}분 후 도착 예정 · [${pickedStore.name}] 픽업 완료`;
-          subline = `다음 경유지 [${stores[step].name}]로 이동 중입니다.`;
+          headline = `매장 픽업 중 · ${remainMin}분 후 도착 예정`;
+          subline = `[${pickedStore.name}] 픽업 완료! 다음 [${stores[step].name}]으로 이동 중입니다.`;
         } else {
-          headline = `${remainMin}분 후 도착 예정 · 전 매장 픽업 완료 및 배달 중`;
-          subline = `모든 음식(${stores.length}곳)을 싣고 고객님 댁으로 이동 중입니다.`;
+          headline = `전 매장 픽업 완료 · ${remainMin}분 후 도착 예정`;
+          subline = `[${pickedStore.name}]까지 모든 매장 픽업을 마치고 라이더가 출발했습니다.`;
         }
+      } else if (step < totalSteps) {
+        stageCode = "delivering";
+        headline = `라이더 배달 중 · ${remainMin}분 후 도착 예정`;
+        subline = `라이더가 고객님 댁(${order.address}) 방향으로 이동 중입니다.`;
       } else {
-        headline = `배달 완료!`;
-        subline = `요청사항 "${order.riderRequest}" 반영 완료`;
+        stageCode = "done";
         remainMin = 0;
+        headline = `배달 완료`;
+        subline = `요청사항 "${order.riderRequest}" 반영 완료`;
       }
 
-      return { step, totalSteps, progressPct, riderLeftPct, headline, subline, remainMin };
+      return { step, totalSteps, progressPct, riderLeftPct, headline, subline, remainMin, stageCode };
     }
 
     function renderTracking() {
@@ -1052,12 +1103,21 @@
       const order = state.orderCompleted;
       const info = getDeliveryStageInfo(order);
 
+      const pillClass = (target) => {
+        if (info.stageCode === "done") return "stage-pill done";
+        if (target === "prep") return info.step === 0 ? "stage-pill current" : "stage-pill done";
+        if (target === "pickup") return (info.step >= 1 && info.step <= order.stores.length) ? "stage-pill current" : (info.step > order.stores.length ? "stage-pill done" : "stage-pill");
+        if (target === "delivering") return info.step === order.stores.length + 1 ? "stage-pill current" : (info.step > order.stores.length + 1 ? "stage-pill done" : "stage-pill");
+        if (target === "done") return info.step >= info.totalSteps ? "stage-pill done" : "stage-pill";
+        return "stage-pill";
+      };
+
       const storePinsHtml = order.stores.map((s, idx) => {
         const pinLeft = 10 + Math.round(((idx + 1) / info.totalSteps) * 80);
         const isPicked = info.step >= idx + 1;
         return `
           <div class="map-pin" style="left: ${pinLeft}%;">
-            <div class="pin-bubble">${isPicked ? '✅' : '🏪'} ${s.name}</div>
+            <div class="pin-bubble">${isPicked ? '✅ 픽업완료' : '🍳 준비중'} · ${s.name}</div>
           </div>
         `;
       }).join("");
@@ -1065,13 +1125,13 @@
       const timelineHtml = order.stores.map((s, idx) => {
         const targetStep = idx + 1;
         let cls = "";
-        let badge = "조리 중";
+        let badge = "음식 준비중";
         if (info.step > targetStep) { cls = "done"; badge = "픽업 완료"; }
         else if (info.step === targetStep) { cls = "active"; badge = "방금 픽업 완료"; }
-        else if (info.step === targetStep - 1) { cls = "active"; badge = "라이더 이동 중"; }
+        else if (info.step === targetStep - 1) { cls = "active"; badge = "라이더 픽업 이동 중"; }
         return `
           <div class="step-item ${cls}">
-            <span><strong>[${idx + 1}차 픽업]</strong> ${s.name}</span>
+            <span><strong>[${idx + 1}차 매장]</strong> ${s.name}</span>
             <span>${badge}</span>
           </div>
         `;
@@ -1084,7 +1144,14 @@
               <div class="eta-big">${info.headline}</div>
               <div class="eta-sub">${info.subline}</div>
             </div>
-            <span class="live-badge"><span class="live-dot"></span> ${info.step >= info.totalSteps ? "도착 완료" : "실시간 위치"}</span>
+            <span class="live-badge"><span class="live-dot"></span> ${info.stageCode === "done" ? "도착 완료" : "실시간 트래킹"}</span>
+          </div>
+
+          <div class="stage-pills">
+            <div class="${pillClass("prep")}">1. 음식 준비중</div>
+            <div class="${pillClass("pickup")}">2. 매장 픽업</div>
+            <div class="${pillClass("delivering")}">3. 라이더 이동</div>
+            <div class="${pillClass("done")}">4. 배달 완료</div>
           </div>
 
           <div class="rider-card-box">
@@ -1104,7 +1171,7 @@
             </div>
 
             <div class="map-pin" style="left: 10%;">
-              <div class="pin-bubble">🚩 출발</div>
+              <div class="pin-bubble">🚩 출발지</div>
             </div>
             ${storePinsHtml}
             <div class="map-pin pin-home" style="left: 90%;">
@@ -1113,21 +1180,21 @@
 
             <div class="rider-marker" style="left: ${info.riderLeftPct}%;">
               <div class="rider-bike">🛵</div>
-              <div class="rider-label">${info.remainMin === 0 ? "도착!" : `${info.remainMin}분 남음`}</div>
+              <div class="rider-label">${info.stageCode === "done" ? "도착!" : `${info.remainMin}분 남음`}</div>
             </div>
           </div>
 
           <div class="step-timeline">
             ${timelineHtml}
-            <div class="step-item ${info.step >= info.totalSteps ? "done" : ""}">
+            <div class="step-item ${info.stageCode === "done" ? "done" : (info.stageCode === "delivering" ? "active" : "")}">
               <span><strong>[도착지]</strong> ${order.address}</span>
-              <span>${info.step >= info.totalSteps ? "배달 완료" : "이동 중"}</span>
+              <span>${info.stageCode === "done" ? "배달 완료" : (info.stageCode === "delivering" ? "라이더 이동 중" : "대기 중")}</span>
             </div>
           </div>
 
           <div class="sim-controls">
-            <button type="button" class="sim-btn primary" id="nextStepBtn">⏭️ 다음 구간 이동 (시연용)</button>
-            <button type="button" class="sim-btn" id="autoSimBtn">${riderTimer ? "⏸️ 자동 이동 일시정지" : "▶️ 실시간 자동 주행"}</button>
+            <button type="button" class="sim-btn primary" id="nextStepBtn">⏭️ 다음 단계 진행 (시연용)</button>
+            <button type="button" class="sim-btn" id="autoSimBtn">${riderTimer ? "⏸️ 자동 진행 일시정지" : "▶️ 실시간 자동 진행"}</button>
           </div>
         </div>
       `;
@@ -1254,7 +1321,7 @@
       };
       saveState();
       startRiderSimulation();
-      showToast("결제 완료! 라이더 실시간 위치 추적을 시작합니다.");
+      showToast("원클릭 결제 완료! 음식 준비중 → 픽업 → 라이더 위치 추적을 시작합니다.");
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
