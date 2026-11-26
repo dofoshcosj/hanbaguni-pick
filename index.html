@@ -9,16 +9,31 @@
       --primary: #0f8a67;
       --primary-dark: #0a684d;
       --primary-light: #e7f6f1;
-      --bg: #f4f7f6;
+      --bg: #f3f6f5;
       --card: #ffffff;
       --border: #dfe7e4;
       --text: #18221f;
       --muted: #61736d;
       --accent: #ff6b35;
-      --accent-light: #fff1eb;
       --danger: #d93848;
-      --shadow: 0 8px 24px rgba(16, 40, 32, 0.06);
-      --radius: 14px;
+      --shadow: 0 10px 28px rgba(16, 40, 32, 0.07);
+      --radius: 16px;
+
+      /* 가게별 고유 컬러 변수 */
+      --store-a: #d95d39;
+      --store-a-dark: #b44525;
+      --store-a-bg: #fff2ed;
+      --store-a-border: #f7c7b8;
+
+      --store-b: #0f8a67;
+      --store-b-dark: #09664c;
+      --store-b-bg: #e8f7f2;
+      --store-b-border: #b5e4d4;
+
+      --store-c: #7c4dff;
+      --store-c-dark: #5b31d6;
+      --store-c-bg: #f2edff;
+      --store-c-border: #d4c4ff;
     }
 
     * {
@@ -29,7 +44,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
-      background-color: var(--bg);
+      background: radial-gradient(circle at top right, #e9f4f0 0%, var(--bg) 55%);
       color: var(--text);
       line-height: 1.5;
       min-height: 100vh;
@@ -40,9 +55,9 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+      background: linear-gradient(100deg, #0b5e47 0%, #0f8a67 55%, #169d77 100%);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(10, 104, 77, 0.22);
+      box-shadow: 0 6px 20px rgba(10, 104, 77, 0.24);
     }
 
     .topbar-inner {
@@ -65,11 +80,11 @@
     .brand-badge {
       background: #fff;
       color: var(--primary-dark);
-      font-weight: 800;
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 8px;
-      letter-spacing: -0.02em;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
     }
 
     .brand-title {
@@ -87,37 +102,38 @@
 
     .screen-tabs {
       display: flex;
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.16);
       padding: 4px;
-      border-radius: 10px;
+      border-radius: 11px;
       gap: 4px;
     }
 
     .tab-btn {
       border: none;
       background: transparent;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255, 255, 255, 0.9);
       font-size: 13px;
       font-weight: 700;
-      padding: 7px 12px;
-      border-radius: 7px;
+      padding: 7px 13px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.16s ease;
     }
 
     .tab-btn.active {
       background: #fff;
       color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .btn-reset {
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       background: rgba(255, 255, 255, 0.14);
       color: #fff;
       font-size: 13px;
       font-weight: 700;
       padding: 7px 12px;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
       transition: background 0.15s ease;
     }
@@ -130,7 +146,7 @@
     .container {
       max-width: 1320px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 22px 20px 36px;
     }
 
     .screen {
@@ -143,11 +159,10 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 1. 장바구니 화면 레이아웃 */
     .cart-grid {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
@@ -173,7 +188,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       gap: 10px;
       flex-wrap: wrap;
     }
@@ -182,12 +197,45 @@
       font-size: 17px;
       font-weight: 800;
       color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .store-color-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--store-color, var(--primary));
     }
 
     .section-sub {
       font-size: 13px;
       color: var(--muted);
       margin-bottom: 14px;
+    }
+
+    /* 가게별 테마 클래스 (A, B, C) */
+    .theme-A {
+      --store-color: var(--store-a);
+      --store-color-dark: var(--store-a-dark);
+      --store-color-bg: var(--store-a-bg);
+      --store-color-border: var(--store-a-border);
+    }
+
+    .theme-B {
+      --store-color: var(--store-b);
+      --store-color-dark: var(--store-b-dark);
+      --store-color-bg: var(--store-b-bg);
+      --store-color-border: var(--store-b-border);
+    }
+
+    .theme-C {
+      --store-color: var(--store-c);
+      --store-color-dark: var(--store-c-dark);
+      --store-color-bg: var(--store-c-bg);
+      --store-color-border: var(--store-c-border);
     }
 
     /* 매장 선택 카드 */
@@ -205,63 +253,79 @@
     }
 
     .store-card {
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
+      position: relative;
+      border: 1.5px solid var(--store-color-border);
+      border-top: 4px solid var(--store-color);
+      border-radius: 13px;
+      padding: 12px 13px;
       cursor: pointer;
       background: #fff;
-      transition: all 0.15s ease;
+      transition: all 0.16s ease;
       text-align: left;
     }
 
     .store-card:hover {
-      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
     .store-card.selected {
-      border-color: var(--primary);
-      background: var(--primary-light);
+      background: var(--store-color-bg);
+      border-color: var(--store-color);
+      border-top-width: 5px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .store-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
     }
 
     .store-card-name {
       font-size: 15px;
       font-weight: 800;
-      margin-bottom: 3px;
+      color: var(--store-color-dark);
     }
 
     .store-card-meta {
       font-size: 12px;
       color: var(--muted);
+      margin-top: 4px;
     }
 
     .store-badge {
       display: inline-block;
-      margin-top: 6px;
+      margin-top: 8px;
       font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
+      font-weight: 800;
+      padding: 3px 8px;
       border-radius: 999px;
-      background: #e9efed;
-      color: var(--text);
+      background: var(--store-color-bg);
+      color: var(--store-color-dark);
+      border: 1px solid var(--store-color-border);
     }
 
     .store-card.selected .store-badge {
-      background: var(--primary);
+      background: var(--store-color);
       color: #fff;
+      border-color: var(--store-color);
     }
 
     .search-input {
       width: 100%;
       padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 11px;
       font-size: 14px;
       margin-bottom: 14px;
       outline: none;
+      transition: border-color 0.15s ease;
     }
 
     .search-input:focus {
-      border-color: var(--primary);
+      border-color: var(--store-color, var(--primary));
     }
 
     /* 메뉴 리스트 */
@@ -276,15 +340,35 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--store-color-border);
+      border-left: 4px solid var(--store-color);
       border-radius: 12px;
       padding: 12px 14px;
       background: #fff;
+      transition: background 0.15s ease;
+    }
+
+    .menu-item:hover {
+      background: var(--store-color-bg);
     }
 
     .menu-info-title {
       font-size: 15px;
       font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .menu-store-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: var(--store-color-bg);
+      color: var(--store-color-dark);
+      border: 1px solid var(--store-color-border);
     }
 
     .menu-info-desc {
@@ -296,33 +380,39 @@
     .menu-info-price {
       font-size: 14px;
       font-weight: 800;
-      color: var(--primary-dark);
+      color: var(--store-color-dark);
       margin-top: 4px;
     }
 
     .btn-add {
-      background: var(--primary);
+      background: var(--store-color);
       color: #fff;
       border: none;
       border-radius: 9px;
-      padding: 9px 13px;
+      padding: 9px 14px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      transition: background 0.15s ease, transform 0.1s ease;
     }
 
     .btn-add:hover {
-      background: var(--primary-dark);
+      background: var(--store-color-dark);
+    }
+
+    .btn-add:active {
+      transform: scale(0.97);
     }
 
     /* 우측 통합 장바구니 */
     .store-group {
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1.5px solid var(--store-color-border);
+      border-top: 4px solid var(--store-color);
+      border-radius: 13px;
       padding: 12px 14px;
       margin-bottom: 12px;
-      background: #fafcfb;
+      background: var(--store-color-bg);
     }
 
     .store-group-header {
@@ -331,18 +421,21 @@
       align-items: center;
       font-size: 14px;
       font-weight: 800;
+      color: var(--store-color-dark);
       padding-bottom: 8px;
-      border-bottom: 1px dashed var(--border);
+      border-bottom: 1px dashed var(--store-color-border);
       margin-bottom: 8px;
+      gap: 8px;
     }
 
     .min-order-ok {
       font-size: 11px;
       color: var(--primary-dark);
-      background: var(--primary-light);
+      background: #dff5ee;
       padding: 2px 8px;
       border-radius: 999px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .min-order-lack {
@@ -352,6 +445,7 @@
       padding: 2px 8px;
       border-radius: 999px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .cart-item-row {
@@ -368,7 +462,7 @@
       align-items: center;
       gap: 6px;
       background: #fff;
-      border: 1px solid var(--border);
+      border: 1px solid var(--store-color-border);
       border-radius: 8px;
       padding: 2px 6px;
     }
@@ -380,7 +474,7 @@
       font-size: 14px;
       cursor: pointer;
       padding: 0 4px;
-      color: var(--text);
+      color: var(--store-color-dark);
     }
 
     .option-row {
@@ -401,6 +495,7 @@
 
     .summary-box {
       background: #f6f9f8;
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       margin-top: 12px;
@@ -496,7 +591,7 @@
 
     .map-mock {
       position: relative;
-      height: 220px;
+      height: 210px;
       border-radius: 14px;
       background: linear-gradient(135deg, #e7f3ef 0%, #d8ebe4 100%);
       border: 1px solid var(--border);
@@ -510,7 +605,7 @@
 
     .route-track {
       position: relative;
-      height: 8px;
+      height: 9px;
       background: #ffffff;
       border-radius: 999px;
       margin: auto 0;
@@ -520,7 +615,7 @@
     .route-fill {
       height: 100%;
       width: 68%;
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--store-a), var(--store-b), var(--store-c));
       border-radius: 999px;
       transition: width 0.3s ease;
     }
@@ -567,12 +662,15 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 14px;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--store-color-border);
+      border-left: 4px solid var(--store-color);
+      background: var(--store-color-bg);
       border-radius: 10px;
       font-size: 13px;
+      color: var(--store-color-dark);
     }
 
-    /* 3. 배달 완료 화면 */
+    /* 3. 배달완료 화면 */
     .complete-card {
       max-width: 640px;
       margin: 0 auto;
@@ -626,7 +724,6 @@
   </style>
 </head>
 <body>
-  <!-- 상단바: 보라색 표시 영역 제거 및 "데모 초기화" -> "처음부터"로 단축 -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand-area">
@@ -646,15 +743,14 @@
   </header>
 
   <main class="container">
-    <!-- 화면 1: 매장 선택 및 한바구니 통합 장바구니 (하단 보라색 표시 박스 제거됨) -->
+    <!-- 화면 1: 매장 선택 및 한바구니 통합 장바구니 -->
     <section id="screen-cart" class="screen active">
       <div class="cart-grid">
-        <!-- 좌측: 매장 선택 & 메뉴 -->
         <div class="card">
           <div class="section-header">
             <h1 class="section-title">1. 매장 선택 및 메뉴 담기</h1>
           </div>
-          <p class="section-sub">여러 매장의 메뉴를 한 번에 담아 함께 주문할 수 있습니다.</p>
+          <p class="section-sub">가게마다 구분된 색상으로 메뉴와 장바구니를 한눈에 확인해 보세요.</p>
 
           <div class="store-tabs" id="storeTabs"></div>
 
@@ -662,18 +758,17 @@
             type="text"
             id="menuSearch"
             class="search-input"
-            placeholder="메뉴 이름을 검색해 보세요 (예: 김치찜, 아메리카노, 치즈케이크)"
+            placeholder="메뉴 이름을 검색해 보세요 (예: 김치찜, 아메리카노, 떡볶이)"
             oninput="renderMenus()"
           />
 
           <div class="section-header">
-            <h2 class="section-title" id="selectedStoreTitle">B가게 (카페) 메뉴</h2>
+            <h2 class="section-title" id="selectedStoreTitle"></h2>
           </div>
 
           <div class="menu-list" id="menuList"></div>
         </div>
 
-        <!-- 우측: 통합 장바구니 -->
         <div class="card">
           <div class="section-header">
             <h2 class="section-title">2. 한바구니 통합 장바구니</h2>
@@ -790,9 +885,9 @@
 
   <script>
     const STORES = [
-      { id: "A", name: "A가게 (한식)", minOrder: 12000, eta: "약 25분" },
-      { id: "B", name: "B가게 (카페)", minOrder: 10000, eta: "약 15분" },
-      { id: "C", name: "C가게 (분식)", minOrder: 11000, eta: "약 20분" }
+      { id: "A", name: "A가게 (한식)", colorHex: "#d95d39", minOrder: 12000, eta: "약 25분" },
+      { id: "B", name: "B가게 (카페)", colorHex: "#0f8a67", minOrder: 10000, eta: "약 15분" },
+      { id: "C", name: "C가게 (분식)", colorHex: "#7c4dff", minOrder: 11000, eta: "약 20분" }
     ];
 
     const MENUS = [
@@ -871,10 +966,13 @@
         return `
           <button
             type="button"
-            class="store-card ${isSelected ? "selected" : ""}"
+            class="store-card theme-${store.id} ${isSelected ? "selected" : ""}"
             onclick="selectStore('${store.id}')"
           >
-            <div class="store-card-name">${store.name}</div>
+            <div class="store-card-top">
+              <span class="store-card-name">${store.name}</span>
+              <span class="store-color-dot"></span>
+            </div>
             <div class="store-card-meta">최소 ${formatWon(store.minOrder)} · ${store.eta}</div>
             <span class="store-badge">${isSelected ? "선택됨" : "선택하기"}</span>
           </button>
@@ -882,7 +980,9 @@
       }).join("");
 
       const currentStore = STORES.find((s) => s.id === state.selectedStoreId);
-      document.getElementById("selectedStoreTitle").textContent = `${currentStore.name} 메뉴`;
+      const titleEl = document.getElementById("selectedStoreTitle");
+      titleEl.className = `section-title theme-${currentStore.id}`;
+      titleEl.innerHTML = `<span class="store-color-dot"></span>${currentStore.name} 메뉴`;
     }
 
     function renderMenus() {
@@ -906,9 +1006,12 @@
         .map((menu) => {
           const store = STORES.find((s) => s.id === menu.storeId);
           return `
-            <div class="menu-item">
+            <div class="menu-item theme-${store.id}">
               <div>
-                <div class="menu-info-title">${menu.name} ${query ? `<span style="font-size:12px;color:var(--muted);">(${store.name})</span>` : ""}</div>
+                <div class="menu-info-title">
+                  <span>${menu.name}</span>
+                  ${query ? `<span class="menu-store-tag">${store.name}</span>` : ""}
+                </div>
                 <div class="menu-info-desc">${menu.desc}</div>
                 <div class="menu-info-price">${formatWon(menu.price)}</div>
               </div>
@@ -965,9 +1068,9 @@
           .join("");
 
         return `
-          <div class="store-group">
+          <div class="store-group theme-${store.id}">
             <div class="store-group-header">
-              <span>${store.name} · ${formatWon(storeSum)}</span>
+              <span><span class="store-color-dot" style="margin-right:6px;"></span>${store.name} · ${formatWon(storeSum)}</span>
               <span class="${isEnough ? "min-order-ok" : "min-order-lack"}">
                 ${isEnough ? "최소주문 충족" : formatWon(store.minOrder - storeSum) + " 부족"}
               </span>
@@ -980,7 +1083,7 @@
       document.getElementById("totalQtyBadge").textContent = `총 ${totalCount}개`;
 
       if (!storeHtmlList.length) {
-        groupsEl.innerHTML = `<div class="store-group" style="text-align:center;color:var(--muted);">장바구니가 비어 있습니다. 왼쪽에서 메뉴를 담아보세요.</div>`;
+        groupsEl.innerHTML = `<div class="store-group" style="text-align:center;color:var(--muted);background:#fafcfb;border-color:var(--border);">장바구니가 비어 있습니다. 왼쪽에서 메뉴를 담아보세요.</div>`;
       } else {
         groupsEl.innerHTML = storeHtmlList.join("");
       }
@@ -1050,13 +1153,13 @@
       const activeStores = STORES.filter((s) =>
         MENUS.some((m) => m.storeId === s.id && (state.cart[m.id] || 0) > 0)
       );
-      const stops = activeStores.length ? activeStores : [STORES[1]];
+      const stops = activeStores.length ? activeStores : STORES;
 
       document.getElementById("riderStopList").innerHTML = stops
         .map(
           (s, idx) => `
-          <div class="stop-item">
-            <span><strong>픽업 ${idx + 1}.</strong> ${s.name}</span>
+          <div class="stop-item theme-${s.id}">
+            <span><span class="store-color-dot" style="margin-right:7px;"></span><strong>픽업 ${idx + 1}.</strong> ${s.name}</span>
             <span class="min-order-ok">픽업 완료</span>
           </div>
         `
@@ -1068,7 +1171,12 @@
       const { finalTotal } = getTotals();
       const items = MENUS.filter((m) => (state.cart[m.id] || 0) > 0);
       const itemLines = items.length
-        ? items.map((m) => `<div>· ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</div>`).join("")
+        ? items
+            .map((m) => {
+              const store = STORES.find((s) => s.id === m.storeId);
+              return `<div style="margin-bottom:4px;"><span class="menu-store-tag theme-${store.id}">${store.name}</span> ${m.name} × ${state.cart[m.id]} (${formatWon(m.price * state.cart[m.id])})</div>`;
+            })
+            .join("")
         : `<div>· 한바구니 통합 주문 내역</div>`;
 
       document.getElementById("completeSummary").innerHTML = `
@@ -1109,7 +1217,6 @@
       goScreen("cart");
     }
 
-    // 초기 렌더링
     renderStoreTabs();
     renderMenus();
     renderCart();
