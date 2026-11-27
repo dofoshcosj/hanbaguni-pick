@@ -1,1 +1,2150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>한바구니픽</title>
+  <style>
+    :root {
+      --bg-page: #f4f6f9;
+      --bg-card: #ffffff;
+      --bg-soft: #f8fafc;
+      --text-main: #111827;
+      --text-sub: #374151;
+      --mint: #0d9488;
+      --mint-dark: #0f766e;
+      --mint-bg: #f0fdfa;
+      --mint-border: #99f6e4;
+      --danger: #b91c1c;
+      --border: #d1d5db;
+      --focus: #1d4ed8;
+      --radius: 16px;
+      --shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+      --anim-ms: 260ms;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.55;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 5px rgba(29, 78, 216, 0.16);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root { --anim-ms: 0ms; }
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -60px;
+      left: 16px;
+      background: var(--mint-dark);
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      z-index: 3000;
+    }
+
+    .skip-link:focus { top: 12px; }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 120;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.32rem;
+      font-weight: 800;
+      color: var(--mint-dark);
+    }
+
+    .live-clock-badge {
+      background: #111827;
+      color: #5eead4;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    .btn-mint {
+      background: var(--mint-dark);
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 0.86rem;
+    }
+
+    .btn-mint:hover { background: #115e59; }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: #9ca3af;
+      padding: 8px 14px;
+      font-size: 0.86rem;
+    }
+
+    .btn-outline:hover { background: var(--bg-soft); }
+
+    .cart-counter-pill {
+      background: var(--mint-bg);
+      color: var(--mint-dark);
+      border: 1.5px solid var(--mint-dark);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .screen-panel {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity var(--anim-ms) cubic-bezier(0.22, 1, 0.36, 1),
+                  transform var(--anim-ms) cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .screen-panel[hidden] { display: none; }
+
+    .screen-entering {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .screen-leaving {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    .sub-pane {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity var(--anim-ms) ease, transform var(--anim-ms) ease;
+    }
+
+    .sub-pane[hidden] { display: none; }
+
+    .sub-pane-enter {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 20px auto 96px;
+      padding: 0 20px;
+    }
+
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .shop-layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .kbd-hint-bar {
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.79rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+    }
+
+    .store-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .store-pick-card {
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 15px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .store-pick-card:hover {
+      border-color: var(--mint-dark);
+      background: var(--mint-bg);
+    }
+
+    .store-pick-name {
+      margin: 0 0 3px;
+      font-size: 1.06rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .store-pick-desc {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .store-pick-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .store-min-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #78350f;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+
+    .store-fee-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #075985;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+
+    .store-enter-txt {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--mint-dark);
+      margin-top: 2px;
+    }
+
+    .store-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: var(--mint-bg);
+      border: 1px solid var(--mint-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .menu-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 14px;
+      display: grid;
+      grid-template-columns: 1fr 104px;
+      gap: 14px;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+
+    .tag-store {
+      background: var(--mint-bg);
+      color: var(--mint-dark);
+      border: 1px solid var(--mint-border);
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+
+    .tag-min {
+      background: #fef3c7;
+      color: #78350f;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+
+    .menu-name {
+      margin: 0 0 3px;
+      font-size: 1.02rem;
+      font-weight: 800;
+    }
+
+    .menu-desc {
+      margin: 0 0 8px;
+      font-size: 0.84rem;
+      color: var(--text-sub);
+    }
+
+    .menu-action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    select.opt-select {
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #6b7280;
+      font-size: 0.84rem;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    .cc-panel {
+      margin-top: 18px;
+      background: #111827;
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 15px 16px;
+    }
+
+    .media-guide-stage {
+      margin-top: 10px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .media-guide-canvas {
+      position: relative;
+      width: 148px;
+      height: 54px;
+      border-radius: 8px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .media-guide-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 33.3%;
+      background: rgba(45, 212, 191, 0.22);
+      border-right: 2px solid #2dd4bf;
+      transition: transform 0.35s ease;
+    }
+
+    .media-guide-label {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #f8fafc;
+      padding: 0 8px;
+      text-align: center;
+    }
+
+    .cc-box {
+      margin-top: 10px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .cc-pill {
+      background: #2dd4bf;
+      color: #111827;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .sticky-cart {
+      position: sticky;
+      top: 76px;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      font-size: 0.86rem;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6px;
+      text-align: left;
+    }
+
+    .cart-table th {
+      background: var(--bg-soft);
+      font-weight: 700;
+    }
+
+    .cost-breakdown {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+    }
+
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      color: var(--text-sub);
+    }
+
+    .cost-row.discount {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      margin-top: 6px;
+      border-top: 1px solid var(--border);
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: var(--text-main);
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+    }
+
+    .coupon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .coupon-card {
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .coupon-card:hover {
+      border-color: var(--mint-dark);
+      background: var(--mint-bg);
+    }
+
+    .coupon-card[aria-pressed="true"] {
+      border-color: var(--mint-dark);
+      background: var(--mint-bg);
+      box-shadow: 0 0 0 2px var(--mint-border);
+    }
+
+    .coupon-amt {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--mint-dark);
+    }
+
+    .coupon-sub {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .form-row { margin-bottom: 12px; }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 4px;
+    }
+
+    .req-asterisk { color: var(--danger); font-weight: 800; }
+
+    input[type="text"],
+    select.form-ctrl {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid #4b5563;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    input[aria-invalid="true"],
+    select[aria-invalid="true"] {
+      border-color: var(--danger);
+    }
+
+    .field-err {
+      color: var(--danger);
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-height: 18px;
+      margin-top: 3px;
+    }
+
+    .track-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .track-layout { grid-template-columns: 1fr; }
+    }
+
+    .eta-banner {
+      background: #111827;
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .eta-banner.completed {
+      background: #065f46;
+      border: 2px solid #34d399;
+    }
+
+    .eta-big {
+      margin: 2px 0 0;
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #2dd4bf;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .eta-banner.completed .eta-big {
+      color: #fef08a;
+    }
+
+    .done-celebrate-box {
+      background: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .done-celebrate-box[hidden] { display: none; }
+
+    .timeline-steps {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .tl-pill {
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+    }
+
+    .tl-pill.active {
+      background: var(--mint-bg);
+      border-color: var(--mint-dark);
+      color: var(--mint-dark);
+    }
+
+    .map-frame {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    #riderPin {
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .cook-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cook-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      background: #ffffff;
+    }
+
+    .cook-card.done {
+      background: var(--mint-bg);
+      border-color: var(--mint-border);
+    }
+
+    .st-badge {
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .s-cook { background: #ffedd5; color: #9a3412; }
+    .s-done { background: #ccfbf1; color: #0f766e; }
+
+    .receipt-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .receipt-item-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--bg-soft);
+    }
+
+    .toast-bar {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111827;
+      color: #ffffff;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      z-index: 950;
+    }
+
+    .toast-bar[hidden] { display: none; }
+
+    footer {
+      max-width: 1180px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+      font-size: 0.84rem;
+      color: var(--text-sub);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand-wrap">
+        <svg width="38" height="38" viewBox="0 0 40 40" role="img" aria-label="한바구니픽 로고">
+          <title>한바구니픽 로고</title>
+          <rect width="40" height="40" rx="11" fill="#0f766e" />
+          <path d="M10 17h20l-2 12H12L10 17z" fill="#ffffff" />
+          <path d="M15 17l5-6 5 6" stroke="#99f6e4" stroke-width="2.4" fill="none" stroke-linecap="round" />
+        </svg>
+        <h1 class="brand-title">한바구니픽</h1>
+        <span id="liveClockBadge" class="live-clock-badge" aria-label="현재 시각">🕒 00:00:00</span>
+      </div>
+
+      <nav class="nav-group" role="tablist" aria-label="화면 전환 (좌/우 방향키 이동 가능)">
+        <button type="button" id="tabShop" class="btn-mint" role="tab" aria-selected="true">🏪 가게 선택</button>
+        <button type="button" id="tabCheckout" class="btn-outline" role="tab" aria-selected="false">🎟️ 쿠폰·결제</button>
+        <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">🛵 배달현황</button>
+        <button type="button" id="tabReceipt" class="btn-outline" role="tab" aria-selected="false" aria-label="주문내역 보기">🧾 주문내역</button>
+        <button type="button" id="topCartBtn" class="cart-counter-pill" aria-label="장바구니 담김 수량">
+          🛒 바구니 <span id="topCartQty">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <!-- [화면 1] 가게 목록 & 선택한 가게 메뉴 화면 -->
+    <section id="viewShop" class="screen-panel shop-layout" role="tabpanel" aria-labelledby="tabShop">
+      <div class="card">
+        <!-- 1-A. 가게 선택 화면 -->
+        <div id="storeListScreen" class="sub-pane">
+          <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
+          <p class="kbd-hint-bar">
+            ⌨️ <strong>키보드 안내:</strong> 위/아래 방향키(<code>↑</code>/<code>↓</code>)로 가게 카드 이동 · <code>Enter</code>/<code>Space</code>로 메뉴 진입 · 메뉴 화면에서 <code>ESC</code>로 가게 목록 복귀
+          </p>
+
+          <div class="store-card-list" role="list" aria-label="가게 목록">
+            <button type="button" class="store-pick-card" data-store="바삭한날 치킨" role="listitem">
+              <div>
+                <p class="store-pick-name">🍗 바삭한날 치킨</p>
+                <p class="store-pick-desc">후라이드 · 양념 · 간장마늘 · 허니버터 · 치즈볼세트</p>
+              </div>
+              <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,000원</span>
+                <span class="store-min-badge">최소 16,000원</span>
+                <span class="store-enter-txt">메뉴 보기 →</span>
+              </div>
+            </button>
+
+            <button type="button" class="store-pick-card" data-store="이슬커피" role="listitem">
+              <div>
+                <p class="store-pick-name">☕ 이슬커피</p>
+                <p class="store-pick-desc">아메리카노 · 바닐라빈 라떼 · 콜드브루 · 모카세트 · 아이스티박스</p>
+              </div>
+              <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 1,500원</span>
+                <span class="store-min-badge">최소 14,000원</span>
+                <span class="store-enter-txt">메뉴 보기 →</span>
+              </div>
+            </button>
+
+            <button type="button" class="store-pick-card" data-store="굽고바삭 와플" role="listitem">
+              <div>
+                <p class="store-pick-name">🧇 굽고바삭 와플</p>
+                <p class="store-pick-desc">사과잼 와플 · 딸기누텔라 · 바나나크로플 · 말차와플 · 로투스와플</p>
+              </div>
+              <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 1,500원</span>
+                <span class="store-min-badge">최소 14,000원</span>
+                <span class="store-enter-txt">메뉴 보기 →</span>
+              </div>
+            </button>
+
+            <button type="button" class="store-pick-card" data-store="화덕향 피자" role="listitem">
+              <div>
+                <p class="store-pick-name">🍕 화덕향 피자</p>
+                <p class="store-pick-desc">페퍼로니 · 불고기버섯 · 고구마무스 · 콰트로치즈 · 스파게티세트</p>
+              </div>
+              <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,500원</span>
+                <span class="store-min-badge">최소 18,000원</span>
+                <span class="store-enter-txt">메뉴 보기 →</span>
+              </div>
+            </button>
+
+            <button type="button" class="store-pick-card" data-store="뚝배기담 김치찜" role="listitem">
+              <div>
+                <p class="store-pick-name">🍲 뚝배기담 김치찜</p>
+                <p class="store-pick-desc">돼지목살 김치찜 · 통삼겹 김치찜 · 참치두부찜 · 계란말이반상 · 얼큰찜</p>
+              </div>
+              <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,000원</span>
+                <span class="store-min-badge">최소 15,000원</span>
+                <span class="store-enter-txt">메뉴 보기 →</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1-B. 선택한 가게의 메뉴 화면 -->
+        <div id="storeMenuScreen" class="sub-pane" hidden>
+          <div class="store-menu-header">
+            <div>
+              <h2 id="activeStoreTitle" style="margin:0; font-size:1.12rem; color:var(--mint-dark);">가게 메뉴</h2>
+              <p id="activeStoreMinInfo" style="margin:2px 0 0; font-size:0.82rem; color:var(--text-sub); font-weight:700;"></p>
+            </div>
+            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기 (ESC)</button>
+          </div>
+
+          <p class="kbd-hint-bar">
+            ⌨️ <code>↑</code>/<code>↓</code> 또는 <code>←</code>/<code>→</code> 방향키로 메뉴 옵션·담기 버튼 간 포커스 이동 · <code>ESC</code>로 가게 목록 복귀
+          </p>
+
+          <div id="menuListContainer" class="menu-grid"></div>
+        </div>
+
+        <!-- 6. 미디어 자막(CC) & 시각 가이드 보완 영역 -->
+        <section class="cc-panel" aria-labelledby="ccHeading">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 가이드 영상·자막 & 사운드</h2>
+            <div class="cc-btn-group" role="group" aria-label="자막 및 알림음 제어 (방향키 이동 가능)" style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" id="ccPlay" class="btn-mint cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
+              <button type="button" id="ccPause" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
+              <button type="button" id="ccStop" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏹ 정지</button>
+              <button type="button" id="soundToggleBtn" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;" aria-pressed="true">🔊 알림음 켜짐</button>
+            </div>
+          </div>
+
+          <div class="media-guide-stage" aria-label="이용 안내 시각 가이드">
+            <div class="media-guide-canvas" role="img" aria-label="이용 단계 1단계부터 3단계까지 진행 바 시각화">
+              <div id="mediaStepBar" class="media-guide-bar"></div>
+              <div id="mediaStepLabel" class="media-guide-label">STEP 1/3 · 가게 선택</div>
+            </div>
+            <p style="margin:0; font-size:0.8rem; color:#cbd5e1; flex:1; min-width:180px;">
+              화면 전환과 주문 절차를 시각 인디케이터와 자막(CC)으로 함께 안내합니다. (모션 축소 설정 시 정지 상태 유지)
+            </p>
+          </div>
+
+          <div class="cc-box" role="region" aria-live="polite" aria-label="자막">
+            <span class="cc-pill">자막(CC)</span>
+            <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.</span>
+          </div>
+        </section>
+      </div>
+
+      <aside class="card sticky-cart" aria-labelledby="cartHeading">
+        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;" tabindex="-1">🛒 한바구니 장바구니</h2>
+
+        <table class="cart-table" aria-label="장바구니 내역">
+          <thead>
+            <tr>
+              <th scope="col">메뉴</th>
+              <th scope="col">수량</th>
+              <th scope="col">금액</th>
+            </tr>
+          </thead>
+          <tbody id="cartBody">
+            <tr>
+              <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
+                장바구니가 비어 있습니다. 🍽️
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="cost-breakdown" aria-label="장바구니 금액 요약">
+          <div class="cost-row">
+            <span>메뉴 금액</span>
+            <span id="shopMenuSumText">0원</span>
+          </div>
+          <div class="cost-row">
+            <span>🛵 예상 배달팁</span>
+            <span id="shopDeliveryFeeText">0원</span>
+          </div>
+          <div class="cost-row discount">
+            <span>🎟️ 선택 쿠폰 할인</span>
+            <span id="shopCouponDiscountText">-0원</span>
+          </div>
+          <div class="total-line">
+            <span>예상 결제금액</span>
+            <span id="shopTotalPayText">0원</span>
+          </div>
+        </div>
+
+        <button type="button" id="goCheckoutBtn" class="btn-mint" style="width:100%; padding:12px; font-size:0.98rem;">
+          🎟️ 쿠폰 선택 & 결제 화면으로 →
+        </button>
+      </aside>
+    </section>
+
+    <!-- [화면 2] 쿠폰 사용 & 결제 화면 -->
+    <section id="viewCheckout" class="screen-panel checkout-layout" role="tabpanel" aria-labelledby="tabCheckout" hidden>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+          <div>
+            <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
+            <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
+              방향키(<code>←</code>/<code>→</code>/<code>↑</code>/<code>↓</code>)로 쿠폰 카드를 이동하고 선택하세요. <code>ESC</code>로 가게 선택 복귀 가능.
+            </p>
+          </div>
+          <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
+        </div>
+
+        <div class="form-row">
+          <span style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:6px;">🎟️ 보유 할인 쿠폰 선택</span>
+          <div class="coupon-grid" role="group" aria-label="할인 쿠폰 목록">
+            <button type="button" class="coupon-card" data-coupon="0" aria-pressed="true">
+              <span class="coupon-amt">쿠폰 미적용</span>
+              <span class="coupon-sub">할인 없이 진행</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="2000" aria-pressed="false">
+              <span class="coupon-amt">🎟️ 2,000원 할인</span>
+              <span class="coupon-sub">한바구니 기본 할인 쿠폰</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="3000" aria-pressed="false">
+              <span class="coupon-amt">🎟️ 3,000원 할인</span>
+              <span class="coupon-sub">다점포 주문 우대 쿠폰</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="4000" aria-pressed="false">
+              <span class="coupon-amt">🎉 4,000원 할인</span>
+              <span class="coupon-sub">한바구니 특별 혜택 쿠폰</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="checkoutForm" novalidate style="margin-top:16px;">
+          <div class="form-row">
+            <label for="addrField">
+              📍 배달 주소 <span class="req-asterisk" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="addrField"
+              name="addrField"
+              required
+              aria-invalid="false"
+              aria-describedby="addrError"
+              placeholder="배달 받을 주소를 입력하세요"
+            />
+            <div id="addrError" class="field-err" role="alert"></div>
+          </div>
+
+          <div class="form-row">
+            <label for="payTypeField">
+              💳 결제 방식 <span class="req-asterisk" aria-hidden="true">*</span>
+            </label>
+            <select
+              id="payTypeField"
+              name="payTypeField"
+              class="form-ctrl"
+              required
+              aria-invalid="false"
+              aria-describedby="payTypeError"
+            >
+              <option value="">선택하세요</option>
+              <option value="간편결제">📱 간편결제</option>
+              <option value="카드결제">💳 카드결제</option>
+            </select>
+            <div id="payTypeError" class="field-err" role="alert"></div>
+          </div>
+
+          <button type="submit" class="btn-mint" style="width:100%; padding:13px; font-size:1rem;">
+            🛵 쿠폰 적용하고 주문하기
+          </button>
+        </form>
+      </div>
+
+      <aside class="card" aria-labelledby="paySummaryHeading">
+        <h2 id="paySummaryHeading" style="margin:0 0 12px; font-size:1.12rem;">🧾 결제 금액 내역</h2>
+
+        <table class="cart-table" aria-label="결제 대상 메뉴">
+          <thead>
+            <tr>
+              <th scope="col">메뉴</th>
+              <th scope="col">수량</th>
+              <th scope="col">금액</th>
+            </tr>
+          </thead>
+          <tbody id="checkoutCartBody">
+            <tr>
+              <td colspan="3" style="text-align:center; color:#4b5563; padding:16px 6px;">
+                담긴 메뉴가 없습니다.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="cost-breakdown">
+          <div class="cost-row">
+            <span>메뉴 합계</span>
+            <span id="payMenuSumText">0원</span>
+          </div>
+          <div class="cost-row">
+            <span>🛵 가게별 배달팁 합계</span>
+            <span id="payDeliveryFeeText">0원</span>
+          </div>
+          <div class="cost-row discount">
+            <span>🎟️ 쿠폰 할인</span>
+            <span id="payCouponDiscountText">-0원</span>
+          </div>
+          <div class="total-line">
+            <span>최종 결제금액</span>
+            <span id="payFinalTotalText">0원</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- [화면 3] 실시간 배달 타이머 & 오토바이 지도 화면 -->
+    <section id="viewTrack" class="screen-panel track-layout" role="tabpanel" aria-labelledby="tabTrack" hidden>
+      <div class="card">
+        <div id="etaBannerBox" class="eta-banner">
+          <div>
+            <span id="trackAddrBadge" style="font-size:0.82rem; color:#99f6e4; font-weight:700;">📍 배달 안내</span>
+            <p id="trackEtaTitle" class="eta-big">⏱️ 남은 시간 15:00</p>
+            <p id="trackStatusSub" style="margin:4px 0 0; font-size:0.86rem; color:#e5e7eb;">
+              실시간 타이머와 🛵 라이더 이동 현황입니다.
+            </p>
+          </div>
+          <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로 (ESC)</button>
+        </div>
+
+        <div id="doneCelebrateBox" class="done-celebrate-box" role="status" aria-live="assertive" hidden>
+          <span>🎉 배달이 완료되었어요! (장바구니 비움 완료) 😋</span>
+          <button type="button" id="openReceiptFromDoneBtn" class="btn-mint" style="padding:6px 12px; font-size:0.8rem;">🧾 내 주문내역 보기</button>
+        </div>
+
+        <div class="timeline-steps" aria-label="배달 단계">
+          <span class="tl-pill active" id="tlStep1">1. 📝 주문 수락됨</span>
+          <span class="tl-pill" id="tlStep2">2. 🍳 메뉴 준비중</span>
+          <span class="tl-pill" id="tlStep3">3. 🛵 배달중</span>
+          <span class="tl-pill" id="tlStep4">4. 🎉 배달 완료</span>
+        </div>
+
+        <div class="map-frame">
+          <svg width="100%" height="310" viewBox="0 0 640 310" role="img" aria-label="주문한 가게만 경유하는 실시간 배달 지도">
+            <title>한바구니픽 배달 지도</title>
+            <rect width="640" height="310" fill="#eef2f6" />
+            <rect x="24" y="20" width="145" height="68" rx="12" fill="#dcfce7" />
+            <text x="96" y="58" text-anchor="middle" fill="#166534" font-size="11" font-weight="bold">🌳 근린공원</text>
+
+            <path d="M0 155 L640 155" stroke="#ffffff" stroke-width="20" />
+            <path d="M180 0 L180 310" stroke="#ffffff" stroke-width="15" />
+            <path d="M310 0 L310 310" stroke="#ffffff" stroke-width="15" />
+            <path d="M440 0 L440 310" stroke="#ffffff" stroke-width="15" />
+
+            <g id="routePathGroup"></g>
+            <g id="routePinsGroup"></g>
+
+            <g id="riderPin" transform="translate(65, 155)">
+              <circle r="25" fill="#0d9488" opacity="0.2" />
+              <circle r="19" fill="#ffffff" stroke="#0d9488" stroke-width="2.5" />
+              <text y="8" text-anchor="middle" font-size="22" aria-hidden="true">🛵</text>
+              <rect x="-40" y="-42" width="80" height="18" rx="9" fill="#111827" />
+              <text id="riderPinText" y="-30" text-anchor="middle" fill="#2dd4bf" font-size="9.5" font-weight="bold">주문 수락됨</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="track-ctrl-group" role="group" aria-label="배달 타이머 제어 (방향키 이동 가능)" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+          <button type="button" id="toggleTimerBtn" class="btn-mint track-ctrl-btn">⏸ 일시정지</button>
+          <button type="button" id="fastForwardBtn" class="btn-outline track-ctrl-btn">⏩ +1분 빠르게</button>
+          <button type="button" id="completeNowBtn" class="btn-outline track-ctrl-btn">🎉 배달 완료</button>
+          <button type="button" id="resetTrackBtn" class="btn-outline track-ctrl-btn">🔄 초기화</button>
+        </div>
+      </div>
+
+      <aside class="card" aria-labelledby="storeCookHeading">
+        <h2 id="storeCookHeading" style="margin:0 0 12px; font-size:1.12rem;">🍳 가게별 조리 현황</h2>
+        <ul id="orderedStoresList" class="cook-list"></ul>
+      </aside>
+    </section>
+
+    <!-- [화면 4] 내가 시킨 주문내역 화면 -->
+    <section id="viewReceipt" class="screen-panel" role="tabpanel" aria-labelledby="tabReceipt" hidden>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+          <div>
+            <h2 style="margin:0; font-size:1.2rem;">🧾 내가 시킨 주문내역</h2>
+            <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
+              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요. (<code>ESC</code>로 가게 선택 복귀)
+            </p>
+          </div>
+          <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로 (ESC)</button>
+        </div>
+        <div id="receiptListContainer" class="receipt-box"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
+
+  <footer role="contentinfo">
+    <p style="margin:0;">🧺 한바구니픽 · 웹 접근성(이미지·키보드·대비·폼·구조·미디어) 보완 버전</p>
+  </footer>
+
+  <script>
+    function updateLiveClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const ss = String(now.getSeconds()).padStart(2, "0");
+      document.getElementById("liveClockBadge").textContent = `🕒 ${hh}:${mm}:${ss}`;
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+
+    let soundEnabled = true;
+    function playChime(type = "add") {
+      if (!soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === "done") {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.12);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.24);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.52);
+        } else {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(660, ctx.currentTime);
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.18);
+        }
+      } catch (_) {}
+    }
+
+    function bindArrowNavigation(itemsGetter, { axis = "both", wrap = true } = {}) {
+      document.addEventListener("keydown", (e) => {
+        const active = document.activeElement;
+        if (!active) return;
+
+        const items = itemsGetter().filter((el) => el && !el.hidden && el.offsetParent !== null);
+        const idx = items.indexOf(active);
+        if (idx === -1) return;
+
+        // native <select> 내부 옵션 선택 시엔 방해하지 않고, 셀렉트 간 이동만 지원
+        const isSelect = active.tagName === "SELECT";
+        if (isSelect && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+          return;
+        }
+
+        let delta = 0;
+        if (axis === "horizontal" || axis === "both") {
+          if (e.key === "ArrowRight") delta = 1;
+          if (e.key === "ArrowLeft") delta = -1;
+        }
+        if (delta === 0 && (axis === "vertical" || axis === "both")) {
+          if (e.key === "ArrowDown") delta = 1;
+          if (e.key === "ArrowUp") delta = -1;
+        }
+
+        if (delta === 0) return;
+        e.preventDefault();
+
+        let nextIdx = idx + delta;
+        if (wrap) {
+          nextIdx = (nextIdx + items.length) % items.length;
+        } else {
+          nextIdx = Math.max(0, Math.min(items.length - 1, nextIdx));
+        }
+        items[nextIdx].focus();
+      });
+    }
+
+    const STORE_INFO = {
+      "바삭한날 치킨": { icon: "🍗", minPrice: 16000, deliveryFee: 2000, mapX: 185, mapY: 84, badge: "🍗바삭한날", color: "#ea580c" },
+      "이슬커피": { icon: "☕", minPrice: 14000, deliveryFee: 1500, mapX: 265, mapY: 155, badge: "☕이슬커피", color: "#0f766e" },
+      "굽고바삭 와플": { icon: "🧇", minPrice: 14000, deliveryFee: 1500, mapX: 345, mapY: 88, badge: "🧇굽고바삭", color: "#b45309" },
+      "화덕향 피자": { icon: "🍕", minPrice: 18000, deliveryFee: 2500, mapX: 425, mapY: 155, badge: "🍕화덕향", color: "#b91c1c" },
+      "뚝배기담 김치찜": { icon: "🍲", minPrice: 15000, deliveryFee: 2000, mapX: 485, mapY: 84, badge: "🍲뚝배기담", color: "#991b1b" }
+    };
+
+    const START_PT = { x: 65, y: 155 };
+    const END_PT = { x: 565, y: 215 };
+
+    const ALL_MENUS = [
+      {
+        id: 101, store: "바삭한날 치킨", name: "황금 후라이드 치킨", desc: "🍗 바삭한 기본 후라이드 치킨",
+        options: [{ label: "한마리", price: 18000 }, { label: "순살 한마리", price: 19500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="황금 후라이드 치킨 일러스트"><title>후라이드 치킨</title><rect width="104" height="82" rx="10" fill="#fef3c7"/><rect x="20" y="44" width="18" height="8" rx="4" fill="#ffffff" transform="rotate(-20 29 48)"/><ellipse cx="56" cy="41" rx="25" ry="17" fill="#d97706"/></svg>`
+      },
+      {
+        id: 102, store: "바삭한날 치킨", name: "매콤 양념 치킨", desc: "🍗 달콤매콤 특제 양념 치킨",
+        options: [{ label: "순살 양념", price: 19000 }, { label: "뼈 양념", price: 18500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="매콤 양념 치킨 일러스트"><title>양념 치킨</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><ellipse cx="52" cy="44" rx="28" ry="18" fill="#dc2626"/><circle cx="42" cy="38" r="3" fill="#fef08a"/><circle cx="62" cy="40" r="3" fill="#fef08a"/></svg>`
+      },
+      {
+        id: 103, store: "바삭한날 치킨", name: "간장마늘 치킨", desc: "🍗 마늘향 가득한 간장 치킨",
+        options: [{ label: "기본 세트", price: 19000 }, { label: "마늘칩 추가", price: 20500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="간장마늘 치킨 일러스트"><title>간장마늘 치킨</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="40" cy="45" r="14" fill="#78350f"/><circle cx="62" cy="45" r="14" fill="#92400e"/><circle cx="51" cy="33" r="13" fill="#78350f"/></svg>`
+      },
+      {
+        id: 104, store: "바삭한날 치킨", name: "허니버터 치킨", desc: "🍗 달콤고소한 허니버터 치킨",
+        options: [{ label: "순살 허니버터", price: 19500 }, { label: "윙봉 세트", price: 20000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="허니버터 치킨 일러스트"><title>허니버터 치킨</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="44" rx="27" ry="17" fill="#f59e0b"/><circle cx="44" cy="36" r="2.5" fill="#78350f"/><circle cx="58" cy="38" r="2.5" fill="#78350f"/></svg>`
+      },
+      {
+        id: 105, store: "바삭한날 치킨", name: "치즈볼 & 감자튀김", desc: "🧀 치즈볼과 감자튀김 모둠",
+        options: [{ label: "치즈볼 6개+감튀", price: 16000 }, { label: "치즈볼 10개 세트", price: 18000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈볼과 감자튀김 일러스트"><title>치즈볼 감자튀김</title><rect width="104" height="82" rx="10" fill="#f8fafc"/><circle cx="38" cy="48" r="12" fill="#facc15"/><circle cx="64" cy="48" r="12" fill="#eab308"/><rect x="44" y="22" width="16" height="22" rx="3" fill="#f59e0b"/></svg>`
+      },
+      {
+        id: 201, store: "이슬커피", name: "아이스 아메리카노", desc: "🧊 깔끔한 원두 아메리카노",
+        options: [{ label: "ICE 4잔 세트", price: 14400 }, { label: "1L 2병 세트", price: 15600 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스 아메리카노 일러스트"><title>아이스 아메리카노</title><rect width="104" height="82" rx="10" fill="#f0fdfa"/><path d="M56 22 L65 9" stroke="#0f766e" stroke-width="3" stroke-linecap="round"/><path d="M36 24 L68 24 L64 68 L40 68 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/><path d="M38 34 L66 34 L63 66 L41 66 Z" fill="#451a03"/></svg>`
+      },
+      {
+        id: 202, store: "이슬커피", name: "바닐라빈 라떼", desc: "🥛 부드러운 바닐라빈 카페라떼",
+        options: [{ label: "ICE 3잔", price: 14700 }, { label: "HOT 3잔", price: 14700 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바닐라빈 라떼 일러스트"><title>바닐라빈 라떼</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><path d="M35 24 L69 24 L65 68 L39 68 Z" fill="#fef3c7" stroke="#9ca3af" stroke-width="1.5"/><path d="M37 36 L67 36 L64 54 L40 54 Z" fill="#b45309"/></svg>`
+      },
+      {
+        id: 203, store: "이슬커피", name: "콜드브루 세트", desc: "☕ 저온 추출 콜드브루 커피",
+        options: [{ label: "3병 세트", price: 15000 }, { label: "디카페인 3병", price: 15300 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="콜드브루 일러스트"><title>콜드브루</title><rect width="104" height="82" rx="10" fill="#ecfeff"/><rect x="34" y="18" width="36" height="48" rx="8" fill="#2c1810"/><rect x="38" y="14" width="28" height="6" rx="3" fill="#cbd5e1"/></svg>`
+      },
+      {
+        id: 204, store: "이슬커피", name: "초코모카 & 크루아상", desc: "🥐 진한 모카와 크루아상 세트",
+        options: [{ label: "모카 2+크루아상 2", price: 15800 }, { label: "아이스 초코 변경", price: 15800 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="초코모카와 크루아상 일러스트"><title>초코모카 크루아상</title><rect width="104" height="82" rx="10" fill="#fdf2f8"/><ellipse cx="52" cy="48" rx="24" ry="13" fill="#d97706"/><path d="M34 44 Q52 30 70 44" stroke="#92400e" stroke-width="4" fill="none"/></svg>`
+      },
+      {
+        id: 205, store: "이슬커피", name: "아이스티 & 스콘 박스", desc: "🍑 시원한 아이스티와 스콘 세트",
+        options: [{ label: "아이스티 3+스콘 2", price: 14500 }, { label: "블루베리 스콘 추가", price: 16500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스티와 스콘 일러스트"><title>아이스티 스콘</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="36" r="14" fill="#fb7185"/><rect x="32" y="52" width="40" height="14" rx="5" fill="#f59e0b"/></svg>`
+      },
+      {
+        id: 301, store: "굽고바삭 와플", name: "생크림 사과잼 와플", desc: "🍎 바삭한 와플과 생크림·사과잼",
+        options: [{ label: "4개 세트", price: 14400 }, { label: "6개 세트", price: 20400 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="생크림 사과잼 와플 일러스트"><title>생크림 사과잼 와플</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><rect x="26" y="24" width="52" height="36" rx="8" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/><circle cx="52" cy="38" r="10" fill="#ffffff"/></svg>`
+      },
+      {
+        id: 302, store: "굽고바삭 와플", name: "딸기 누텔라 와플", desc: "🍓 딸기와 누텔라 초코 와플",
+        options: [{ label: "와플 2개+젤라또", price: 14800 }, { label: "생딸기 추가", price: 16800 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="딸기 누텔라 와플 일러스트"><title>딸기 누텔라 와플</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><rect x="26" y="28" width="52" height="34" rx="8" fill="#d97706"/><path d="M28 32 Q52 46 76 32 L76 42 Q52 54 28 42 Z" fill="#451a03"/><circle cx="42" cy="28" r="7" fill="#ef4444"/><circle cx="62" cy="28" r="7" fill="#ef4444"/></svg>`
+      },
+      {
+        id: 303, store: "굽고바삭 와플", name: "바나나 카라멜 크로플", desc: "🍌 카라멜 소스와 바나나 크로플",
+        options: [{ label: "3개 세트", price: 14200 }, { label: "아이스크림 추가", price: 16200 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바나나 카라멜 크로플 일러스트"><title>바나나 크로플</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="46" rx="26" ry="15" fill="#d97706"/><path d="M36 42 Q52 28 68 42" stroke="#facc15" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`
+      },
+      {
+        id: 304, store: "굽고바삭 와플", name: "말차 화이트초코 와플", desc: "🍵 말차 크림과 화이트초코 와플",
+        options: [{ label: "3개 세트", price: 14500 }, { label: "팥 토핑 추가", price: 15800 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="말차 화이트초코 와플 일러스트"><title>말차 와플</title><rect width="104" height="82" rx="10" fill="#f0fdf4"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#16a34a"/><circle cx="52" cy="42" r="9" fill="#ffffff"/></svg>`
+      },
+      {
+        id: 305, store: "굽고바삭 와플", name: "로투스 비스코프 와플", desc: "🍪 로투스 크럼블 와플 박스",
+        options: [{ label: "4개 박스", price: 15000 }, { label: "로투스 잼 추가", price: 16200 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="로투스 비스코프 와플 일러스트"><title>로투스 와플</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#b45309"/><circle cx="38" cy="38" r="4" fill="#fde68a"/><circle cx="66" cy="44" r="4" fill="#fde68a"/></svg>`
+      },
+      {
+        id: 401, store: "화덕향 피자", name: "페퍼로니 클래식 피자", desc: "🍕 페퍼로니가 듬뿍 올라간 피자",
+        options: [{ label: "M 사이즈", price: 19000 }, { label: "L 사이즈", price: 23000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="페퍼로니 피자 일러스트"><title>페퍼로니 피자</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="20" fill="#fef08a"/><circle cx="44" cy="36" r="5" fill="#dc2626"/><circle cx="58" cy="40" r="5" fill="#dc2626"/><circle cx="50" cy="50" r="5" fill="#dc2626"/></svg>`
+      },
+      {
+        id: 402, store: "화덕향 피자", name: "불고기 버섯 피자", desc: "🍄 불고기와 버섯 토핑 피자",
+        options: [{ label: "M 사이즈", price: 20000 }, { label: "치즈크러스트 추가", price: 23000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="불고기 피자 일러스트"><title>불고기 피자</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="52" cy="42" r="25" fill="#eab308"/><circle cx="52" cy="42" r="19" fill="#fde047"/><rect x="40" y="34" width="12" height="6" rx="2" fill="#78350f"/><rect x="54" y="44" width="12" height="6" rx="2" fill="#78350f"/></svg>`
+      },
+      {
+        id: 403, store: "화덕향 피자", name: "고구마 무스 피자", desc: "🍠 고구마 무스가 부드러운 피자",
+        options: [{ label: "M 사이즈", price: 19500 }, { label: "L 사이즈", price: 23500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="고구마 피자 일러스트"><title>고구마 피자</title><rect width="104" height="82" rx="10" fill="#faf5ff"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="19" fill="#fef9c3"/><circle cx="46" cy="38" r="5" fill="#a855f7"/><circle cx="58" cy="46" r="5" fill="#a855f7"/></svg>`
+      },
+      {
+        id: 404, store: "화덕향 피자", name: "콰트로 치즈 피자", desc: "🧀 고소한 4가지 치즈 피자",
+        options: [{ label: "M 사이즈", price: 18500 }, { label: "꿀 소스 추가", price: 19500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈 피자 일러스트"><title>치즈 피자</title><rect width="104" height="82" rx="10" fill="#fefce8"/><circle cx="52" cy="42" r="25" fill="#d97706"/><circle cx="52" cy="42" r="20" fill="#fef08a"/></svg>`
+      },
+      {
+        id: 405, store: "화덕향 피자", name: "콤비네이션 & 스파게티", desc: "🍝 피자와 오븐스파게티 세트",
+        options: [{ label: "기본 세트", price: 22000 }, { label: "갈릭디핑 추가", price: 23000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="피자와 스파게티 일러스트"><title>피자 스파게티 세트</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><circle cx="44" cy="42" r="20" fill="#f59e0b"/><ellipse cx="74" cy="48" rx="16" ry="12" fill="#dc2626"/></svg>`
+      },
+      {
+        id: 501, store: "뚝배기담 김치찜", name: "묵은지 돼지목살 김치찜", desc: "🍲 묵은지와 돼지목살 뚝배기찜",
+        options: [{ label: "2인분", price: 16500 }, { label: "3인분 대자", price: 24000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="묵은지 돼지목살 김치찜 일러스트"><title>묵은지 김치찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="5" fill="#fb923c"/><circle cx="60" cy="35" r="5" fill="#fef3c7"/></svg>`
+      },
+      {
+        id: 502, store: "뚝배기담 김치찜", name: "통삼겹 김치찜", desc: "🥓 통삼겹살이 들어간 김치찜",
+        options: [{ label: "2인분 기본", price: 17500 }, { label: "라면사리 추가", price: 19000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="통삼겹 김치찜 일러스트"><title>통삼겹 김치찜</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#b91c1c"/><rect x="38" y="30" width="28" height="8" rx="3" fill="#fda4af"/></svg>`
+      },
+      {
+        id: 503, store: "뚝배기담 김치찜", name: "참치 두부 김치찜", desc: "🐟 참치와 손두부가 어우러진 찜",
+        options: [{ label: "2인분 기본", price: 15500 }, { label: "두부 추가", price: 17000 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="참치 두부 김치찜 일러스트"><title>참치 두부 김치찜</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#ef4444"/><rect x="44" y="30" width="16" height="8" rx="2" fill="#ffffff"/></svg>`
+      },
+      {
+        id: 504, store: "뚝배기담 김치찜", name: "계란말이 & 김치찜", desc: "🥚 계란말이가 곁들여진 김치찜",
+        options: [{ label: "기본 세트", price: 16000 }, { label: "치즈 계란말이", price: 17500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="계란말이와 김치찜 일러스트"><title>계란말이 김치찜</title><rect width="104" height="82" rx="10" fill="#fefce8"/><rect x="24" y="30" width="56" height="24" rx="6" fill="#facc15"/><line x1="43" y1="30" x2="43" y2="54" stroke="#eab308" stroke-width="2"/><line x1="61" y1="30" x2="61" y2="54" stroke="#eab308" stroke-width="2"/></svg>`
+      },
+      {
+        id: 505, store: "뚝배기담 김치찜", name: "얼큰 묵은지 찜", desc: "🔥 얼큰하게 끓여낸 묵은지 찜",
+        options: [{ label: "2인분 기본", price: 17000 }, { label: "치즈장 추가", price: 18500 }],
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="얼큰 묵은지 찜 일러스트"><title>얼큰 묵은지 찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="4.5" fill="#f472b6"/><circle cx="62" cy="34" r="4.5" fill="#fde047"/></svg>`
+      }
+    ];
+
+    let activeStoreName = null;
+    let lastSelectedStoreBtn = null;
+    let selectedCouponValue = 0;
+    const cartBasket = new Map();
+    const myOrders = [];
+
+    let orderedStoreList = ["뚝배기담 김치찜"];
+    let orderAddrText = "";
+    let totalEtaSeconds = 900;
+    let remainingSeconds = 900;
+    let countdownRunning = true;
+    let completedAnnounced = false;
+    let routeCoords = [];
+
+    let ccInterval = null;
+    let ccIdx = 0;
+    const CC_LINES = [
+      "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.",
+      "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 🛵 라이더가 움직입니다.",
+      "[3/3] 배달이 완료되면 '🎉 배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
+    ];
+    const MEDIA_STEPS = [
+      "STEP 1/3 · 가게 선택",
+      "STEP 2/3 · 쿠폰·결제",
+      "STEP 3/3 · 배달·완료"
+    ];
+
+    function syncMediaGuide(stepIndex) {
+      const idx = Math.max(0, Math.min(MEDIA_STEPS.length - 1, stepIndex));
+      const bar = document.getElementById("mediaStepBar");
+      const label = document.getElementById("mediaStepLabel");
+      if (bar) bar.style.transform = `translateX(${idx * 100}%)`;
+      if (label) label.textContent = MEDIA_STEPS[idx];
+    }
+
+    let toastTimeout = null;
+    function notify(msg) {
+      const el = document.getElementById("toastNotice");
+      el.textContent = msg;
+      el.hidden = false;
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => { el.hidden = true; }, 2200);
+    }
+
+    function calculateCartTotals() {
+      let qtySum = 0;
+      let menuSum = 0;
+      const pickedStores = new Set();
+
+      cartBasket.forEach((item) => {
+        qtySum += item.qty;
+        menuSum += item.price * item.qty;
+        pickedStores.add(item.store);
+      });
+
+      let deliveryFee = 0;
+      pickedStores.forEach((st) => {
+        if (STORE_INFO[st]) deliveryFee += STORE_INFO[st].deliveryFee;
+      });
+
+      const discount = menuSum > 0 ? Math.min(selectedCouponValue, menuSum) : 0;
+      const finalTotal = menuSum > 0 ? Math.max(0, menuSum + deliveryFee - discount) : 0;
+
+      return { qtySum, menuSum, deliveryFee, discount, finalTotal, pickedStores };
+    }
+
+    let isSwitchingScreen = false;
+    function switchScreen(mode) {
+      if (isSwitchingScreen) return;
+
+      const panels = {
+        shop: document.getElementById("viewShop"),
+        checkout: document.getElementById("viewCheckout"),
+        track: document.getElementById("viewTrack"),
+        receipt: document.getElementById("viewReceipt")
+      };
+      const tabs = {
+        shop: document.getElementById("tabShop"),
+        checkout: document.getElementById("tabCheckout"),
+        track: document.getElementById("tabTrack"),
+        receipt: document.getElementById("tabReceipt")
+      };
+
+      const currentMode = Object.keys(panels).find((k) => !panels[k].hidden);
+      if (currentMode === mode) {
+        if (mode === "shop" && !activeStoreName) showStorePickList();
+        return;
+      }
+
+      Object.keys(tabs).forEach((k) => {
+        const isTarget = k === mode;
+        tabs[k].setAttribute("aria-selected", isTarget ? "true" : "false");
+        tabs[k].className = isTarget ? "btn-mint" : "btn-outline";
+      });
+
+      const prepareModeContent = () => {
+        if (mode === "shop" && !activeStoreName) {
+          showStorePickList(true);
+        } else if (mode === "checkout") {
+          renderBasket();
+        } else if (mode === "track") {
+          prepareDynamicRoute(orderedStoreList);
+          renderCountdownUI();
+        } else if (mode === "receipt") {
+          renderReceiptList();
+        }
+      };
+
+      const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!currentMode || isReduced) {
+        Object.keys(panels).forEach((k) => { panels[k].hidden = k !== mode; });
+        prepareModeContent();
+        panels[mode].classList.remove("screen-entering", "screen-leaving");
+        return;
+      }
+
+      isSwitchingScreen = true;
+      const outgoing = panels[currentMode];
+      const incoming = panels[mode];
+
+      outgoing.classList.add("screen-leaving");
+      setTimeout(() => {
+        outgoing.hidden = true;
+        outgoing.classList.remove("screen-leaving");
+
+        prepareModeContent();
+        incoming.classList.add("screen-entering");
+        incoming.hidden = false;
+
+        requestAnimationFrame(() => {
+          incoming.classList.remove("screen-entering");
+          isSwitchingScreen = false;
+        });
+      }, 140);
+    }
+
+    function swapSubPane(hideEl, showEl, instant = false) {
+      if (instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        hideEl.hidden = true;
+        showEl.hidden = false;
+        showEl.classList.remove("sub-pane-enter");
+        return;
+      }
+      hideEl.hidden = true;
+      showEl.classList.add("sub-pane-enter");
+      showEl.hidden = false;
+      requestAnimationFrame(() => {
+        showEl.classList.remove("sub-pane-enter");
+      });
+    }
+
+    function showStorePickList(instant = false, restoreFocus = false) {
+      activeStoreName = null;
+      swapSubPane(
+        document.getElementById("storeMenuScreen"),
+        document.getElementById("storeListScreen"),
+        instant
+      );
+      if (restoreFocus && lastSelectedStoreBtn) {
+        setTimeout(() => lastSelectedStoreBtn.focus(), 60);
+      }
+    }
+
+    function enterStoreMenu(storeName, triggerBtn = null) {
+      const info = STORE_INFO[storeName];
+      if (!info) return;
+      activeStoreName = storeName;
+      if (triggerBtn) lastSelectedStoreBtn = triggerBtn;
+
+      document.getElementById("activeStoreTitle").textContent = `${info.icon} ${storeName}`;
+      document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원 · 배달팁 ${info.deliveryFee.toLocaleString()}원`;
+
+      const box = document.getElementById("menuListContainer");
+      const items = ALL_MENUS.filter((m) => m.store === storeName);
+      box.innerHTML = "";
+
+      items.forEach((m) => {
+        const optHtml = m.options.map((o, idx) => `<option value="${idx}">${o.label} (${o.price.toLocaleString()}원)</option>`).join("");
+        const article = document.createElement("article");
+        article.className = "menu-card";
+        article.innerHTML = `
+          <div>
+            <div class="badge-row">
+              <span class="tag-store">${info.icon} ${m.store}</span>
+              <span class="tag-min">💰 최소 ${info.minPrice.toLocaleString()}원</span>
+            </div>
+            <h3 class="menu-name">${m.name}</h3>
+            <p class="menu-desc">${m.desc}</p>
+            <div class="menu-action-row">
+              <label for="opt-sel-${m.id}" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">옵션</label>
+              <select id="opt-sel-${m.id}" class="opt-select menu-focusable">${optHtml}</select>
+              <button type="button" class="btn-mint add-menu-btn menu-focusable" data-id="${m.id}">🛒 담기</button>
+            </div>
+          </div>
+          <div>${m.svg}</div>
+        `;
+        box.appendChild(article);
+      });
+
+      document.querySelectorAll(".add-menu-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          const optIdx = Number(document.getElementById(`opt-sel-${id}`).value);
+          addMenuToBasket(id, optIdx);
+        });
+      });
+
+      swapSubPane(
+        document.getElementById("storeListScreen"),
+        document.getElementById("storeMenuScreen")
+      );
+      switchScreen("shop");
+      setTimeout(() => {
+        const backBtn = document.getElementById("backToStorePickBtn");
+        if (backBtn) backBtn.focus();
+      }, 170);
+    }
+
+    const storeCards = Array.from(document.querySelectorAll(".store-pick-card"));
+    storeCards.forEach((card) => {
+      card.addEventListener("click", () => enterStoreMenu(card.dataset.store, card));
+    });
+
+    bindArrowNavigation(() => storeCards, { axis: "vertical", wrap: true });
+    bindArrowNavigation(() => [
+      document.getElementById("backToStorePickBtn"),
+      ...Array.from(document.querySelectorAll("#menuListContainer .menu-focusable"))
+    ], { axis: "both", wrap: true });
+
+    bindArrowNavigation(() => [
+      document.getElementById("tabShop"),
+      document.getElementById("tabCheckout"),
+      document.getElementById("tabTrack"),
+      document.getElementById("tabReceipt"),
+      document.getElementById("topCartBtn")
+    ], { axis: "horizontal", wrap: true });
+
+    bindArrowNavigation(() => Array.from(document.querySelectorAll(".cc-ctrl-btn")), {
+      axis: "horizontal",
+      wrap: true
+    });
+
+    bindArrowNavigation(() => Array.from(document.querySelectorAll(".track-ctrl-btn")), {
+      axis: "horizontal",
+      wrap: true
+    });
+
+    document.getElementById("backToStorePickBtn").addEventListener("click", () => showStorePickList(false, true));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+
+      const viewShopVisible = !document.getElementById("viewShop").hidden;
+      if (viewShopVisible && activeStoreName) {
+        e.preventDefault();
+        showStorePickList(false, true);
+        notify("↩️ 가게 선택 목록으로 돌아왔습니다.");
+        return;
+      }
+
+      if (!viewShopVisible) {
+        e.preventDefault();
+        showStorePickList(true, false);
+        switchScreen("shop");
+        setTimeout(() => {
+          const shopTab = document.getElementById("tabShop");
+          if (shopTab) shopTab.focus();
+        }, 170);
+        notify("↩️ 가게 선택 화면으로 돌아왔습니다.");
+      }
+    });
+
+    document.getElementById("tabShop").addEventListener("click", () => {
+      showStorePickList(true);
+      switchScreen("shop");
+    });
+    document.getElementById("tabCheckout").addEventListener("click", () => switchScreen("checkout"));
+    document.getElementById("goCheckoutBtn").addEventListener("click", () => switchScreen("checkout"));
+    document.getElementById("backFromCheckoutBtn").addEventListener("click", () => switchScreen("shop"));
+    document.getElementById("tabTrack").addEventListener("click", () => switchScreen("track"));
+    document.getElementById("tabReceipt").addEventListener("click", () => switchScreen("receipt"));
+    document.getElementById("backToShopBtn").addEventListener("click", () => {
+      showStorePickList(true);
+      switchScreen("shop");
+    });
+    document.getElementById("backFromReceiptBtn").addEventListener("click", () => {
+      showStorePickList(true);
+      switchScreen("shop");
+    });
+    document.getElementById("openReceiptFromDoneBtn").addEventListener("click", () => switchScreen("receipt"));
+    document.getElementById("topCartBtn").addEventListener("click", () => {
+      switchScreen("shop");
+      setTimeout(() => document.getElementById("cartHeading").focus(), 180);
+    });
+
+    function addMenuToBasket(id, optIdx) {
+      const m = ALL_MENUS.find((x) => x.id === id);
+      if (!m) return;
+      const opt = m.options[optIdx] || m.options[0];
+      const key = `${id}__${opt.label}`;
+
+      if (cartBasket.has(key)) {
+        cartBasket.get(key).qty += 1;
+      } else {
+        cartBasket.set(key, {
+          key,
+          store: m.store,
+          name: m.name,
+          optionLabel: opt.label,
+          price: opt.price,
+          qty: 1
+        });
+      }
+
+      playChime("add");
+      renderBasket();
+      notify(`🛒 [${m.store}] ${m.name} 담김!`);
+    }
+
+    function renderBasket() {
+      const tbody = document.getElementById("cartBody");
+      const payTbody = document.getElementById("checkoutCartBody");
+      tbody.innerHTML = "";
+      payTbody.innerHTML = "";
+
+      if (cartBasket.size === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
+              장바구니가 비어 있습니다. 🍽️
+            </td>
+          </tr>
+        `;
+        payTbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align:center; color:#4b5563; padding:16px 6px;">
+              담긴 메뉴가 없습니다.
+            </td>
+          </tr>
+        `;
+      } else {
+        cartBasket.forEach((item) => {
+          const lineTotal = item.price * item.qty;
+          const icon = STORE_INFO[item.store]?.icon || "🍽️";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>
+              <strong>[${icon} ${item.store}]</strong> ${item.name}<br />
+              <span style="font-size:0.76rem; color:#4b5563;">${item.optionLabel}</span>
+            </td>
+            <td>
+              <div style="display:inline-flex; align-items:center; gap:5px;">
+                <button type="button" class="btn-outline qty-dec" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} 수량 줄이기">−</button>
+                <span>${item.qty}</span>
+                <button type="button" class="btn-outline qty-inc" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} 수량 늘리기">+</button>
+              </div>
+            </td>
+            <td><strong>${lineTotal.toLocaleString()}원</strong></td>
+          `;
+          tbody.appendChild(tr);
+
+          const payTr = document.createElement("tr");
+          payTr.innerHTML = `
+            <td>[${icon} ${item.store}] ${item.name} (${item.optionLabel})</td>
+            <td>${item.qty}개</td>
+            <td><strong>${lineTotal.toLocaleString()}원</strong></td>
+          `;
+          payTbody.appendChild(payTr);
+        });
+      }
+
+      const totals = calculateCartTotals();
+      document.getElementById("topCartQty").textContent = String(totals.qtySum);
+
+      document.getElementById("shopMenuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
+      document.getElementById("shopDeliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
+      document.getElementById("shopCouponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
+      document.getElementById("shopTotalPayText").textContent = `${totals.finalTotal.toLocaleString()}원`;
+
+      document.getElementById("payMenuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
+      document.getElementById("payDeliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
+      document.getElementById("payCouponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
+      document.getElementById("payFinalTotalText").textContent = `${totals.finalTotal.toLocaleString()}원`;
+
+      document.querySelectorAll(".qty-inc").forEach((b) => {
+        b.addEventListener("click", () => {
+          const it = cartBasket.get(b.dataset.key);
+          if (it) { it.qty += 1; renderBasket(); }
+        });
+      });
+
+      document.querySelectorAll(".qty-dec").forEach((b) => {
+        b.addEventListener("click", () => {
+          const k = b.dataset.key;
+          const it = cartBasket.get(k);
+          if (!it) return;
+          if (it.qty > 1) it.qty -= 1;
+          else cartBasket.delete(k);
+          renderBasket();
+        });
+      });
+    }
+
+    const couponCards = Array.from(document.querySelectorAll(".coupon-card"));
+    couponCards.forEach((card, idx) => {
+      card.addEventListener("click", () => {
+        selectedCouponValue = Number(card.dataset.coupon) || 0;
+        couponCards.forEach((c) => {
+          c.setAttribute("aria-pressed", c === card ? "true" : "false");
+        });
+        renderBasket();
+        notify(selectedCouponValue > 0 ? `🎟️ ${selectedCouponValue.toLocaleString()}원 쿠폰 적용!` : "🎟️ 쿠폰을 적용하지 않았어요.");
+      });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+          e.preventDefault();
+          couponCards[(idx + 1) % couponCards.length].focus();
+        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+          e.preventDefault();
+          couponCards[(idx - 1 + couponCards.length) % couponCards.length].focus();
+        }
+      });
+    });
+
+    function resetCouponSelection() {
+      selectedCouponValue = 0;
+      couponCards.forEach((c) => {
+        c.setAttribute("aria-pressed", c.dataset.coupon === "0" ? "true" : "false");
+      });
+    }
+
+    function prepareDynamicRoute(stores) {
+      const pathGroup = document.getElementById("routePathGroup");
+      const pinsGroup = document.getElementById("routePinsGroup");
+      pathGroup.innerHTML = "";
+      pinsGroup.innerHTML = "";
+
+      routeCoords = [START_PT];
+      stores.forEach((st) => {
+        if (STORE_INFO[st]) {
+          routeCoords.push({ x: STORE_INFO[st].mapX, y: STORE_INFO[st].mapY });
+        }
+      });
+      routeCoords.push(END_PT);
+
+      const dPath = routeCoords.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
+      const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathEl.setAttribute("d", dPath);
+      pathEl.setAttribute("fill", "none");
+      pathEl.setAttribute("stroke", "#0f766e");
+      pathEl.setAttribute("stroke-width", "5");
+      pathEl.setAttribute("stroke-dasharray", "9 7");
+      pathGroup.appendChild(pathEl);
+
+      stores.forEach((st) => {
+        const info = STORE_INFO[st];
+        if (!info) return;
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("transform", `translate(${info.mapX}, ${info.mapY})`);
+        g.innerHTML = `
+          <circle r="20" fill="${info.color}" stroke="#ffffff" stroke-width="2.5" />
+          <text y="4" text-anchor="middle" fill="#ffffff" font-size="8.5" font-weight="bold">${info.badge}</text>
+          <text y="-26" text-anchor="middle" fill="#111827" font-size="10.5" font-weight="bold">${st}</text>
+        `;
+        pinsGroup.appendChild(g);
+      });
+
+      const endG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      endG.setAttribute("transform", `translate(${END_PT.x}, ${END_PT.y})`);
+      endG.innerHTML = `
+        <circle r="21" fill="#b91c1c" stroke="#ffffff" stroke-width="2.5" />
+        <text y="4" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">🏠도착</text>
+        <text y="34" text-anchor="middle" fill="#b91c1c" font-size="10.5" font-weight="bold">도착지</text>
+      `;
+      pinsGroup.appendChild(endG);
+    }
+
+    function renderCountdownUI() {
+      if (routeCoords.length < 2) prepareDynamicRoute(orderedStoreList);
+
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      const timeFmt = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+      const progress = totalEtaSeconds > 0 ? Math.min(1, Math.max(0, (totalEtaSeconds - remainingSeconds) / totalEtaSeconds)) : 1;
+      const segTotal = routeCoords.length - 1;
+      const exactPos = progress * segTotal;
+      const segIdx = Math.min(segTotal - 1, Math.floor(exactPos));
+      const segRatio = exactPos - segIdx;
+
+      const p1 = routeCoords[segIdx];
+      const p2 = routeCoords[segIdx + 1];
+      const curX = p1.x + (p2.x - p1.x) * segRatio;
+      const curY = p1.y + (p2.y - p1.y) * segRatio;
+
+      document.getElementById("riderPin").setAttribute("transform", `translate(${curX.toFixed(1)}, ${curY.toFixed(1)})`);
+      document.getElementById("trackAddrBadge").textContent = orderAddrText ? `📍 배달지: ${orderAddrText}` : "📍 배달 안내";
+
+      const bannerBox = document.getElementById("etaBannerBox");
+      const celebrateBox = document.getElementById("doneCelebrateBox");
+
+      let tlPhase = 1;
+      let pinText = "📝 주문 수락됨";
+      let etaTitle = `⏱️ 남은 시간 ${timeFmt}`;
+      let statusDesc = `${orderedStoreList.map((s) => `${STORE_INFO[s]?.icon || ""} ${s}`).join(", ")} 메뉴를 준비 중입니다.`;
+
+      if (remainingSeconds === 0) {
+        tlPhase = 4;
+        pinText = "🎉 배달 완료";
+        etaTitle = "🎉 배달이 완료되었어요!";
+        statusDesc = "배달이 완료되어 장바구니에서 주문 메뉴가 비워졌어요.";
+        bannerBox.classList.add("completed");
+        celebrateBox.hidden = false;
+
+        if (cartBasket.size > 0) {
+          cartBasket.clear();
+          resetCouponSelection();
+          renderBasket();
+        }
+
+        if (!completedAnnounced) {
+          completedAnnounced = true;
+          playChime("done");
+          notify("🎉 배달이 완료되었어요! 장바구니가 비워졌습니다.");
+        }
+      } else {
+        bannerBox.classList.remove("completed");
+        celebrateBox.hidden = true;
+        if (progress >= 0.65) {
+          tlPhase = 3;
+          pinText = "🛵 배달중";
+          statusDesc = "🛵 라이더가 배달 중입니다!";
+        } else if (progress >= 0.2) {
+          tlPhase = 2;
+          pinText = "🍳 조리중";
+        }
+      }
+
+      document.getElementById("riderPinText").textContent = pinText;
+      document.getElementById("trackEtaTitle").textContent = etaTitle;
+      document.getElementById("trackStatusSub").textContent = statusDesc;
+
+      [1, 2, 3, 4].forEach((n) => {
+        const pill = document.getElementById(`tlStep${n}`);
+        if (n <= tlPhase) pill.classList.add("active");
+        else pill.classList.remove("active");
+      });
+
+      const listEl = document.getElementById("orderedStoresList");
+      listEl.innerHTML = "";
+      const elapsedSec = totalEtaSeconds - remainingSeconds;
+
+      orderedStoreList.forEach((st, idx) => {
+        const storePrepSec = Math.min(totalEtaSeconds - 60, (idx + 1) * 180);
+        const leftSec = Math.max(0, storePrepSec - elapsedSec);
+        const isDone = leftSec === 0 || remainingSeconds === 0;
+        const lMin = Math.floor(leftSec / 60);
+        const lSec = leftSec % 60;
+        const icon = STORE_INFO[st]?.icon || "🍽️";
+
+        const li = document.createElement("li");
+        li.className = `cook-card ${isDone ? "done" : ""}`;
+        li.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:0.95rem;">${icon} ${st}</strong>
+            <span class="st-badge ${isDone ? "s-done" : "s-cook"}">${isDone ? "✅ 픽업 완료" : "🍳 조리중"}</span>
+          </div>
+          <div style="font-size:0.84rem; color:#4b5563; margin-top:4px;">
+            ${remainingSeconds === 0 ? "🎉 배달 완료" : isDone ? "🛵 라이더 배달 이동 중" : `⏱️ 남은 시간 ${String(lMin).padStart(2, "0")}:${String(lSec).padStart(2, "0")}`}
+          </div>
+        `;
+        listEl.appendChild(li);
+      });
+    }
+
+    function renderReceiptList() {
+      const box = document.getElementById("receiptListContainer");
+      box.innerHTML = "";
+
+      if (myOrders.length === 0) {
+        box.innerHTML = `
+          <p style="text-align:center; color:#4b5563; padding:24px;">
+            🧾 아직 시킨 주문내역이 없어요. 가게를 눌러 메뉴를 담아보세요!
+          </p>
+        `;
+        return;
+      }
+
+      myOrders.forEach((ord, idx) => {
+        const div = document.createElement("article");
+        div.className = "receipt-item-card";
+        const rowsHtml = ord.items.map((it) => {
+          const icon = STORE_INFO[it.store]?.icon || "🍽️";
+          return `<li>[${icon} ${it.store}] <strong>${it.name}</strong> (${it.optionLabel}) × ${it.qty}개 — <strong>${(it.price * it.qty).toLocaleString()}원</strong></li>`;
+        }).join("");
+
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
+            <strong style="font-size:0.98rem; color:#0f766e;">🧾 주문 #${myOrders.length - idx} · ${ord.orderedAt}</strong>
+            <span class="tag-store">${ord.payType}</span>
+          </div>
+          <div style="font-size:0.84rem; color:#4b5563; margin-bottom:8px;">📍 배달 주소: ${ord.addr}</div>
+          <ul style="margin:0 0 10px; padding-left:18px; font-size:0.88rem; display:flex; flex-direction:column; gap:4px;">
+            ${rowsHtml}
+          </ul>
+          <div style="font-size:0.85rem; color:#374151; border-top:1px dashed #d1d5db; padding-top:8px;">
+            <div>메뉴 금액: ${ord.menuSum.toLocaleString()}원 · 🛵 배달팁: ${ord.deliveryFee.toLocaleString()}원 · 🎟️ 쿠폰 할인: -${ord.discount.toLocaleString()}원</div>
+            <div style="text-align:right; font-weight:800; font-size:0.98rem; color:#111827; margin-top:4px;">총 결제금액: ${ord.finalTotal.toLocaleString()}원</div>
+          </div>
+        `;
+        box.appendChild(div);
+      });
+    }
+
+    setInterval(() => {
+      if (!countdownRunning) return;
+      if (remainingSeconds > 0) {
+        remainingSeconds -= 1;
+        if (!document.getElementById("viewTrack").hidden || remainingSeconds === 0) {
+          renderCountdownUI();
+        }
+      }
+    }, 1000);
+
+    document.getElementById("toggleTimerBtn").addEventListener("click", (e) => {
+      countdownRunning = !countdownRunning;
+      e.target.textContent = countdownRunning ? "⏸ 일시정지" : "▶ 재개";
+    });
+
+    document.getElementById("fastForwardBtn").addEventListener("click", () => {
+      remainingSeconds = Math.max(0, remainingSeconds - 60);
+      renderCountdownUI();
+    });
+
+    document.getElementById("completeNowBtn").addEventListener("click", () => {
+      remainingSeconds = 0;
+      countdownRunning = false;
+      renderCountdownUI();
+    });
+
+    document.getElementById("resetTrackBtn").addEventListener("click", () => {
+      remainingSeconds = totalEtaSeconds;
+      completedAnnounced = false;
+      countdownRunning = true;
+      document.getElementById("toggleTimerBtn").textContent = "⏸ 일시정지";
+      renderCountdownUI();
+    });
+
+    document.getElementById("checkoutForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const addrEl = document.getElementById("addrField");
+      const payEl = document.getElementById("payTypeField");
+      const addrErr = document.getElementById("addrError");
+      const payErr = document.getElementById("payTypeError");
+
+      addrErr.textContent = "";
+      payErr.textContent = "";
+      addrEl.setAttribute("aria-invalid", "false");
+      payEl.setAttribute("aria-invalid", "false");
+
+      if (cartBasket.size === 0) {
+        payErr.textContent = "🛒 장바구니에 메뉴를 담아주세요.";
+        payEl.setAttribute("aria-invalid", "true");
+        return;
+      }
+
+      const sums = {};
+      const pickedSet = new Set();
+      Object.keys(STORE_INFO).forEach((s) => { sums[s] = 0; });
+
+      cartBasket.forEach((v) => {
+        sums[v.store] += v.price * v.qty;
+        pickedSet.add(v.store);
+      });
+
+      for (const [st, info] of Object.entries(STORE_INFO)) {
+        if (sums[st] > 0 && sums[st] < info.minPrice) {
+          payErr.textContent = `${info.icon} ${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
+          payEl.setAttribute("aria-invalid", "true");
+          return;
+        }
+      }
+
+      if (!addrEl.value.trim()) {
+        addrErr.textContent = "📍 배달 주소를 입력하세요.";
+        addrEl.setAttribute("aria-invalid", "true");
+        addrEl.focus();
+        return;
+      }
+
+      if (!payEl.value) {
+        payErr.textContent = "💳 결제 방식을 선택하세요.";
+        payEl.setAttribute("aria-invalid", "true");
+        payEl.focus();
+        return;
+      }
+
+      const totals = calculateCartTotals();
+      orderedStoreList = Array.from(pickedSet);
+      orderAddrText = addrEl.value.trim();
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+
+      myOrders.unshift({
+        orderedAt: timeStr,
+        addr: orderAddrText,
+        payType: payEl.value,
+        menuSum: totals.menuSum,
+        deliveryFee: totals.deliveryFee,
+        discount: totals.discount,
+        finalTotal: totals.finalTotal,
+        items: Array.from(cartBasket.values()).map((x) => ({ ...x }))
+      });
+
+      cartBasket.clear();
+      resetCouponSelection();
+      renderBasket();
+
+      totalEtaSeconds = orderedStoreList.length * 360 + 300;
+      remainingSeconds = totalEtaSeconds;
+      completedAnnounced = false;
+      countdownRunning = true;
+
+      prepareDynamicRoute(orderedStoreList);
+      playChime("add");
+      notify("🛵 주문이 완료되어 장바구니가 비워졌어요!");
+      switchScreen("track");
+    });
+
+    document.getElementById("ccPlay").addEventListener("click", () => {
+      if (ccInterval) return;
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      ccInterval = setInterval(() => {
+        ccIdx = (ccIdx + 1) % CC_LINES.length;
+        document.getElementById("ccText").textContent = CC_LINES[ccIdx];
+        if (!prefersReduced) {
+          syncMediaGuide(ccIdx);
+        }
+      }, 2600);
+    });
+
+    document.getElementById("ccPause").addEventListener("click", () => {
+      clearInterval(ccInterval);
+      ccInterval = null;
+    });
+
+    document.getElementById("ccStop").addEventListener("click", () => {
+      clearInterval(ccInterval);
+      ccInterval = null;
+      ccIdx = 0;
+      document.getElementById("ccText").textContent = CC_LINES[0];
+      syncMediaGuide(0);
+    });
+
+    document.getElementById("soundToggleBtn").addEventListener("click", (e) => {
+      soundEnabled = !soundEnabled;
+      e.target.setAttribute("aria-pressed", String(soundEnabled));
+      e.target.textContent = soundEnabled ? "🔊 알림음 켜짐" : "🔇 알림음 꺼짐";
+      notify(soundEnabled ? "🔊 알림음이 켜졌습니다." : "🔇 알림음이 꺼졌습니다.");
+    });
+
+    syncMediaGuide(0);
+    renderBasket();
+    prepareDynamicRoute(orderedStoreList);
+  </script>
+</body>
+</html>
