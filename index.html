@@ -33,7 +33,6 @@
       line-height: 1.55;
     }
 
-    /* outline 제거 금지 및 명확한 포커스 표시 */
     :focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 2px;
@@ -207,16 +206,6 @@
       border-radius: var(--radius);
       padding: 18px;
       box-shadow: var(--shadow);
-    }
-
-    .kbd-hint-bar {
-      background: #f8fafc;
-      border: 1px dashed #94a3b8;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.79rem;
-      color: var(--text-sub);
-      margin-bottom: 12px;
     }
 
     .store-card-list {
@@ -752,7 +741,6 @@
 
     .toast-bar[hidden] { display: none; }
 
-    /* 키보드 접근형 안내 모달(팝업) */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -821,7 +809,7 @@
         <span id="liveClockBadge" class="live-clock-badge" aria-label="현재 시각">🕒 00:00:00</span>
       </div>
 
-      <nav class="nav-group" role="tablist" aria-label="화면 전환 (좌/우 방향키 이동 가능)">
+      <nav class="nav-group" role="tablist" aria-label="화면 전환">
         <button type="button" id="tabShop" class="btn-mint" role="tab" aria-selected="true">🏪 가게 선택</button>
         <button type="button" id="tabCheckout" class="btn-outline" role="tab" aria-selected="false">🎟️ 쿠폰·결제</button>
         <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">🛵 배달현황</button>
@@ -839,10 +827,7 @@
       <div class="card">
         <!-- 1-A. 가게 선택 화면 -->
         <div id="storeListScreen" class="sub-pane">
-          <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
-          <p class="kbd-hint-bar">
-            ⌨️ <strong>키보드 전체 조작:</strong> <code>Tab</code>/<code>Shift+Tab</code> 또는 방향키(<code>↑</code>/<code>↓</code>/<code>←</code>/<code>→</code>) 이동 · <code>Enter</code>/<code>Space</code> 실행 · <code>ESC</code>로 이전 화면/모달 닫기 및 포커스 복귀
-          </p>
+          <h2 style="margin:0 0 12px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
 
           <div class="store-card-list" role="list" aria-label="가게 목록">
             <button type="button" class="store-pick-card" data-store="바삭한날 치킨" role="listitem">
@@ -914,21 +899,17 @@
               <h2 id="activeStoreTitle" style="margin:0; font-size:1.12rem; color:var(--mint-dark);">가게 메뉴</h2>
               <p id="activeStoreMinInfo" style="margin:2px 0 0; font-size:0.82rem; color:var(--text-sub); font-weight:700;"></p>
             </div>
-            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기 (ESC)</button>
+            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기</button>
           </div>
-
-          <p class="kbd-hint-bar">
-            ⌨️ 방향키로 메뉴 옵션·담기 버튼 간 포커스 이동 · <code>ESC</code>로 가게 목록 복귀
-          </p>
 
           <div id="menuListContainer" class="menu-grid"></div>
         </div>
 
-        <!-- 6. 미디어 자막(CC) & 시각 가이드 보완 영역 -->
+        <!-- 미디어 자막(CC) & 시각 가이드 영역 -->
         <section class="cc-panel" aria-labelledby="ccHeading">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 가이드 영상·자막 & 사운드</h2>
-            <div class="cc-btn-group" role="group" aria-label="자막 및 알림음 제어 (방향키 이동 가능)" style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div class="cc-btn-group" role="group" aria-label="자막 및 알림음 제어" style="display:flex; gap:6px; flex-wrap:wrap;">
               <button type="button" id="ccPlay" class="btn-mint cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
               <button type="button" id="ccPause" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
               <button type="button" id="ccStop" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏹ 정지</button>
@@ -942,7 +923,7 @@
               <div id="mediaStepLabel" class="media-guide-label">STEP 1/3 · 가게 선택</div>
             </div>
             <p style="margin:0; font-size:0.8rem; color:#cbd5e1; flex:1; min-width:180px;">
-              화면 전환과 주문 절차를 시각 인디케이터와 자막(CC)으로 함께 안내합니다. (모션 축소 설정 시 정지 상태 유지)
+              화면 전환과 주문 절차를 시각 인디케이터와 자막(CC)으로 함께 안내합니다.
             </p>
           </div>
 
@@ -1002,12 +983,7 @@
     <section id="viewCheckout" class="screen-panel checkout-layout" role="tabpanel" aria-labelledby="tabCheckout" hidden>
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
-          <div>
-            <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
-            <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              방향키(<code>←</code>/<code>→</code>/<code>↑</code>/<code>↓</code>)로 쿠폰 카드를 이동하고 선택하세요. <code>ESC</code>로 가게 선택 복귀 가능.
-            </p>
-          </div>
+          <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
           <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
         </div>
 
@@ -1127,7 +1103,7 @@
               실시간 타이머와 🛵 라이더 이동 현황입니다.
             </p>
           </div>
-          <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로 (ESC)</button>
+          <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로</button>
         </div>
 
         <div id="doneCelebrateBox" class="done-celebrate-box" role="status" aria-live="assertive" hidden>
@@ -1167,7 +1143,7 @@
           </svg>
         </div>
 
-        <div class="track-ctrl-group" role="group" aria-label="배달 타이머 제어 (방향키 이동 가능)" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+        <div class="track-ctrl-group" role="group" aria-label="배달 타이머 제어" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
           <button type="button" id="toggleTimerBtn" class="btn-mint track-ctrl-btn">⏸ 일시정지</button>
           <button type="button" id="fastForwardBtn" class="btn-outline track-ctrl-btn">⏩ +1분 빠르게</button>
           <button type="button" id="completeNowBtn" class="btn-outline track-ctrl-btn">🎉 배달 완료</button>
@@ -1188,17 +1164,17 @@
           <div>
             <h2 style="margin:0; font-size:1.2rem;">🧾 내가 시킨 주문내역</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요. (<code>ESC</code>로 가게 선택 복귀)
+              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요.
             </p>
           </div>
-          <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로 (ESC)</button>
+          <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로</button>
         </div>
         <div id="receiptListContainer" class="receipt-box"></div>
       </div>
     </section>
   </main>
 
-  <!-- 키보드 포커스 트랩 + ESC 닫기 지원 안내 모달 -->
+  <!-- 안내 모달 -->
   <div id="kbdModalBackdrop" class="modal-backdrop" hidden>
     <div
       id="kbdModalDialog"
@@ -1212,7 +1188,7 @@
       <p id="kbdModalDesc" class="modal-desc"></p>
       <div class="modal-actions">
         <button type="button" id="kbdModalActionBtn" class="btn-mint">확인 및 이동</button>
-        <button type="button" id="kbdModalCloseBtn" class="btn-outline">닫기 (ESC)</button>
+        <button type="button" id="kbdModalCloseBtn" class="btn-outline">닫기</button>
       </div>
     </div>
   </div>
@@ -1220,7 +1196,7 @@
   <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
 
   <footer role="contentinfo">
-    <p style="margin:0;">🧺 한바구니픽 · 웹 접근성(이미지·키보드·대비·폼·구조·미디어) 보완 버전</p>
+    <p style="margin:0;">🧺 한바구니픽</p>
   </footer>
 
   <script>
@@ -1265,7 +1241,6 @@
       } catch (_) {}
     }
 
-    // 키보드 포커스 이동 헬퍼 (↑/↓/←/→)
     function bindArrowNavigation(itemsGetter, { axis = "both", wrap = true } = {}) {
       document.addEventListener("keydown", (e) => {
         if (!document.getElementById("kbdModalBackdrop").hidden) return;
@@ -1303,7 +1278,6 @@
       });
     }
 
-    // 모달 제어 (열 때 포커스 이동, 닫을 때 원래 위치 복귀, Tab 트랩, ESC 닫기)
     let modalReturnFocusEl = null;
     let modalOnAction = null;
 
@@ -1766,7 +1740,6 @@
       if (viewShopVisible && activeStoreName) {
         e.preventDefault();
         showStorePickList(false, true);
-        notify("↩️ 가게 선택 목록으로 돌아왔습니다.");
         return;
       }
 
@@ -1778,7 +1751,6 @@
           const shopTab = document.getElementById("tabShop");
           if (shopTab) shopTab.focus();
         }, 170);
-        notify("↩️ 가게 선택 화면으로 돌아왔습니다.");
       }
     });
 
