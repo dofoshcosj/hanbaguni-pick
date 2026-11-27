@@ -36,6 +36,7 @@
     :focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 2px;
+      box-shadow: 0 0 0 5px rgba(29, 78, 216, 0.16);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -207,6 +208,16 @@
       box-shadow: var(--shadow);
     }
 
+    .kbd-hint-bar {
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.79rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+    }
+
     .store-card-list {
       display: flex;
       flex-direction: column;
@@ -365,7 +376,6 @@
       color: var(--text-main);
     }
 
-    /* 미디어 안내 영상 + 자막(CC) 패널 */
     .cc-panel {
       margin-top: 18px;
       background: #111827;
@@ -766,7 +776,7 @@
         <span id="liveClockBadge" class="live-clock-badge" aria-label="현재 시각">🕒 00:00:00</span>
       </div>
 
-      <nav class="nav-group" role="tablist" aria-label="화면 전환">
+      <nav class="nav-group" role="tablist" aria-label="화면 전환 (좌/우 방향키 이동 가능)">
         <button type="button" id="tabShop" class="btn-mint" role="tab" aria-selected="true">🏪 가게 선택</button>
         <button type="button" id="tabCheckout" class="btn-outline" role="tab" aria-selected="false">🎟️ 쿠폰·결제</button>
         <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">🛵 배달현황</button>
@@ -785,11 +795,11 @@
         <!-- 1-A. 가게 선택 화면 -->
         <div id="storeListScreen" class="sub-pane">
           <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
-          <p style="margin:0 0 14px; font-size:0.84rem; color:var(--text-sub);">
-            원하는 가게 카드를 누르면 해당 가게 메뉴 화면으로 부드럽게 넘어갑니다.
+          <p class="kbd-hint-bar">
+            ⌨️ <strong>키보드 안내:</strong> 위/아래 방향키(<code>↑</code>/<code>↓</code>)로 가게 카드 이동 · <code>Enter</code>/<code>Space</code>로 메뉴 진입 · 메뉴 화면에서 <code>ESC</code>로 가게 목록 복귀
           </p>
 
-          <div class="store-card-list" role="list">
+          <div class="store-card-list" role="list" aria-label="가게 목록">
             <button type="button" class="store-pick-card" data-store="바삭한날 치킨" role="listitem">
               <div>
                 <p class="store-pick-name">🍗 바삭한날 치킨</p>
@@ -859,8 +869,12 @@
               <h2 id="activeStoreTitle" style="margin:0; font-size:1.12rem; color:var(--mint-dark);">가게 메뉴</h2>
               <p id="activeStoreMinInfo" style="margin:2px 0 0; font-size:0.82rem; color:var(--text-sub); font-weight:700;"></p>
             </div>
-            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기 (Esc)</button>
+            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기 (ESC)</button>
           </div>
+
+          <p class="kbd-hint-bar">
+            ⌨️ <code>↑</code>/<code>↓</code> 또는 <code>←</code>/<code>→</code> 방향키로 메뉴 옵션·담기 버튼 간 포커스 이동 · <code>ESC</code>로 가게 목록 복귀
+          </p>
 
           <div id="menuListContainer" class="menu-grid"></div>
         </div>
@@ -869,11 +883,11 @@
         <section class="cc-panel" aria-labelledby="ccHeading">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 가이드 영상·자막 & 사운드</h2>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" id="ccPlay" class="btn-mint" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
-              <button type="button" id="ccPause" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
-              <button type="button" id="ccStop" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;">⏹ 정지</button>
-              <button type="button" id="soundToggleBtn" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;" aria-pressed="true">🔊 알림음 켜짐</button>
+            <div class="cc-btn-group" role="group" aria-label="자막 및 알림음 제어 (방향키 이동 가능)" style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" id="ccPlay" class="btn-mint cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
+              <button type="button" id="ccPause" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
+              <button type="button" id="ccStop" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏹ 정지</button>
+              <button type="button" id="soundToggleBtn" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;" aria-pressed="true">🔊 알림음 켜짐</button>
             </div>
           </div>
 
@@ -946,7 +960,7 @@
           <div>
             <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              사용할 쿠폰 카드를 고르고 배달 주소와 결제 방식을 입력하세요. (좌/우 방향키로 쿠폰 이동 가능)
+              방향키(<code>←</code>/<code>→</code>/<code>↑</code>/<code>↓</code>)로 쿠폰 카드를 이동하고 선택하세요. <code>ESC</code>로 가게 선택 복귀 가능.
             </p>
           </div>
           <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
@@ -1068,7 +1082,7 @@
               실시간 타이머와 🛵 라이더 이동 현황입니다.
             </p>
           </div>
-          <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로</button>
+          <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로 (ESC)</button>
         </div>
 
         <div id="doneCelebrateBox" class="done-celebrate-box" role="status" aria-live="assertive" hidden>
@@ -1108,11 +1122,11 @@
           </svg>
         </div>
 
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
-          <button type="button" id="toggleTimerBtn" class="btn-mint">⏸ 일시정지</button>
-          <button type="button" id="fastForwardBtn" class="btn-outline">⏩ +1분 빠르게</button>
-          <button type="button" id="completeNowBtn" class="btn-outline">🎉 배달 완료</button>
-          <button type="button" id="resetTrackBtn" class="btn-outline">🔄 초기화</button>
+        <div class="track-ctrl-group" role="group" aria-label="배달 타이머 제어 (방향키 이동 가능)" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+          <button type="button" id="toggleTimerBtn" class="btn-mint track-ctrl-btn">⏸ 일시정지</button>
+          <button type="button" id="fastForwardBtn" class="btn-outline track-ctrl-btn">⏩ +1분 빠르게</button>
+          <button type="button" id="completeNowBtn" class="btn-outline track-ctrl-btn">🎉 배달 완료</button>
+          <button type="button" id="resetTrackBtn" class="btn-outline track-ctrl-btn">🔄 초기화</button>
         </div>
       </div>
 
@@ -1129,10 +1143,10 @@
           <div>
             <h2 style="margin:0; font-size:1.2rem;">🧾 내가 시킨 주문내역</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요.
+              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요. (<code>ESC</code>로 가게 선택 복귀)
             </p>
           </div>
-          <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로</button>
+          <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로 (ESC)</button>
         </div>
         <div id="receiptListContainer" class="receipt-box"></div>
       </div>
@@ -1185,6 +1199,44 @@
           osc.stop(ctx.currentTime + 0.18);
         }
       } catch (_) {}
+    }
+
+    function bindArrowNavigation(itemsGetter, { axis = "both", wrap = true } = {}) {
+      document.addEventListener("keydown", (e) => {
+        const active = document.activeElement;
+        if (!active) return;
+
+        const items = itemsGetter().filter((el) => el && !el.hidden && el.offsetParent !== null);
+        const idx = items.indexOf(active);
+        if (idx === -1) return;
+
+        // native <select> 내부 옵션 선택 시엔 방해하지 않고, 셀렉트 간 이동만 지원
+        const isSelect = active.tagName === "SELECT";
+        if (isSelect && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+          return;
+        }
+
+        let delta = 0;
+        if (axis === "horizontal" || axis === "both") {
+          if (e.key === "ArrowRight") delta = 1;
+          if (e.key === "ArrowLeft") delta = -1;
+        }
+        if (delta === 0 && (axis === "vertical" || axis === "both")) {
+          if (e.key === "ArrowDown") delta = 1;
+          if (e.key === "ArrowUp") delta = -1;
+        }
+
+        if (delta === 0) return;
+        e.preventDefault();
+
+        let nextIdx = idx + delta;
+        if (wrap) {
+          nextIdx = (nextIdx + items.length) % items.length;
+        } else {
+          nextIdx = Math.max(0, Math.min(items.length - 1, nextIdx));
+        }
+        items[nextIdx].focus();
+      });
     }
 
     const STORE_INFO = {
@@ -1516,8 +1568,8 @@
             <p class="menu-desc">${m.desc}</p>
             <div class="menu-action-row">
               <label for="opt-sel-${m.id}" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">옵션</label>
-              <select id="opt-sel-${m.id}" class="opt-select">${optHtml}</select>
-              <button type="button" class="btn-mint add-menu-btn" data-id="${m.id}">🛒 담기</button>
+              <select id="opt-sel-${m.id}" class="opt-select menu-focusable">${optHtml}</select>
+              <button type="button" class="btn-mint add-menu-btn menu-focusable" data-id="${m.id}">🛒 담기</button>
             </div>
           </div>
           <div>${m.svg}</div>
@@ -1544,16 +1596,57 @@
       }, 170);
     }
 
-    document.querySelectorAll(".store-pick-card").forEach((card) => {
+    const storeCards = Array.from(document.querySelectorAll(".store-pick-card"));
+    storeCards.forEach((card) => {
       card.addEventListener("click", () => enterStoreMenu(card.dataset.store, card));
+    });
+
+    bindArrowNavigation(() => storeCards, { axis: "vertical", wrap: true });
+    bindArrowNavigation(() => [
+      document.getElementById("backToStorePickBtn"),
+      ...Array.from(document.querySelectorAll("#menuListContainer .menu-focusable"))
+    ], { axis: "both", wrap: true });
+
+    bindArrowNavigation(() => [
+      document.getElementById("tabShop"),
+      document.getElementById("tabCheckout"),
+      document.getElementById("tabTrack"),
+      document.getElementById("tabReceipt"),
+      document.getElementById("topCartBtn")
+    ], { axis: "horizontal", wrap: true });
+
+    bindArrowNavigation(() => Array.from(document.querySelectorAll(".cc-ctrl-btn")), {
+      axis: "horizontal",
+      wrap: true
+    });
+
+    bindArrowNavigation(() => Array.from(document.querySelectorAll(".track-ctrl-btn")), {
+      axis: "horizontal",
+      wrap: true
     });
 
     document.getElementById("backToStorePickBtn").addEventListener("click", () => showStorePickList(false, true));
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && activeStoreName && !document.getElementById("viewShop").hidden) {
+      if (e.key !== "Escape") return;
+
+      const viewShopVisible = !document.getElementById("viewShop").hidden;
+      if (viewShopVisible && activeStoreName) {
         e.preventDefault();
         showStorePickList(false, true);
+        notify("↩️ 가게 선택 목록으로 돌아왔습니다.");
+        return;
+      }
+
+      if (!viewShopVisible) {
+        e.preventDefault();
+        showStorePickList(true, false);
+        switchScreen("shop");
+        setTimeout(() => {
+          const shopTab = document.getElementById("tabShop");
+          if (shopTab) shopTab.focus();
+        }, 170);
+        notify("↩️ 가게 선택 화면으로 돌아왔습니다.");
       }
     });
 
@@ -1701,10 +1794,10 @@
       });
 
       card.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight") {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
           e.preventDefault();
           couponCards[(idx + 1) % couponCards.length].focus();
-        } else if (e.key === "ArrowLeft") {
+        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
           e.preventDefault();
           couponCards[(idx - 1 + couponCards.length) % couponCards.length].focus();
         }
