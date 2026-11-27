@@ -33,10 +33,11 @@
       line-height: 1.55;
     }
 
+    /* outline 제거 금지 및 명확한 포커스 표시 */
     :focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 2px;
-      box-shadow: 0 0 0 5px rgba(29, 78, 216, 0.16);
+      box-shadow: 0 0 0 5px rgba(29, 78, 216, 0.18);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -751,6 +752,50 @@
 
     .toast-bar[hidden] { display: none; }
 
+    /* 키보드 접근형 안내 모달(팝업) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.58);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+    }
+
+    .modal-backdrop[hidden] { display: none; }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border: 2px solid var(--mint-dark);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+    }
+
+    .modal-title {
+      margin: 0 0 8px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: var(--mint-dark);
+    }
+
+    .modal-desc {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     footer {
       max-width: 1180px;
       margin: 0 auto 40px;
@@ -796,7 +841,7 @@
         <div id="storeListScreen" class="sub-pane">
           <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
           <p class="kbd-hint-bar">
-            ⌨️ <strong>키보드 안내:</strong> 위/아래 방향키(<code>↑</code>/<code>↓</code>)로 가게 카드 이동 · <code>Enter</code>/<code>Space</code>로 메뉴 진입 · 메뉴 화면에서 <code>ESC</code>로 가게 목록 복귀
+            ⌨️ <strong>키보드 전체 조작:</strong> <code>Tab</code>/<code>Shift+Tab</code> 또는 방향키(<code>↑</code>/<code>↓</code>/<code>←</code>/<code>→</code>) 이동 · <code>Enter</code>/<code>Space</code> 실행 · <code>ESC</code>로 이전 화면/모달 닫기 및 포커스 복귀
           </p>
 
           <div class="store-card-list" role="list" aria-label="가게 목록">
@@ -873,7 +918,7 @@
           </div>
 
           <p class="kbd-hint-bar">
-            ⌨️ <code>↑</code>/<code>↓</code> 또는 <code>←</code>/<code>→</code> 방향키로 메뉴 옵션·담기 버튼 간 포커스 이동 · <code>ESC</code>로 가게 목록 복귀
+            ⌨️ 방향키로 메뉴 옵션·담기 버튼 간 포커스 이동 · <code>ESC</code>로 가게 목록 복귀
           </p>
 
           <div id="menuListContainer" class="menu-grid"></div>
@@ -1153,6 +1198,25 @@
     </section>
   </main>
 
+  <!-- 키보드 포커스 트랩 + ESC 닫기 지원 안내 모달 -->
+  <div id="kbdModalBackdrop" class="modal-backdrop" hidden>
+    <div
+      id="kbdModalDialog"
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="kbdModalTitle"
+      aria-describedby="kbdModalDesc"
+    >
+      <h2 id="kbdModalTitle" class="modal-title">주문 안내</h2>
+      <p id="kbdModalDesc" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" id="kbdModalActionBtn" class="btn-mint">확인 및 이동</button>
+        <button type="button" id="kbdModalCloseBtn" class="btn-outline">닫기 (ESC)</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
 
   <footer role="contentinfo">
@@ -1201,8 +1265,10 @@
       } catch (_) {}
     }
 
+    // 키보드 포커스 이동 헬퍼 (↑/↓/←/→)
     function bindArrowNavigation(itemsGetter, { axis = "both", wrap = true } = {}) {
       document.addEventListener("keydown", (e) => {
+        if (!document.getElementById("kbdModalBackdrop").hidden) return;
         const active = document.activeElement;
         if (!active) return;
 
@@ -1210,9 +1276,7 @@
         const idx = items.indexOf(active);
         if (idx === -1) return;
 
-        // native <select> 내부 옵션 선택 시엔 방해하지 않고, 셀렉트 간 이동만 지원
-        const isSelect = active.tagName === "SELECT";
-        if (isSelect && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+        if (active.tagName === "SELECT" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
           return;
         }
 
@@ -1238,6 +1302,73 @@
         items[nextIdx].focus();
       });
     }
+
+    // 모달 제어 (열 때 포커스 이동, 닫을 때 원래 위치 복귀, Tab 트랩, ESC 닫기)
+    let modalReturnFocusEl = null;
+    let modalOnAction = null;
+
+    function openKbdModal({ title, desc, actionLabel = "확인", onAction = null }) {
+      const backdrop = document.getElementById("kbdModalBackdrop");
+      const titleEl = document.getElementById("kbdModalTitle");
+      const descEl = document.getElementById("kbdModalDesc");
+      const actionBtn = document.getElementById("kbdModalActionBtn");
+
+      modalReturnFocusEl = document.activeElement;
+      modalOnAction = onAction;
+
+      titleEl.textContent = title;
+      descEl.textContent = desc;
+      actionBtn.textContent = actionLabel;
+      actionBtn.hidden = typeof onAction !== "function";
+
+      backdrop.hidden = false;
+      setTimeout(() => {
+        if (!actionBtn.hidden) actionBtn.focus();
+        else document.getElementById("kbdModalCloseBtn").focus();
+      }, 20);
+    }
+
+    function closeKbdModal() {
+      const backdrop = document.getElementById("kbdModalBackdrop");
+      if (backdrop.hidden) return;
+      backdrop.hidden = true;
+      modalOnAction = null;
+      if (modalReturnFocusEl && modalReturnFocusEl.offsetParent !== null) {
+        const target = modalReturnFocusEl;
+        modalReturnFocusEl = null;
+        setTimeout(() => target.focus(), 20);
+      }
+    }
+
+    document.getElementById("kbdModalCloseBtn").addEventListener("click", closeKbdModal);
+    document.getElementById("kbdModalActionBtn").addEventListener("click", () => {
+      const fn = modalOnAction;
+      closeKbdModal();
+      if (typeof fn === "function") fn();
+    });
+
+    document.getElementById("kbdModalBackdrop").addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeKbdModal();
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusables = Array.from(
+          document.getElementById("kbdModalDialog").querySelectorAll("button:not([hidden])")
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
 
     const STORE_INFO = {
       "바삭한날 치킨": { icon: "🍗", minPrice: 16000, deliveryFee: 2000, mapX: 185, mapY: 84, badge: "🍗바삭한날", color: "#ea580c" },
@@ -1629,6 +1760,7 @@
 
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
+      if (!document.getElementById("kbdModalBackdrop").hidden) return;
 
       const viewShopVisible = !document.getElementById("viewShop").hidden;
       if (viewShopVisible && activeStoreName) {
@@ -2043,6 +2175,15 @@
       if (cartBasket.size === 0) {
         payErr.textContent = "🛒 장바구니에 메뉴를 담아주세요.";
         payEl.setAttribute("aria-invalid", "true");
+        openKbdModal({
+          title: "장바구니가 비어 있어요",
+          desc: "가게 선택 화면으로 이동해 메뉴를 먼저 담아주세요.",
+          actionLabel: "가게 선택으로 이동",
+          onAction: () => {
+            showStorePickList(true);
+            switchScreen("shop");
+          }
+        });
         return;
       }
 
@@ -2057,8 +2198,15 @@
 
       for (const [st, info] of Object.entries(STORE_INFO)) {
         if (sums[st] > 0 && sums[st] < info.minPrice) {
-          payErr.textContent = `${info.icon} ${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
+          const msg = `${info.icon} ${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
+          payErr.textContent = msg;
           payEl.setAttribute("aria-invalid", "true");
+          openKbdModal({
+            title: "최소주문금액 확인 필요",
+            desc: msg,
+            actionLabel: `${st} 메뉴 더 담기`,
+            onAction: () => enterStoreMenu(st)
+          });
           return;
         }
       }
