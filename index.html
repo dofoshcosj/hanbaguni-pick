@@ -10,13 +10,13 @@
       --bg-card: #ffffff;
       --bg-soft: #f8fafc;
       --text-main: #111827;
-      --text-sub: #4b5563;
+      --text-sub: #374151;
       --mint: #0d9488;
       --mint-dark: #0f766e;
       --mint-bg: #f0fdfa;
       --mint-border: #99f6e4;
       --danger: #b91c1c;
-      --border: #e5e7eb;
+      --border: #d1d5db;
       --focus: #1d4ed8;
       --radius: 16px;
       --shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
@@ -93,7 +93,7 @@
 
     .live-clock-badge {
       background: #111827;
-      color: #2dd4bf;
+      color: #5eead4;
       font-size: 0.8rem;
       font-weight: 800;
       padding: 4px 10px;
@@ -118,18 +118,18 @@
     }
 
     .btn-mint {
-      background: var(--mint);
+      background: var(--mint-dark);
       color: #ffffff;
       padding: 8px 14px;
       font-size: 0.86rem;
     }
 
-    .btn-mint:hover { background: var(--mint-dark); }
+    .btn-mint:hover { background: #115e59; }
 
     .btn-outline {
       background: #ffffff;
       color: var(--text-main);
-      border-color: #d1d5db;
+      border-color: #9ca3af;
       padding: 8px 14px;
       font-size: 0.86rem;
     }
@@ -139,7 +139,7 @@
     .cart-counter-pill {
       background: var(--mint-bg);
       color: var(--mint-dark);
-      border: 1.5px solid var(--mint);
+      border: 1.5px solid var(--mint-dark);
       padding: 7px 14px;
       border-radius: 999px;
       font-size: 0.86rem;
@@ -205,7 +205,7 @@
     }
 
     .store-pick-card:hover {
-      border-color: var(--mint);
+      border-color: var(--mint-dark);
       background: var(--mint-bg);
     }
 
@@ -231,7 +231,7 @@
     .store-min-badge {
       display: inline-block;
       background: #fef3c7;
-      color: #92400e;
+      color: #78350f;
       font-size: 0.76rem;
       font-weight: 800;
       padding: 3px 9px;
@@ -239,11 +239,23 @@
       margin-bottom: 4px;
     }
 
+    .store-fee-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #075985;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+
     .store-enter-txt {
       display: block;
       font-size: 0.84rem;
       font-weight: 800;
       color: var(--mint-dark);
+      margin-top: 2px;
     }
 
     .store-menu-header {
@@ -295,7 +307,7 @@
 
     .tag-min {
       background: #fef3c7;
-      color: #92400e;
+      color: #78350f;
       font-size: 0.74rem;
       font-weight: 800;
       padding: 2px 8px;
@@ -324,7 +336,7 @@
     select.opt-select {
       padding: 7px 10px;
       border-radius: 8px;
-      border: 1px solid #9ca3af;
+      border: 1px solid #6b7280;
       font-size: 0.84rem;
       background: #ffffff;
       color: var(--text-main);
@@ -385,15 +397,38 @@
       font-weight: 700;
     }
 
+    .cost-breakdown {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 0.86rem;
+    }
+
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+      color: var(--text-sub);
+    }
+
+    .cost-row.discount {
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+
     .total-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
-      background: var(--bg-soft);
-      border-radius: 10px;
-      margin-bottom: 12px;
+      padding-top: 8px;
+      margin-top: 6px;
+      border-top: 1px solid var(--border);
       font-weight: 800;
+      font-size: 0.98rem;
+      color: var(--text-main);
     }
 
     .form-row { margin-bottom: 12px; }
@@ -411,9 +446,11 @@
     select.form-ctrl {
       width: 100%;
       padding: 9px 12px;
-      border: 1.5px solid #6b7280;
+      border: 1.5px solid #4b5563;
       border-radius: 8px;
       font-size: 0.9rem;
+      background: #ffffff;
+      color: var(--text-main);
     }
 
     .field-err {
@@ -501,7 +538,7 @@
 
     .tl-pill.active {
       background: var(--mint-bg);
-      border-color: var(--mint);
+      border-color: var(--mint-dark);
       color: var(--mint-dark);
     }
 
@@ -591,7 +628,7 @@
       <div class="brand-wrap">
         <svg width="38" height="38" viewBox="0 0 40 40" role="img" aria-label="한바구니픽 로고">
           <title>한바구니픽 로고</title>
-          <rect width="40" height="40" rx="11" fill="#0d9488" />
+          <rect width="40" height="40" rx="11" fill="#0f766e" />
           <path d="M10 17h20l-2 12H12L10 17z" fill="#ffffff" />
           <path d="M15 17l5-6 5 6" stroke="#99f6e4" stroke-width="2.4" fill="none" stroke-linecap="round" />
         </svg>
@@ -614,7 +651,7 @@
     <!-- [화면 1] 가게 목록(눌러야 메뉴 진입) & 선택한 가게 메뉴 화면 -->
     <section id="viewShop" class="screen-panel shop-layout" role="tabpanel" aria-labelledby="tabShop">
       <div class="card">
-        <!-- 1-A. 가게 선택 화면 (가게를 눌러야 메뉴가 나옴) -->
+        <!-- 1-A. 가게 선택 화면 -->
         <div id="storeListScreen">
           <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
           <p style="margin:0 0 14px; font-size:0.84rem; color:var(--text-sub);">
@@ -628,6 +665,7 @@
                 <p class="store-pick-desc">후라이드 · 양념 · 간장마늘 · 허니버터 · 치즈볼세트</p>
               </div>
               <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,000원</span>
                 <span class="store-min-badge">최소 16,000원</span>
                 <span class="store-enter-txt">메뉴 보기 →</span>
               </div>
@@ -639,6 +677,7 @@
                 <p class="store-pick-desc">아메리카노 · 바닐라빈 라떼 · 콜드브루 · 모카세트 · 아이스티박스</p>
               </div>
               <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 1,500원</span>
                 <span class="store-min-badge">최소 14,000원</span>
                 <span class="store-enter-txt">메뉴 보기 →</span>
               </div>
@@ -650,6 +689,7 @@
                 <p class="store-pick-desc">사과잼 와플 · 딸기누텔라 · 바나나크로플 · 말차와플 · 로투스와플</p>
               </div>
               <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 1,500원</span>
                 <span class="store-min-badge">최소 14,000원</span>
                 <span class="store-enter-txt">메뉴 보기 →</span>
               </div>
@@ -661,6 +701,7 @@
                 <p class="store-pick-desc">페퍼로니 · 불고기버섯 · 고구마무스 · 콰트로치즈 · 스파게티세트</p>
               </div>
               <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,500원</span>
                 <span class="store-min-badge">최소 18,000원</span>
                 <span class="store-enter-txt">메뉴 보기 →</span>
               </div>
@@ -672,6 +713,7 @@
                 <p class="store-pick-desc">돼지목살 김치찜 · 통삼겹 김치찜 · 참치두부찜 · 계란말이반상 · 얼큰찜</p>
               </div>
               <div class="store-pick-right">
+                <span class="store-fee-badge">배달팁 2,000원</span>
                 <span class="store-min-badge">최소 15,000원</span>
                 <span class="store-enter-txt">메뉴 보기 →</span>
               </div>
@@ -704,7 +746,7 @@
           </div>
           <div class="cc-box" role="region" aria-live="polite" aria-label="자막">
             <span class="cc-pill">자막(CC)</span>
-            <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 여러 가게를 담아도 경고 팝업 없이 함께 주문할 수 있어요.</span>
+            <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰 선택과 배달팁 계산이 총 결제금액에 반영됩니다.</span>
           </div>
         </section>
       </div>
@@ -722,16 +764,40 @@
           </thead>
           <tbody id="cartBody">
             <tr>
-              <td colspan="3" style="text-align:center; color:#6b7280; padding:18px 6px;">
+              <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
                 장바구니가 비어 있습니다. 🍽️
               </td>
             </tr>
           </tbody>
         </table>
 
-        <div class="total-line">
-          <span>총 주문금액</span>
-          <span id="totalPayText">0원</span>
+        <div class="form-row">
+          <label for="couponSelect">🎟️ 쿠폰 사용</label>
+          <select id="couponSelect" name="couponSelect" class="form-ctrl">
+            <option value="0">쿠폰 미적용</option>
+            <option value="2000">🎟️ 2,000원 할인 쿠폰</option>
+            <option value="3000">🎟️ 3,000원 할인 쿠폰</option>
+            <option value="4000">🎉 한바구니 4,000원 할인 쿠폰</option>
+          </select>
+        </div>
+
+        <div class="cost-breakdown" aria-label="결제 금액 상세">
+          <div class="cost-row">
+            <span>메뉴 금액</span>
+            <span id="menuSumText">0원</span>
+          </div>
+          <div class="cost-row">
+            <span>🛵 배달팁</span>
+            <span id="deliveryFeeText">0원</span>
+          </div>
+          <div class="cost-row discount">
+            <span>🎟️ 쿠폰 할인</span>
+            <span id="couponDiscountText">-0원</span>
+          </div>
+          <div class="total-line">
+            <span>총 결제금액</span>
+            <span id="totalPayText">0원</span>
+          </div>
         </div>
 
         <form id="checkoutForm" novalidate>
@@ -841,7 +907,7 @@
           <div>
             <h2 style="margin:0; font-size:1.2rem;">🧾 내가 시킨 주문내역</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              주문한 메뉴, 수량, 배달 주소와 결제 방식을 확인할 수 있어요.
+              주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요.
             </p>
           </div>
           <button type="button" id="backFromReceiptBtn" class="btn-mint">🏪 가게 선택으로</button>
@@ -900,18 +966,17 @@
     }
 
     const STORE_INFO = {
-      "바삭한날 치킨": { icon: "🍗", minPrice: 16000, mapX: 185, mapY: 84, badge: "🍗바삭한날", color: "#ea580c" },
-      "이슬커피": { icon: "☕", minPrice: 14000, mapX: 265, mapY: 155, badge: "☕이슬커피", color: "#0d9488" },
-      "굽고바삭 와플": { icon: "🧇", minPrice: 14000, mapX: 345, mapY: 88, badge: "🧇굽고바삭", color: "#d97706" },
-      "화덕향 피자": { icon: "🍕", minPrice: 18000, mapX: 425, mapY: 155, badge: "🍕화덕향", color: "#dc2626" },
-      "뚝배기담 김치찜": { icon: "🍲", minPrice: 15000, mapX: 485, mapY: 84, badge: "🍲뚝배기담", color: "#991b1b" }
+      "바삭한날 치킨": { icon: "🍗", minPrice: 16000, deliveryFee: 2000, mapX: 185, mapY: 84, badge: "🍗바삭한날", color: "#ea580c" },
+      "이슬커피": { icon: "☕", minPrice: 14000, deliveryFee: 1500, mapX: 265, mapY: 155, badge: "☕이슬커피", color: "#0f766e" },
+      "굽고바삭 와플": { icon: "🧇", minPrice: 14000, deliveryFee: 1500, mapX: 345, mapY: 88, badge: "🧇굽고바삭", color: "#b45309" },
+      "화덕향 피자": { icon: "🍕", minPrice: 18000, deliveryFee: 2500, mapX: 425, mapY: 155, badge: "🍕화덕향", color: "#b91c1c" },
+      "뚝배기담 김치찜": { icon: "🍲", minPrice: 15000, deliveryFee: 2000, mapX: 485, mapY: 84, badge: "🍲뚝배기담", color: "#991b1b" }
     };
 
     const START_PT = { x: 65, y: 155 };
     const END_PT = { x: 565, y: 215 };
 
     const ALL_MENUS = [
-      // 바삭한날 치킨
       {
         id: 101, store: "바삭한날 치킨", name: "황금 후라이드 치킨", desc: "🍗 바삭한 기본 후라이드 치킨",
         options: [{ label: "한마리", price: 18000 }, { label: "순살 한마리", price: 19500 }],
@@ -937,12 +1002,10 @@
         options: [{ label: "치즈볼 6개+감튀", price: 16000 }, { label: "치즈볼 10개 세트", price: 18000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈볼과 감자튀김 일러스트"><title>치즈볼 감자튀김</title><rect width="104" height="82" rx="10" fill="#f8fafc"/><circle cx="38" cy="48" r="12" fill="#facc15"/><circle cx="64" cy="48" r="12" fill="#eab308"/><rect x="44" y="22" width="16" height="22" rx="3" fill="#f59e0b"/></svg>`
       },
-
-      // 이슬커피
       {
         id: 201, store: "이슬커피", name: "아이스 아메리카노", desc: "🧊 깔끔한 원두 아메리카노",
         options: [{ label: "ICE 4잔 세트", price: 14400 }, { label: "1L 2병 세트", price: 15600 }],
-        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스 아메리카노 일러스트"><title>아이스 아메리카노</title><rect width="104" height="82" rx="10" fill="#f0fdfa"/><path d="M56 22 L65 9" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/><path d="M36 24 L68 24 L64 68 L40 68 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/><path d="M38 34 L66 34 L63 66 L41 66 Z" fill="#451a03"/></svg>`
+        svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스 아메리카노 일러스트"><title>아이스 아메리카노</title><rect width="104" height="82" rx="10" fill="#f0fdfa"/><path d="M56 22 L65 9" stroke="#0f766e" stroke-width="3" stroke-linecap="round"/><path d="M36 24 L68 24 L64 68 L40 68 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/><path d="M38 34 L66 34 L63 66 L41 66 Z" fill="#451a03"/></svg>`
       },
       {
         id: 202, store: "이슬커피", name: "바닐라빈 라떼", desc: "🥛 부드러운 바닐라빈 카페라떼",
@@ -964,8 +1027,6 @@
         options: [{ label: "아이스티 3+스콘 2", price: 14500 }, { label: "블루베리 스콘 추가", price: 16500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스티와 스콘 일러스트"><title>아이스티 스콘</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="36" r="14" fill="#fb7185"/><rect x="32" y="52" width="40" height="14" rx="5" fill="#f59e0b"/></svg>`
       },
-
-      // 굽고바삭 와플
       {
         id: 301, store: "굽고바삭 와플", name: "생크림 사과잼 와플", desc: "🍎 바삭한 와플과 생크림·사과잼",
         options: [{ label: "4개 세트", price: 14400 }, { label: "6개 세트", price: 20400 }],
@@ -991,8 +1052,6 @@
         options: [{ label: "4개 박스", price: 15000 }, { label: "로투스 잼 추가", price: 16200 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="로투스 비스코프 와플 일러스트"><title>로투스 와플</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#b45309"/><circle cx="38" cy="38" r="4" fill="#fde68a"/><circle cx="66" cy="44" r="4" fill="#fde68a"/></svg>`
       },
-
-      // 화덕향 피자
       {
         id: 401, store: "화덕향 피자", name: "페퍼로니 클래식 피자", desc: "🍕 페퍼로니가 듬뿍 올라간 피자",
         options: [{ label: "M 사이즈", price: 19000 }, { label: "L 사이즈", price: 23000 }],
@@ -1018,8 +1077,6 @@
         options: [{ label: "기본 세트", price: 22000 }, { label: "갈릭디핑 추가", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="피자와 스파게티 일러스트"><title>피자 스파게티 세트</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><circle cx="44" cy="42" r="20" fill="#f59e0b"/><ellipse cx="74" cy="48" rx="16" ry="12" fill="#dc2626"/></svg>`
       },
-
-      // 뚝배기담 김치찜
       {
         id: 501, store: "뚝배기담 김치찜", name: "묵은지 돼지목살 김치찜", desc: "🍲 묵은지와 돼지목살 뚝배기찜",
         options: [{ label: "2인분", price: 16500 }, { label: "3인분 대자", price: 24000 }],
@@ -1062,7 +1119,7 @@
     let ccInterval = null;
     let ccIdx = 0;
     const CC_LINES = [
-      "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 여러 가게를 담아도 경고 팝업 없이 함께 주문할 수 있어요.",
+      "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰 선택과 배달팁 계산이 총 결제금액에 반영됩니다.",
       "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 🛵 라이더가 움직입니다.",
       "[3/3] 배달이 완료되면 '🎉 배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
     ];
@@ -1074,6 +1131,29 @@
       el.hidden = false;
       clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => { el.hidden = true; }, 2200);
+    }
+
+    function calculateCartTotals() {
+      let qtySum = 0;
+      let menuSum = 0;
+      const pickedStores = new Set();
+
+      cartBasket.forEach((item) => {
+        qtySum += item.qty;
+        menuSum += item.price * item.qty;
+        pickedStores.add(item.store);
+      });
+
+      let deliveryFee = 0;
+      pickedStores.forEach((st) => {
+        if (STORE_INFO[st]) deliveryFee += STORE_INFO[st].deliveryFee;
+      });
+
+      const selectedCoupon = Number(document.getElementById("couponSelect").value) || 0;
+      const discount = menuSum > 0 ? Math.min(selectedCoupon, menuSum) : 0;
+      const finalTotal = menuSum > 0 ? Math.max(0, menuSum + deliveryFee - discount) : 0;
+
+      return { qtySum, menuSum, deliveryFee, discount, finalTotal, pickedStores };
     }
 
     function switchScreen(mode) {
@@ -1122,7 +1202,7 @@
       document.getElementById("storeListScreen").hidden = true;
       document.getElementById("storeMenuScreen").hidden = false;
       document.getElementById("activeStoreTitle").textContent = `${info.icon} ${storeName}`;
-      document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원`;
+      document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원 · 배달팁 ${info.deliveryFee.toLocaleString()}원`;
 
       const box = document.getElementById("menuListContainer");
       const items = ALL_MENUS.filter((m) => m.store === storeName);
@@ -1213,23 +1293,19 @@
 
     function renderBasket() {
       const tbody = document.getElementById("cartBody");
-      let qtySum = 0;
-      let totalPay = 0;
-
       tbody.innerHTML = "";
+
       if (cartBasket.size === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="3" style="text-align:center; color:#6b7280; padding:18px 6px;">
+            <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
               장바구니가 비어 있습니다. 🍽️
             </td>
           </tr>
         `;
       } else {
         cartBasket.forEach((item) => {
-          qtySum += item.qty;
           const lineTotal = item.price * item.qty;
-          totalPay += lineTotal;
           const icon = STORE_INFO[item.store]?.icon || "🍽️";
 
           const tr = document.createElement("tr");
@@ -1251,8 +1327,12 @@
         });
       }
 
-      document.getElementById("topCartQty").textContent = String(qtySum);
-      document.getElementById("totalPayText").textContent = `${totalPay.toLocaleString()}원`;
+      const totals = calculateCartTotals();
+      document.getElementById("topCartQty").textContent = String(totals.qtySum);
+      document.getElementById("menuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
+      document.getElementById("deliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
+      document.getElementById("couponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
+      document.getElementById("totalPayText").textContent = `${totals.finalTotal.toLocaleString()}원`;
 
       document.querySelectorAll(".qty-inc").forEach((b) => {
         b.addEventListener("click", () => {
@@ -1273,6 +1353,12 @@
       });
     }
 
+    document.getElementById("couponSelect").addEventListener("change", () => {
+      renderBasket();
+      const val = Number(document.getElementById("couponSelect").value) || 0;
+      notify(val > 0 ? `🎟️ ${val.toLocaleString()}원 할인 쿠폰이 선택되었습니다.` : "🎟️ 쿠폰 적용이 해제되었습니다.");
+    });
+
     function prepareDynamicRoute(stores) {
       const pathGroup = document.getElementById("routePathGroup");
       const pinsGroup = document.getElementById("routePinsGroup");
@@ -1291,7 +1377,7 @@
       const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
       pathEl.setAttribute("d", dPath);
       pathEl.setAttribute("fill", "none");
-      pathEl.setAttribute("stroke", "#0d9488");
+      pathEl.setAttribute("stroke", "#0f766e");
       pathEl.setAttribute("stroke-width", "5");
       pathEl.setAttribute("stroke-dasharray", "9 7");
       pathGroup.appendChild(pathEl);
@@ -1358,6 +1444,7 @@
 
         if (cartBasket.size > 0) {
           cartBasket.clear();
+          document.getElementById("couponSelect").value = "0";
           renderBasket();
         }
 
@@ -1422,7 +1509,7 @@
 
       if (myOrders.length === 0) {
         box.innerHTML = `
-          <p style="text-align:center; color:#6b7280; padding:24px;">
+          <p style="text-align:center; color:#4b5563; padding:24px;">
             🧾 아직 시킨 주문내역이 없어요. 가게를 눌러 메뉴를 담아보세요!
           </p>
         `;
@@ -1443,10 +1530,13 @@
             <span class="tag-store">${ord.payType}</span>
           </div>
           <div style="font-size:0.84rem; color:#4b5563; margin-bottom:8px;">📍 배달 주소: ${ord.addr}</div>
-          <ul style="margin:0 0 8px; padding-left:18px; font-size:0.88rem; display:flex; flex-direction:column; gap:4px;">
+          <ul style="margin:0 0 10px; padding-left:18px; font-size:0.88rem; display:flex; flex-direction:column; gap:4px;">
             ${rowsHtml}
           </ul>
-          <div style="text-align:right; font-weight:800; font-size:0.95rem;">총 결제금액: ${ord.totalPrice.toLocaleString()}원</div>
+          <div style="font-size:0.85rem; color:#374151; border-top:1px dashed #d1d5db; padding-top:8px;">
+            <div>메뉴 금액: ${ord.menuSum.toLocaleString()}원 · 🛵 배달팁: ${ord.deliveryFee.toLocaleString()}원 · 🎟️ 쿠폰 할인: -${ord.discount.toLocaleString()}원</div>
+            <div style="text-align:right; font-weight:800; font-size:0.98rem; color:#111827; margin-top:4px;">총 결제금액: ${ord.finalTotal.toLocaleString()}원</div>
+          </div>
         `;
         box.appendChild(div);
       });
@@ -1456,9 +1546,7 @@
       if (!countdownRunning) return;
       if (remainingSeconds > 0) {
         remainingSeconds -= 1;
-        if (!document.getElementById("viewTrack").hidden) {
-          renderCountdownUI();
-        } else if (remainingSeconds === 0) {
+        if (!document.getElementById("viewTrack").hidden || remainingSeconds === 0) {
           renderCountdownUI();
         }
       }
@@ -1505,13 +1593,10 @@
 
       const sums = {};
       const pickedSet = new Set();
-      let totalSum = 0;
       Object.keys(STORE_INFO).forEach((s) => { sums[s] = 0; });
 
       cartBasket.forEach((v) => {
-        const line = v.price * v.qty;
-        sums[v.store] += line;
-        totalSum += line;
+        sums[v.store] += v.price * v.qty;
         pickedSet.add(v.store);
       });
 
@@ -1534,6 +1619,7 @@
         return;
       }
 
+      const totals = calculateCartTotals();
       orderedStoreList = Array.from(pickedSet);
       orderAddrText = addrEl.value.trim();
 
@@ -1544,12 +1630,15 @@
         orderedAt: timeStr,
         addr: orderAddrText,
         payType: payEl.value,
-        totalPrice: totalSum,
+        menuSum: totals.menuSum,
+        deliveryFee: totals.deliveryFee,
+        discount: totals.discount,
+        finalTotal: totals.finalTotal,
         items: Array.from(cartBasket.values()).map((x) => ({ ...x }))
       });
 
-      // 주문 완료 시 장바구니 비우기
       cartBasket.clear();
+      document.getElementById("couponSelect").value = "0";
       renderBasket();
 
       totalEtaSeconds = orderedStoreList.length * 360 + 300;
