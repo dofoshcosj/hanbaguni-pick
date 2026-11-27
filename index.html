@@ -47,6 +47,18 @@
       }
     }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     .skip-link {
       position: absolute;
       top: -60px;
@@ -567,6 +579,13 @@
 
     .req-asterisk { color: var(--danger); font-weight: 800; }
 
+    .req-guide {
+      margin: 0 0 12px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
     input[type="text"],
     select.form-ctrl {
       width: 100%;
@@ -832,7 +851,7 @@
           <div class="store-card-list" role="list" aria-label="가게 목록">
             <button type="button" class="store-pick-card" data-store="바삭한날 치킨" role="listitem">
               <div>
-                <p class="store-pick-name">🍗 바삭한날 치킨</p>
+                <p class="store-pick-name"><span aria-hidden="true">🍗</span> 바삭한날 치킨</p>
                 <p class="store-pick-desc">후라이드 · 양념 · 간장마늘 · 허니버터 · 치즈볼세트</p>
               </div>
               <div class="store-pick-right">
@@ -844,7 +863,7 @@
 
             <button type="button" class="store-pick-card" data-store="이슬커피" role="listitem">
               <div>
-                <p class="store-pick-name">☕ 이슬커피</p>
+                <p class="store-pick-name"><span aria-hidden="true">☕</span> 이슬커피</p>
                 <p class="store-pick-desc">아메리카노 · 바닐라빈 라떼 · 콜드브루 · 모카세트 · 아이스티박스</p>
               </div>
               <div class="store-pick-right">
@@ -856,7 +875,7 @@
 
             <button type="button" class="store-pick-card" data-store="굽고바삭 와플" role="listitem">
               <div>
-                <p class="store-pick-name">🧇 굽고바삭 와플</p>
+                <p class="store-pick-name"><span aria-hidden="true">🧇</span> 굽고바삭 와플</p>
                 <p class="store-pick-desc">사과잼 와플 · 딸기누텔라 · 바나나크로플 · 말차와플 · 로투스와플</p>
               </div>
               <div class="store-pick-right">
@@ -868,7 +887,7 @@
 
             <button type="button" class="store-pick-card" data-store="화덕향 피자" role="listitem">
               <div>
-                <p class="store-pick-name">🍕 화덕향 피자</p>
+                <p class="store-pick-name"><span aria-hidden="true">🍕</span> 화덕향 피자</p>
                 <p class="store-pick-desc">페퍼로니 · 불고기버섯 · 고구마무스 · 콰트로치즈 · 스파게티세트</p>
               </div>
               <div class="store-pick-right">
@@ -880,7 +899,7 @@
 
             <button type="button" class="store-pick-card" data-store="뚝배기담 김치찜" role="listitem">
               <div>
-                <p class="store-pick-name">🍲 뚝배기담 김치찜</p>
+                <p class="store-pick-name"><span aria-hidden="true">🍲</span> 뚝배기담 김치찜</p>
                 <p class="store-pick-desc">돼지목살 김치찜 · 통삼겹 김치찜 · 참치두부찜 · 계란말이반상 · 얼큰찜</p>
               </div>
               <div class="store-pick-right">
@@ -908,7 +927,7 @@
         <!-- 미디어 자막(CC) & 시각 가이드 영역 -->
         <section class="cc-panel" aria-labelledby="ccHeading">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-            <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 가이드 영상·자막 & 사운드</h2>
+            <h2 id="ccHeading" style="margin:0; font-size:0.95rem;"><span aria-hidden="true">🎬</span> 미디어 가이드 영상·자막 &amp; 사운드</h2>
             <div class="cc-btn-group" role="group" aria-label="자막 및 알림음 제어" style="display:flex; gap:6px; flex-wrap:wrap;">
               <button type="button" id="ccPlay" class="btn-mint cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
               <button type="button" id="ccPause" class="btn-outline cc-ctrl-btn" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
@@ -935,9 +954,10 @@
       </div>
 
       <aside class="card sticky-cart" aria-labelledby="cartHeading">
-        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;" tabindex="-1">🛒 한바구니 장바구니</h2>
+        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;" tabindex="-1"><span aria-hidden="true">🛒</span> 한바구니 장바구니</h2>
 
-        <table class="cart-table" aria-label="장바구니 내역">
+        <table class="cart-table">
+          <caption class="sr-only">장바구니에 담긴 메뉴, 수량 및 금액 내역</caption>
           <thead>
             <tr>
               <th scope="col">메뉴</th>
@@ -948,7 +968,7 @@
           <tbody id="cartBody">
             <tr>
               <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
-                장바구니가 비어 있습니다. 🍽️
+                장바구니가 비어 있습니다. <span aria-hidden="true">🍽️</span>
               </td>
             </tr>
           </tbody>
@@ -960,11 +980,11 @@
             <span id="shopMenuSumText">0원</span>
           </div>
           <div class="cost-row">
-            <span>🛵 예상 배달팁</span>
+            <span><span aria-hidden="true">🛵</span> 예상 배달팁</span>
             <span id="shopDeliveryFeeText">0원</span>
           </div>
           <div class="cost-row discount">
-            <span>🎟️ 선택 쿠폰 할인</span>
+            <span><span aria-hidden="true">🎟️</span> 선택 쿠폰 할인</span>
             <span id="shopCouponDiscountText">-0원</span>
           </div>
           <div class="total-line">
@@ -974,7 +994,7 @@
         </div>
 
         <button type="button" id="goCheckoutBtn" class="btn-mint" style="width:100%; padding:12px; font-size:0.98rem;">
-          🎟️ 쿠폰 선택 & 결제 화면으로 →
+          <span aria-hidden="true">🎟️</span> 쿠폰 선택 &amp; 결제 화면으로 →
         </button>
       </aside>
     </section>
@@ -983,42 +1003,45 @@
     <section id="viewCheckout" class="screen-panel checkout-layout" role="tabpanel" aria-labelledby="tabCheckout" hidden>
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
-          <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
+          <h2 style="margin:0; font-size:1.18rem;"><span aria-hidden="true">🎟️</span> 쿠폰 사용 및 주문 결제</h2>
           <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
         </div>
 
         <div class="form-row">
-          <span style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:6px;">🎟️ 보유 할인 쿠폰 선택</span>
+          <span style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:6px;"><span aria-hidden="true">🎟️</span> 보유 할인 쿠폰 선택</span>
           <div class="coupon-grid" role="group" aria-label="할인 쿠폰 목록">
             <button type="button" class="coupon-card" data-coupon="0" aria-pressed="true">
               <span class="coupon-amt">쿠폰 미적용</span>
               <span class="coupon-sub">할인 없이 진행</span>
             </button>
             <button type="button" class="coupon-card" data-coupon="2000" aria-pressed="false">
-              <span class="coupon-amt">🎟️ 2,000원 할인</span>
+              <span class="coupon-amt"><span aria-hidden="true">🎟️</span> 2,000원 할인</span>
               <span class="coupon-sub">한바구니 기본 할인 쿠폰</span>
             </button>
             <button type="button" class="coupon-card" data-coupon="3000" aria-pressed="false">
-              <span class="coupon-amt">🎟️ 3,000원 할인</span>
+              <span class="coupon-amt"><span aria-hidden="true">🎟️</span> 3,000원 할인</span>
               <span class="coupon-sub">다점포 주문 우대 쿠폰</span>
             </button>
             <button type="button" class="coupon-card" data-coupon="4000" aria-pressed="false">
-              <span class="coupon-amt">🎉 4,000원 할인</span>
+              <span class="coupon-amt"><span aria-hidden="true">🎉</span> 4,000원 할인</span>
               <span class="coupon-sub">한바구니 특별 혜택 쿠폰</span>
             </button>
           </div>
         </div>
 
-        <form id="checkoutForm" novalidate style="margin-top:16px;">
+        <p class="req-guide"><span class="req-asterisk">*</span> 표시는 필수 입력 항목입니다.</p>
+
+        <form id="checkoutForm" novalidate style="margin-top:12px;">
           <div class="form-row">
             <label for="addrField">
-              📍 배달 주소 <span class="req-asterisk" aria-hidden="true">*</span>
+              <span aria-hidden="true">📍</span> 배달 주소 <span class="req-asterisk" aria-label="필수">*</span>
             </label>
             <input
               type="text"
               id="addrField"
               name="addrField"
               required
+              aria-required="true"
               aria-invalid="false"
               aria-describedby="addrError"
               placeholder="배달 받을 주소를 입력하세요"
@@ -1028,33 +1051,35 @@
 
           <div class="form-row">
             <label for="payTypeField">
-              💳 결제 방식 <span class="req-asterisk" aria-hidden="true">*</span>
+              <span aria-hidden="true">💳</span> 결제 방식 <span class="req-asterisk" aria-label="필수">*</span>
             </label>
             <select
               id="payTypeField"
               name="payTypeField"
               class="form-ctrl"
               required
+              aria-required="true"
               aria-invalid="false"
               aria-describedby="payTypeError"
             >
               <option value="">선택하세요</option>
-              <option value="간편결제">📱 간편결제</option>
-              <option value="카드결제">💳 카드결제</option>
+              <option value="간편결제">간편결제</option>
+              <option value="카드결제">카드결제</option>
             </select>
             <div id="payTypeError" class="field-err" role="alert"></div>
           </div>
 
           <button type="submit" class="btn-mint" style="width:100%; padding:13px; font-size:1rem;">
-            🛵 쿠폰 적용하고 주문하기
+            <span aria-hidden="true">🛵</span> 쿠폰 적용하고 주문하기
           </button>
         </form>
       </div>
 
       <aside class="card" aria-labelledby="paySummaryHeading">
-        <h2 id="paySummaryHeading" style="margin:0 0 12px; font-size:1.12rem;">🧾 결제 금액 내역</h2>
+        <h2 id="paySummaryHeading" style="margin:0 0 12px; font-size:1.12rem;"><span aria-hidden="true">🧾</span> 결제 금액 내역</h2>
 
-        <table class="cart-table" aria-label="결제 대상 메뉴">
+        <table class="cart-table">
+          <caption class="sr-only">결제 대상 메뉴, 수량 및 금액 내역</caption>
           <thead>
             <tr>
               <th scope="col">메뉴</th>
@@ -1077,11 +1102,11 @@
             <span id="payMenuSumText">0원</span>
           </div>
           <div class="cost-row">
-            <span>🛵 가게별 배달팁 합계</span>
+            <span><span aria-hidden="true">🛵</span> 가게별 배달팁 합계</span>
             <span id="payDeliveryFeeText">0원</span>
           </div>
           <div class="cost-row discount">
-            <span>🎟️ 쿠폰 할인</span>
+            <span><span aria-hidden="true">🎟️</span> 쿠폰 할인</span>
             <span id="payCouponDiscountText">-0원</span>
           </div>
           <div class="total-line">
@@ -1097,17 +1122,17 @@
       <div class="card">
         <div id="etaBannerBox" class="eta-banner">
           <div>
-            <span id="trackAddrBadge" style="font-size:0.82rem; color:#99f6e4; font-weight:700;">📍 배달 안내</span>
-            <p id="trackEtaTitle" class="eta-big">⏱️ 남은 시간 15:00</p>
+            <span id="trackAddrBadge" style="font-size:0.82rem; color:#99f6e4; font-weight:700;"><span aria-hidden="true">📍</span> 배달 안내</span>
+            <p id="trackEtaTitle" class="eta-big" aria-live="polite"><span aria-hidden="true">⏱️</span> 남은 시간 15:00</p>
             <p id="trackStatusSub" style="margin:4px 0 0; font-size:0.86rem; color:#e5e7eb;">
-              실시간 타이머와 🛵 라이더 이동 현황입니다.
+              실시간 타이머와 <span aria-hidden="true">🛵</span> 라이더 이동 현황입니다.
             </p>
           </div>
           <button type="button" id="backToShopBtn" class="btn-outline">🏪 가게 선택으로</button>
         </div>
 
         <div id="doneCelebrateBox" class="done-celebrate-box" role="status" aria-live="assertive" hidden>
-          <span>🎉 배달이 완료되었어요! (장바구니 비움 완료) 😋</span>
+          <span><span aria-hidden="true">🎉</span> 배달이 완료되었어요! (장바구니 비움 완료) <span aria-hidden="true">😋</span></span>
           <button type="button" id="openReceiptFromDoneBtn" class="btn-mint" style="padding:6px 12px; font-size:0.8rem;">🧾 내 주문내역 보기</button>
         </div>
 
@@ -1121,9 +1146,10 @@
         <div class="map-frame">
           <svg width="100%" height="310" viewBox="0 0 640 310" role="img" aria-label="주문한 가게만 경유하는 실시간 배달 지도">
             <title>한바구니픽 배달 지도</title>
+            <desc>출발지에서 주문한 가게들을 경유해 도착지로 이동하는 라이더의 실시간 경로를 보여줍니다.</desc>
             <rect width="640" height="310" fill="#eef2f6" />
             <rect x="24" y="20" width="145" height="68" rx="12" fill="#dcfce7" />
-            <text x="96" y="58" text-anchor="middle" fill="#166534" font-size="11" font-weight="bold">🌳 근린공원</text>
+            <text x="96" y="58" text-anchor="middle" fill="#166534" font-size="11" font-weight="bold">근린공원</text>
 
             <path d="M0 155 L640 155" stroke="#ffffff" stroke-width="20" />
             <path d="M180 0 L180 310" stroke="#ffffff" stroke-width="15" />
@@ -1152,7 +1178,7 @@
       </div>
 
       <aside class="card" aria-labelledby="storeCookHeading">
-        <h2 id="storeCookHeading" style="margin:0 0 12px; font-size:1.12rem;">🍳 가게별 조리 현황</h2>
+        <h2 id="storeCookHeading" style="margin:0 0 12px; font-size:1.12rem;"><span aria-hidden="true">🍳</span> 가게별 조리 현황</h2>
         <ul id="orderedStoresList" class="cook-list"></ul>
       </aside>
     </section>
@@ -1162,7 +1188,7 @@
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
           <div>
-            <h2 style="margin:0; font-size:1.2rem;">🧾 내가 시킨 주문내역</h2>
+            <h2 style="margin:0; font-size:1.2rem;"><span aria-hidden="true">🧾</span> 내가 시킨 주문내역</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
               주문한 메뉴, 배달팁, 쿠폰 할인, 배달 주소와 결제 방식을 확인할 수 있어요.
             </p>
@@ -1195,7 +1221,7 @@
   <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
 
   <footer role="contentinfo">
-    <p style="margin:0;">🧺 한바구니픽</p>
+    <p style="margin:0;"><span aria-hidden="true">🧺</span> 한바구니픽</p>
   </footer>
 
   <script>
@@ -1344,11 +1370,11 @@
     });
 
     const STORE_INFO = {
-      "바삭한날 치킨": { icon: "🍗", minPrice: 16000, deliveryFee: 2000, mapX: 185, mapY: 84, badge: "🍗바삭한날", color: "#ea580c" },
-      "이슬커피": { icon: "☕", minPrice: 14000, deliveryFee: 1500, mapX: 265, mapY: 155, badge: "☕이슬커피", color: "#0f766e" },
-      "굽고바삭 와플": { icon: "🧇", minPrice: 14000, deliveryFee: 1500, mapX: 345, mapY: 88, badge: "🧇굽고바삭", color: "#b45309" },
-      "화덕향 피자": { icon: "🍕", minPrice: 18000, deliveryFee: 2500, mapX: 425, mapY: 155, badge: "🍕화덕향", color: "#b91c1c" },
-      "뚝배기담 김치찜": { icon: "🍲", minPrice: 15000, deliveryFee: 2000, mapX: 485, mapY: 84, badge: "🍲뚝배기담", color: "#991b1b" }
+      "바삭한날 치킨": { icon: "🍗", minPrice: 16000, deliveryFee: 2000, mapX: 185, mapY: 84, badge: "바삭한날", color: "#ea580c" },
+      "이슬커피": { icon: "☕", minPrice: 14000, deliveryFee: 1500, mapX: 265, mapY: 155, badge: "이슬커피", color: "#0f766e" },
+      "굽고바삭 와플": { icon: "🧇", minPrice: 14000, deliveryFee: 1500, mapX: 345, mapY: 88, badge: "굽고바삭", color: "#b45309" },
+      "화덕향 피자": { icon: "🍕", minPrice: 18000, deliveryFee: 2500, mapX: 425, mapY: 155, badge: "화덕향", color: "#b91c1c" },
+      "뚝배기담 김치찜": { icon: "🍲", minPrice: 15000, deliveryFee: 2000, mapX: 485, mapY: 84, badge: "뚝배기담", color: "#991b1b" }
     };
 
     const START_PT = { x: 65, y: 155 };
@@ -1356,127 +1382,127 @@
 
     const ALL_MENUS = [
       {
-        id: 101, store: "바삭한날 치킨", name: "황금 후라이드 치킨", desc: "🍗 바삭한 기본 후라이드 치킨",
+        id: 101, store: "바삭한날 치킨", name: "황금 후라이드 치킨", desc: "바삭한 기본 후라이드 치킨",
         options: [{ label: "한마리", price: 18000 }, { label: "순살 한마리", price: 19500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="황금 후라이드 치킨 일러스트"><title>후라이드 치킨</title><rect width="104" height="82" rx="10" fill="#fef3c7"/><rect x="20" y="44" width="18" height="8" rx="4" fill="#ffffff" transform="rotate(-20 29 48)"/><ellipse cx="56" cy="41" rx="25" ry="17" fill="#d97706"/></svg>`
       },
       {
-        id: 102, store: "바삭한날 치킨", name: "매콤 양념 치킨", desc: "🍗 달콤매콤 특제 양념 치킨",
+        id: 102, store: "바삭한날 치킨", name: "매콤 양념 치킨", desc: "달콤매콤 특제 양념 치킨",
         options: [{ label: "순살 양념", price: 19000 }, { label: "뼈 양념", price: 18500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="매콤 양념 치킨 일러스트"><title>양념 치킨</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><ellipse cx="52" cy="44" rx="28" ry="18" fill="#dc2626"/><circle cx="42" cy="38" r="3" fill="#fef08a"/><circle cx="62" cy="40" r="3" fill="#fef08a"/></svg>`
       },
       {
-        id: 103, store: "바삭한날 치킨", name: "간장마늘 치킨", desc: "🍗 마늘향 가득한 간장 치킨",
+        id: 103, store: "바삭한날 치킨", name: "간장마늘 치킨", desc: "마늘향 가득한 간장 치킨",
         options: [{ label: "기본 세트", price: 19000 }, { label: "마늘칩 추가", price: 20500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="간장마늘 치킨 일러스트"><title>간장마늘 치킨</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="40" cy="45" r="14" fill="#78350f"/><circle cx="62" cy="45" r="14" fill="#92400e"/><circle cx="51" cy="33" r="13" fill="#78350f"/></svg>`
       },
       {
-        id: 104, store: "바삭한날 치킨", name: "허니버터 치킨", desc: "🍗 달콤고소한 허니버터 치킨",
+        id: 104, store: "바삭한날 치킨", name: "허니버터 치킨", desc: "달콤고소한 허니버터 치킨",
         options: [{ label: "순살 허니버터", price: 19500 }, { label: "윙봉 세트", price: 20000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="허니버터 치킨 일러스트"><title>허니버터 치킨</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="44" rx="27" ry="17" fill="#f59e0b"/><circle cx="44" cy="36" r="2.5" fill="#78350f"/><circle cx="58" cy="38" r="2.5" fill="#78350f"/></svg>`
       },
       {
-        id: 105, store: "바삭한날 치킨", name: "치즈볼 & 감자튀김", desc: "🧀 치즈볼과 감자튀김 모둠",
+        id: 105, store: "바삭한날 치킨", name: "치즈볼 & 감자튀김", desc: "치즈볼과 감자튀김 모둠",
         options: [{ label: "치즈볼 6개+감튀", price: 16000 }, { label: "치즈볼 10개 세트", price: 18000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈볼과 감자튀김 일러스트"><title>치즈볼 감자튀김</title><rect width="104" height="82" rx="10" fill="#f8fafc"/><circle cx="38" cy="48" r="12" fill="#facc15"/><circle cx="64" cy="48" r="12" fill="#eab308"/><rect x="44" y="22" width="16" height="22" rx="3" fill="#f59e0b"/></svg>`
       },
       {
-        id: 201, store: "이슬커피", name: "아이스 아메리카노", desc: "🧊 깔끔한 원두 아메리카노",
+        id: 201, store: "이슬커피", name: "아이스 아메리카노", desc: "깔끔한 원두 아메리카노",
         options: [{ label: "ICE 4잔 세트", price: 14400 }, { label: "1L 2병 세트", price: 15600 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스 아메리카노 일러스트"><title>아이스 아메리카노</title><rect width="104" height="82" rx="10" fill="#f0fdfa"/><path d="M56 22 L65 9" stroke="#0f766e" stroke-width="3" stroke-linecap="round"/><path d="M36 24 L68 24 L64 68 L40 68 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/><path d="M38 34 L66 34 L63 66 L41 66 Z" fill="#451a03"/></svg>`
       },
       {
-        id: 202, store: "이슬커피", name: "바닐라빈 라떼", desc: "🥛 부드러운 바닐라빈 카페라떼",
+        id: 202, store: "이슬커피", name: "바닐라빈 라떼", desc: "부드러운 바닐라빈 카페라떼",
         options: [{ label: "ICE 3잔", price: 14700 }, { label: "HOT 3잔", price: 14700 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바닐라빈 라떼 일러스트"><title>바닐라빈 라떼</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><path d="M35 24 L69 24 L65 68 L39 68 Z" fill="#fef3c7" stroke="#9ca3af" stroke-width="1.5"/><path d="M37 36 L67 36 L64 54 L40 54 Z" fill="#b45309"/></svg>`
       },
       {
-        id: 203, store: "이슬커피", name: "콜드브루 세트", desc: "☕ 저온 추출 콜드브루 커피",
+        id: 203, store: "이슬커피", name: "콜드브루 세트", desc: "저온 추출 콜드브루 커피",
         options: [{ label: "3병 세트", price: 15000 }, { label: "디카페인 3병", price: 15300 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="콜드브루 일러스트"><title>콜드브루</title><rect width="104" height="82" rx="10" fill="#ecfeff"/><rect x="34" y="18" width="36" height="48" rx="8" fill="#2c1810"/><rect x="38" y="14" width="28" height="6" rx="3" fill="#cbd5e1"/></svg>`
       },
       {
-        id: 204, store: "이슬커피", name: "초코모카 & 크루아상", desc: "🥐 진한 모카와 크루아상 세트",
+        id: 204, store: "이슬커피", name: "초코모카 & 크루아상", desc: "진한 모카와 크루아상 세트",
         options: [{ label: "모카 2+크루아상 2", price: 15800 }, { label: "아이스 초코 변경", price: 15800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="초코모카와 크루아상 일러스트"><title>초코모카 크루아상</title><rect width="104" height="82" rx="10" fill="#fdf2f8"/><ellipse cx="52" cy="48" rx="24" ry="13" fill="#d97706"/><path d="M34 44 Q52 30 70 44" stroke="#92400e" stroke-width="4" fill="none"/></svg>`
       },
       {
-        id: 205, store: "이슬커피", name: "아이스티 & 스콘 박스", desc: "🍑 시원한 아이스티와 스콘 세트",
+        id: 205, store: "이슬커피", name: "아이스티 & 스콘 박스", desc: "시원한 아이스티와 스콘 세트",
         options: [{ label: "아이스티 3+스콘 2", price: 14500 }, { label: "블루베리 스콘 추가", price: 16500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스티와 스콘 일러스트"><title>아이스티 스콘</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="36" r="14" fill="#fb7185"/><rect x="32" y="52" width="40" height="14" rx="5" fill="#f59e0b"/></svg>`
       },
       {
-        id: 301, store: "굽고바삭 와플", name: "생크림 사과잼 와플", desc: "🍎 바삭한 와플과 생크림·사과잼",
+        id: 301, store: "굽고바삭 와플", name: "생크림 사과잼 와플", desc: "바삭한 와플과 생크림·사과잼",
         options: [{ label: "4개 세트", price: 14400 }, { label: "6개 세트", price: 20400 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="생크림 사과잼 와플 일러스트"><title>생크림 사과잼 와플</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><rect x="26" y="24" width="52" height="36" rx="8" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/><circle cx="52" cy="38" r="10" fill="#ffffff"/></svg>`
       },
       {
-        id: 302, store: "굽고바삭 와플", name: "딸기 누텔라 와플", desc: "🍓 딸기와 누텔라 초코 와플",
+        id: 302, store: "굽고바삭 와플", name: "딸기 누텔라 와플", desc: "딸기와 누텔라 초코 와플",
         options: [{ label: "와플 2개+젤라또", price: 14800 }, { label: "생딸기 추가", price: 16800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="딸기 누텔라 와플 일러스트"><title>딸기 누텔라 와플</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><rect x="26" y="28" width="52" height="34" rx="8" fill="#d97706"/><path d="M28 32 Q52 46 76 32 L76 42 Q52 54 28 42 Z" fill="#451a03"/><circle cx="42" cy="28" r="7" fill="#ef4444"/><circle cx="62" cy="28" r="7" fill="#ef4444"/></svg>`
       },
       {
-        id: 303, store: "굽고바삭 와플", name: "바나나 카라멜 크로플", desc: "🍌 카라멜 소스와 바나나 크로플",
+        id: 303, store: "굽고바삭 와플", name: "바나나 카라멜 크로플", desc: "카라멜 소스와 바나나 크로플",
         options: [{ label: "3개 세트", price: 14200 }, { label: "아이스크림 추가", price: 16200 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바나나 카라멜 크로플 일러스트"><title>바나나 크로플</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="46" rx="26" ry="15" fill="#d97706"/><path d="M36 42 Q52 28 68 42" stroke="#facc15" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`
       },
       {
-        id: 304, store: "굽고바삭 와플", name: "말차 화이트초코 와플", desc: "🍵 말차 크림과 화이트초코 와플",
+        id: 304, store: "굽고바삭 와플", name: "말차 화이트초코 와플", desc: "말차 크림과 화이트초코 와플",
         options: [{ label: "3개 세트", price: 14500 }, { label: "팥 토핑 추가", price: 15800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="말차 화이트초코 와플 일러스트"><title>말차 와플</title><rect width="104" height="82" rx="10" fill="#f0fdf4"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#16a34a"/><circle cx="52" cy="42" r="9" fill="#ffffff"/></svg>`
       },
       {
-        id: 305, store: "굽고바삭 와플", name: "로투스 비스코프 와플", desc: "🍪 로투스 크럼블 와플 박스",
+        id: 305, store: "굽고바삭 와플", name: "로투스 비스코프 와플", desc: "로투스 크럼블 와플 박스",
         options: [{ label: "4개 박스", price: 15000 }, { label: "로투스 잼 추가", price: 16200 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="로투스 비스코프 와플 일러스트"><title>로투스 와플</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#b45309"/><circle cx="38" cy="38" r="4" fill="#fde68a"/><circle cx="66" cy="44" r="4" fill="#fde68a"/></svg>`
       },
       {
-        id: 401, store: "화덕향 피자", name: "페퍼로니 클래식 피자", desc: "🍕 페퍼로니가 듬뿍 올라간 피자",
+        id: 401, store: "화덕향 피자", name: "페퍼로니 클래식 피자", desc: "페퍼로니가 듬뿍 올라간 피자",
         options: [{ label: "M 사이즈", price: 19000 }, { label: "L 사이즈", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="페퍼로니 피자 일러스트"><title>페퍼로니 피자</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="20" fill="#fef08a"/><circle cx="44" cy="36" r="5" fill="#dc2626"/><circle cx="58" cy="40" r="5" fill="#dc2626"/><circle cx="50" cy="50" r="5" fill="#dc2626"/></svg>`
       },
       {
-        id: 402, store: "화덕향 피자", name: "불고기 버섯 피자", desc: "🍄 불고기와 버섯 토핑 피자",
+        id: 402, store: "화덕향 피자", name: "불고기 버섯 피자", desc: "불고기와 버섯 토핑 피자",
         options: [{ label: "M 사이즈", price: 20000 }, { label: "치즈크러스트 추가", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="불고기 피자 일러스트"><title>불고기 피자</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="52" cy="42" r="25" fill="#eab308"/><circle cx="52" cy="42" r="19" fill="#fde047"/><rect x="40" y="34" width="12" height="6" rx="2" fill="#78350f"/><rect x="54" y="44" width="12" height="6" rx="2" fill="#78350f"/></svg>`
       },
       {
-        id: 403, store: "화덕향 피자", name: "고구마 무스 피자", desc: "🍠 고구마 무스가 부드러운 피자",
+        id: 403, store: "화덕향 피자", name: "고구마 무스 피자", desc: "고구마 무스가 부드러운 피자",
         options: [{ label: "M 사이즈", price: 19500 }, { label: "L 사이즈", price: 23500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="고구마 피자 일러스트"><title>고구마 피자</title><rect width="104" height="82" rx="10" fill="#faf5ff"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="19" fill="#fef9c3"/><circle cx="46" cy="38" r="5" fill="#a855f7"/><circle cx="58" cy="46" r="5" fill="#a855f7"/></svg>`
       },
       {
-        id: 404, store: "화덕향 피자", name: "콰트로 치즈 피자", desc: "🧀 고소한 4가지 치즈 피자",
+        id: 404, store: "화덕향 피자", name: "콰트로 치즈 피자", desc: "고소한 4가지 치즈 피자",
         options: [{ label: "M 사이즈", price: 18500 }, { label: "꿀 소스 추가", price: 19500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈 피자 일러스트"><title>치즈 피자</title><rect width="104" height="82" rx="10" fill="#fefce8"/><circle cx="52" cy="42" r="25" fill="#d97706"/><circle cx="52" cy="42" r="20" fill="#fef08a"/></svg>`
       },
       {
-        id: 405, store: "화덕향 피자", name: "콤비네이션 & 스파게티", desc: "🍝 피자와 오븐스파게티 세트",
+        id: 405, store: "화덕향 피자", name: "콤비네이션 & 스파게티", desc: "피자와 오븐스파게티 세트",
         options: [{ label: "기본 세트", price: 22000 }, { label: "갈릭디핑 추가", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="피자와 스파게티 일러스트"><title>피자 스파게티 세트</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><circle cx="44" cy="42" r="20" fill="#f59e0b"/><ellipse cx="74" cy="48" rx="16" ry="12" fill="#dc2626"/></svg>`
       },
       {
-        id: 501, store: "뚝배기담 김치찜", name: "묵은지 돼지목살 김치찜", desc: "🍲 묵은지와 돼지목살 뚝배기찜",
+        id: 501, store: "뚝배기담 김치찜", name: "묵은지 돼지목살 김치찜", desc: "묵은지와 돼지목살 뚝배기찜",
         options: [{ label: "2인분", price: 16500 }, { label: "3인분 대자", price: 24000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="묵은지 돼지목살 김치찜 일러스트"><title>묵은지 김치찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="5" fill="#fb923c"/><circle cx="60" cy="35" r="5" fill="#fef3c7"/></svg>`
       },
       {
-        id: 502, store: "뚝배기담 김치찜", name: "통삼겹 김치찜", desc: "🥓 통삼겹살이 들어간 김치찜",
+        id: 502, store: "뚝배기담 김치찜", name: "통삼겹 김치찜", desc: "통삼겹살이 들어간 김치찜",
         options: [{ label: "2인분 기본", price: 17500 }, { label: "라면사리 추가", price: 19000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="통삼겹 김치찜 일러스트"><title>통삼겹 김치찜</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#b91c1c"/><rect x="38" y="30" width="28" height="8" rx="3" fill="#fda4af"/></svg>`
       },
       {
-        id: 503, store: "뚝배기담 김치찜", name: "참치 두부 김치찜", desc: "🐟 참치와 손두부가 어우러진 찜",
+        id: 503, store: "뚝배기담 김치찜", name: "참치 두부 김치찜", desc: "참치와 손두부가 어우러진 찜",
         options: [{ label: "2인분 기본", price: 15500 }, { label: "두부 추가", price: 17000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="참치 두부 김치찜 일러스트"><title>참치 두부 김치찜</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#ef4444"/><rect x="44" y="30" width="16" height="8" rx="2" fill="#ffffff"/></svg>`
       },
       {
-        id: 504, store: "뚝배기담 김치찜", name: "계란말이 & 김치찜", desc: "🥚 계란말이가 곁들여진 김치찜",
+        id: 504, store: "뚝배기담 김치찜", name: "계란말이 & 김치찜", desc: "계란말이가 곁들여진 김치찜",
         options: [{ label: "기본 세트", price: 16000 }, { label: "치즈 계란말이", price: 17500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="계란말이와 김치찜 일러스트"><title>계란말이 김치찜</title><rect width="104" height="82" rx="10" fill="#fefce8"/><rect x="24" y="30" width="56" height="24" rx="6" fill="#facc15"/><line x1="43" y1="30" x2="43" y2="54" stroke="#eab308" stroke-width="2"/><line x1="61" y1="30" x2="61" y2="54" stroke="#eab308" stroke-width="2"/></svg>`
       },
       {
-        id: 505, store: "뚝배기담 김치찜", name: "얼큰 묵은지 찜", desc: "🔥 얼큰하게 끓여낸 묵은지 찜",
+        id: 505, store: "뚝배기담 김치찜", name: "얼큰 묵은지 찜", desc: "얼큰하게 끓여낸 묵은지 찜",
         options: [{ label: "2인분 기본", price: 17000 }, { label: "치즈장 추가", price: 18500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="얼큰 묵은지 찜 일러스트"><title>얼큰 묵은지 찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="4.5" fill="#f472b6"/><circle cx="62" cy="34" r="4.5" fill="#fde047"/></svg>`
       }
@@ -1500,8 +1526,8 @@
     let ccIdx = 0;
     const CC_LINES = [
       "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.",
-      "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 🛵 라이더가 움직입니다.",
-      "[3/3] 배달이 완료되면 '🎉 배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
+      "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 라이더가 움직입니다.",
+      "[3/3] 배달이 완료되면 '배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
     ];
     const MEDIA_STEPS = [
       "STEP 1/3 · 가게 선택",
@@ -1651,7 +1677,7 @@
       activeStoreName = storeName;
       if (triggerBtn) lastSelectedStoreBtn = triggerBtn;
 
-      document.getElementById("activeStoreTitle").textContent = `${info.icon} ${storeName}`;
+      document.getElementById("activeStoreTitle").innerHTML = `<span aria-hidden="true">${info.icon}</span> ${storeName}`;
       document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원 · 배달팁 ${info.deliveryFee.toLocaleString()}원`;
 
       const box = document.getElementById("menuListContainer");
@@ -1665,15 +1691,15 @@
         article.innerHTML = `
           <div>
             <div class="badge-row">
-              <span class="tag-store">${info.icon} ${m.store}</span>
-              <span class="tag-min">💰 최소 ${info.minPrice.toLocaleString()}원</span>
+              <span class="tag-store"><span aria-hidden="true">${info.icon}</span> ${m.store}</span>
+              <span class="tag-min">최소 ${info.minPrice.toLocaleString()}원</span>
             </div>
             <h3 class="menu-name">${m.name}</h3>
             <p class="menu-desc">${m.desc}</p>
             <div class="menu-action-row">
-              <label for="opt-sel-${m.id}" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">옵션</label>
+              <label for="opt-sel-${m.id}" class="sr-only">${m.name} 옵션 선택</label>
               <select id="opt-sel-${m.id}" class="opt-select menu-focusable">${optHtml}</select>
-              <button type="button" class="btn-mint add-menu-btn menu-focusable" data-id="${m.id}">🛒 담기</button>
+              <button type="button" class="btn-mint add-menu-btn menu-focusable" data-id="${m.id}" aria-label="${m.name} 장바구니에 담기">담기</button>
             </div>
           </div>
           <div>${m.svg}</div>
@@ -1797,7 +1823,7 @@
 
       playChime("add");
       renderBasket();
-      notify(`🛒 [${m.store}] ${m.name} 담김!`);
+      notify(`[${m.store}] ${m.name} 담김!`);
     }
 
     function renderBasket() {
@@ -1810,7 +1836,7 @@
         tbody.innerHTML = `
           <tr>
             <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
-              장바구니가 비어 있습니다. 🍽️
+              장바구니가 비어 있습니다. <span aria-hidden="true">🍽️</span>
             </td>
           </tr>
         `;
@@ -1829,14 +1855,14 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>
-              <strong>[${icon} ${item.store}]</strong> ${item.name}<br />
+              <strong>[<span aria-hidden="true">${icon}</span> ${item.store}]</strong> ${item.name}<br />
               <span style="font-size:0.76rem; color:#4b5563;">${item.optionLabel}</span>
             </td>
             <td>
               <div style="display:inline-flex; align-items:center; gap:5px;">
-                <button type="button" class="btn-outline qty-dec" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} 수량 줄이기">−</button>
-                <span>${item.qty}</span>
-                <button type="button" class="btn-outline qty-inc" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} 수량 늘리기">+</button>
+                <button type="button" class="btn-outline qty-dec" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} ${item.optionLabel} 수량 줄이기">−</button>
+                <span aria-label="수량 ${item.qty}개">${item.qty}</span>
+                <button type="button" class="btn-outline qty-inc" data-key="${item.key}" style="padding:2px 7px;" aria-label="${item.name} ${item.optionLabel} 수량 늘리기">+</button>
               </div>
             </td>
             <td><strong>${lineTotal.toLocaleString()}원</strong></td>
@@ -1845,7 +1871,7 @@
 
           const payTr = document.createElement("tr");
           payTr.innerHTML = `
-            <td>[${icon} ${item.store}] ${item.name} (${item.optionLabel})</td>
+            <td>[<span aria-hidden="true">${icon}</span> ${item.store}] ${item.name} (${item.optionLabel})</td>
             <td>${item.qty}개</td>
             <td><strong>${lineTotal.toLocaleString()}원</strong></td>
           `;
@@ -1893,7 +1919,7 @@
           c.setAttribute("aria-pressed", c === card ? "true" : "false");
         });
         renderBasket();
-        notify(selectedCouponValue > 0 ? `🎟️ ${selectedCouponValue.toLocaleString()}원 쿠폰 적용!` : "🎟️ 쿠폰을 적용하지 않았어요.");
+        notify(selectedCouponValue > 0 ? `${selectedCouponValue.toLocaleString()}원 쿠폰 적용!` : "쿠폰을 적용하지 않았어요.");
       });
 
       card.addEventListener("keydown", (e) => {
@@ -1954,7 +1980,7 @@
       endG.setAttribute("transform", `translate(${END_PT.x}, ${END_PT.y})`);
       endG.innerHTML = `
         <circle r="21" fill="#b91c1c" stroke="#ffffff" stroke-width="2.5" />
-        <text y="4" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">🏠도착</text>
+        <text y="4" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">도착</text>
         <text y="34" text-anchor="middle" fill="#b91c1c" font-size="10.5" font-weight="bold">도착지</text>
       `;
       pinsGroup.appendChild(endG);
@@ -1979,20 +2005,20 @@
       const curY = p1.y + (p2.y - p1.y) * segRatio;
 
       document.getElementById("riderPin").setAttribute("transform", `translate(${curX.toFixed(1)}, ${curY.toFixed(1)})`);
-      document.getElementById("trackAddrBadge").textContent = orderAddrText ? `📍 배달지: ${orderAddrText}` : "📍 배달 안내";
+      document.getElementById("trackAddrBadge").innerHTML = orderAddrText ? `<span aria-hidden="true">📍</span> 배달지: ${orderAddrText}` : `<span aria-hidden="true">📍</span> 배달 안내`;
 
       const bannerBox = document.getElementById("etaBannerBox");
       const celebrateBox = document.getElementById("doneCelebrateBox");
 
       let tlPhase = 1;
-      let pinText = "📝 주문 수락됨";
-      let etaTitle = `⏱️ 남은 시간 ${timeFmt}`;
+      let pinText = "주문 수락됨";
+      let etaTitle = `<span aria-hidden="true">⏱️</span> 남은 시간 ${timeFmt}`;
       let statusDesc = `${orderedStoreList.map((s) => `${STORE_INFO[s]?.icon || ""} ${s}`).join(", ")} 메뉴를 준비 중입니다.`;
 
       if (remainingSeconds === 0) {
         tlPhase = 4;
-        pinText = "🎉 배달 완료";
-        etaTitle = "🎉 배달이 완료되었어요!";
+        pinText = "배달 완료";
+        etaTitle = `<span aria-hidden="true">🎉</span> 배달이 완료되었어요!`;
         statusDesc = "배달이 완료되어 장바구니에서 주문 메뉴가 비워졌어요.";
         bannerBox.classList.add("completed");
         celebrateBox.hidden = false;
@@ -2006,23 +2032,23 @@
         if (!completedAnnounced) {
           completedAnnounced = true;
           playChime("done");
-          notify("🎉 배달이 완료되었어요! 장바구니가 비워졌습니다.");
+          notify("배달이 완료되었어요! 장바구니가 비워졌습니다.");
         }
       } else {
         bannerBox.classList.remove("completed");
         celebrateBox.hidden = true;
         if (progress >= 0.65) {
           tlPhase = 3;
-          pinText = "🛵 배달중";
-          statusDesc = "🛵 라이더가 배달 중입니다!";
+          pinText = "배달중";
+          statusDesc = "라이더가 배달 중입니다!";
         } else if (progress >= 0.2) {
           tlPhase = 2;
-          pinText = "🍳 조리중";
+          pinText = "조리중";
         }
       }
 
       document.getElementById("riderPinText").textContent = pinText;
-      document.getElementById("trackEtaTitle").textContent = etaTitle;
+      document.getElementById("trackEtaTitle").innerHTML = etaTitle;
       document.getElementById("trackStatusSub").textContent = statusDesc;
 
       [1, 2, 3, 4].forEach((n) => {
@@ -2047,11 +2073,11 @@
         li.className = `cook-card ${isDone ? "done" : ""}`;
         li.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong style="font-size:0.95rem;">${icon} ${st}</strong>
-            <span class="st-badge ${isDone ? "s-done" : "s-cook"}">${isDone ? "✅ 픽업 완료" : "🍳 조리중"}</span>
+            <strong style="font-size:0.95rem;"><span aria-hidden="true">${icon}</span> ${st}</strong>
+            <span class="st-badge ${isDone ? "s-done" : "s-cook"}">${isDone ? "픽업 완료" : "조리중"}</span>
           </div>
           <div style="font-size:0.84rem; color:#4b5563; margin-top:4px;">
-            ${remainingSeconds === 0 ? "🎉 배달 완료" : isDone ? "🛵 라이더 배달 이동 중" : `⏱️ 남은 시간 ${String(lMin).padStart(2, "0")}:${String(lSec).padStart(2, "0")}`}
+            ${remainingSeconds === 0 ? "배달 완료" : isDone ? "라이더 배달 이동 중" : `남은 시간 ${String(lMin).padStart(2, "0")}:${String(lSec).padStart(2, "0")}`}
           </div>
         `;
         listEl.appendChild(li);
@@ -2065,7 +2091,7 @@
       if (myOrders.length === 0) {
         box.innerHTML = `
           <p style="text-align:center; color:#4b5563; padding:24px;">
-            🧾 아직 시킨 주문내역이 없어요. 가게를 눌러 메뉴를 담아보세요!
+            아직 시킨 주문내역이 없어요. 가게를 눌러 메뉴를 담아보세요!
           </p>
         `;
         return;
@@ -2076,20 +2102,20 @@
         div.className = "receipt-item-card";
         const rowsHtml = ord.items.map((it) => {
           const icon = STORE_INFO[it.store]?.icon || "🍽️";
-          return `<li>[${icon} ${it.store}] <strong>${it.name}</strong> (${it.optionLabel}) × ${it.qty}개 — <strong>${(it.price * it.qty).toLocaleString()}원</strong></li>`;
+          return `<li>[<span aria-hidden="true">${icon}</span> ${it.store}] <strong>${it.name}</strong> (${it.optionLabel}) × ${it.qty}개 — <strong>${(it.price * it.qty).toLocaleString()}원</strong></li>`;
         }).join("");
 
         div.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
-            <strong style="font-size:0.98rem; color:#0f766e;">🧾 주문 #${myOrders.length - idx} · ${ord.orderedAt}</strong>
+            <strong style="font-size:0.98rem; color:#0f766e;">주문 #${myOrders.length - idx} · ${ord.orderedAt}</strong>
             <span class="tag-store">${ord.payType}</span>
           </div>
-          <div style="font-size:0.84rem; color:#4b5563; margin-bottom:8px;">📍 배달 주소: ${ord.addr}</div>
+          <div style="font-size:0.84rem; color:#4b5563; margin-bottom:8px;">배달 주소: ${ord.addr}</div>
           <ul style="margin:0 0 10px; padding-left:18px; font-size:0.88rem; display:flex; flex-direction:column; gap:4px;">
             ${rowsHtml}
           </ul>
           <div style="font-size:0.85rem; color:#374151; border-top:1px dashed #d1d5db; padding-top:8px;">
-            <div>메뉴 금액: ${ord.menuSum.toLocaleString()}원 · 🛵 배달팁: ${ord.deliveryFee.toLocaleString()}원 · 🎟️ 쿠폰 할인: -${ord.discount.toLocaleString()}원</div>
+            <div>메뉴 금액: ${ord.menuSum.toLocaleString()}원 · 배달팁: ${ord.deliveryFee.toLocaleString()}원 · 쿠폰 할인: -${ord.discount.toLocaleString()}원</div>
             <div style="text-align:right; font-weight:800; font-size:0.98rem; color:#111827; margin-top:4px;">총 결제금액: ${ord.finalTotal.toLocaleString()}원</div>
           </div>
         `;
@@ -2144,7 +2170,7 @@
       payEl.setAttribute("aria-invalid", "false");
 
       if (cartBasket.size === 0) {
-        payErr.textContent = "🛒 장바구니에 메뉴를 담아주세요.";
+        payErr.textContent = "장바구니에 메뉴를 담아주세요.";
         payEl.setAttribute("aria-invalid", "true");
         openKbdModal({
           title: "장바구니가 비어 있어요",
@@ -2169,7 +2195,7 @@
 
       for (const [st, info] of Object.entries(STORE_INFO)) {
         if (sums[st] > 0 && sums[st] < info.minPrice) {
-          const msg = `${info.icon} ${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
+          const msg = `${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
           payErr.textContent = msg;
           payEl.setAttribute("aria-invalid", "true");
           openKbdModal({
@@ -2183,14 +2209,14 @@
       }
 
       if (!addrEl.value.trim()) {
-        addrErr.textContent = "📍 배달 주소를 입력하세요.";
+        addrErr.textContent = "배달 주소를 입력하세요.";
         addrEl.setAttribute("aria-invalid", "true");
         addrEl.focus();
         return;
       }
 
       if (!payEl.value) {
-        payErr.textContent = "💳 결제 방식을 선택하세요.";
+        payErr.textContent = "결제 방식을 선택하세요.";
         payEl.setAttribute("aria-invalid", "true");
         payEl.focus();
         return;
@@ -2225,7 +2251,7 @@
 
       prepareDynamicRoute(orderedStoreList);
       playChime("add");
-      notify("🛵 주문이 완료되어 장바구니가 비워졌어요!");
+      notify("주문이 완료되어 장바구니가 비워졌어요!");
       switchScreen("track");
     });
 
@@ -2258,14 +2284,14 @@
       soundEnabled = !soundEnabled;
       e.target.setAttribute("aria-pressed", String(soundEnabled));
       e.target.textContent = soundEnabled ? "🔊 알림음 켜짐" : "🔇 알림음 꺼짐";
-      notify(soundEnabled ? "🔊 알림음이 켜졌습니다." : "🔇 알림음이 꺼졌습니다.");
+      notify(soundEnabled ? "알림음이 켜졌습니다." : "알림음이 꺼졌습니다.");
     });
 
     function clearBasketItems() {
       cartBasket.clear();
       resetCouponSelection();
       renderBasket();
-      notify("🗑️ 장바구니를 비웠어요.");
+      notify("장바구니를 비웠어요.");
     }
 
     const cartActionRow = document.createElement("div");
@@ -2275,7 +2301,7 @@
     clearCartBtn.id = "clearCartBtn";
     clearCartBtn.className = "btn-outline";
     clearCartBtn.style.cssText = "flex:1; padding:8px; font-size:0.84rem;";
-    clearCartBtn.textContent = "🗑️ 장바구니 비우기";
+    clearCartBtn.textContent = "장바구니 비우기";
     clearCartBtn.addEventListener("click", clearBasketItems);
     cartActionRow.appendChild(clearCartBtn);
 
