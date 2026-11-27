@@ -365,12 +365,61 @@
       color: var(--text-main);
     }
 
+    /* 미디어 안내 영상 + 자막(CC) 패널 */
     .cc-panel {
       margin-top: 18px;
       background: #111827;
       color: #ffffff;
       border-radius: 14px;
       padding: 15px 16px;
+    }
+
+    .media-guide-stage {
+      margin-top: 10px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .media-guide-canvas {
+      position: relative;
+      width: 148px;
+      height: 54px;
+      border-radius: 8px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .media-guide-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 33.3%;
+      background: rgba(45, 212, 191, 0.22);
+      border-right: 2px solid #2dd4bf;
+      transition: transform 0.35s ease;
+    }
+
+    .media-guide-label {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #f8fafc;
+      padding: 0 8px;
+      text-align: center;
     }
 
     .cc-box {
@@ -454,7 +503,6 @@
       color: var(--text-main);
     }
 
-    /* 결제 & 쿠폰 화면 스타일 */
     .checkout-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
@@ -528,6 +576,11 @@
       font-size: 0.9rem;
       background: #ffffff;
       color: var(--text-main);
+    }
+
+    input[aria-invalid="true"],
+    select[aria-invalid="true"] {
+      border-color: var(--danger);
     }
 
     .field-err {
@@ -806,22 +859,34 @@
               <h2 id="activeStoreTitle" style="margin:0; font-size:1.12rem; color:var(--mint-dark);">가게 메뉴</h2>
               <p id="activeStoreMinInfo" style="margin:2px 0 0; font-size:0.82rem; color:var(--text-sub); font-weight:700;"></p>
             </div>
-            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기</button>
+            <button type="button" id="backToStorePickBtn" class="btn-outline">← 다른 가게 고르기 (Esc)</button>
           </div>
 
           <div id="menuListContainer" class="menu-grid"></div>
         </div>
 
+        <!-- 6. 미디어 자막(CC) & 시각 가이드 보완 영역 -->
         <section class="cc-panel" aria-labelledby="ccHeading">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-            <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 안내 자막 & 사운드</h2>
+            <h2 id="ccHeading" style="margin:0; font-size:0.95rem;">🎬 미디어 가이드 영상·자막 & 사운드</h2>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" id="ccPlay" class="btn-mint" style="padding:6px 11px; font-size:0.8rem;">▶ 자막 재생</button>
+              <button type="button" id="ccPlay" class="btn-mint" style="padding:6px 11px; font-size:0.8rem;">▶ 자막·가이드 재생</button>
               <button type="button" id="ccPause" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;">⏸ 일시정지</button>
               <button type="button" id="ccStop" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;">⏹ 정지</button>
               <button type="button" id="soundToggleBtn" class="btn-outline" style="padding:6px 11px; font-size:0.8rem;" aria-pressed="true">🔊 알림음 켜짐</button>
             </div>
           </div>
+
+          <div class="media-guide-stage" aria-label="이용 안내 시각 가이드">
+            <div class="media-guide-canvas" role="img" aria-label="이용 단계 1단계부터 3단계까지 진행 바 시각화">
+              <div id="mediaStepBar" class="media-guide-bar"></div>
+              <div id="mediaStepLabel" class="media-guide-label">STEP 1/3 · 가게 선택</div>
+            </div>
+            <p style="margin:0; font-size:0.8rem; color:#cbd5e1; flex:1; min-width:180px;">
+              화면 전환과 주문 절차를 시각 인디케이터와 자막(CC)으로 함께 안내합니다. (모션 축소 설정 시 정지 상태 유지)
+            </p>
+          </div>
+
           <div class="cc-box" role="region" aria-live="polite" aria-label="자막">
             <span class="cc-pill">자막(CC)</span>
             <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.</span>
@@ -830,7 +895,7 @@
       </div>
 
       <aside class="card sticky-cart" aria-labelledby="cartHeading">
-        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;">🛒 한바구니 장바구니</h2>
+        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;" tabindex="-1">🛒 한바구니 장바구니</h2>
 
         <table class="cart-table" aria-label="장바구니 내역">
           <thead>
@@ -881,7 +946,7 @@
           <div>
             <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
             <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
-              사용할 쿠폰 카드를 고르고 배달 주소와 결제 방식을 입력하세요.
+              사용할 쿠폰 카드를 고르고 배달 주소와 결제 방식을 입력하세요. (좌/우 방향키로 쿠폰 이동 가능)
             </p>
           </div>
           <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
@@ -919,6 +984,7 @@
               id="addrField"
               name="addrField"
               required
+              aria-invalid="false"
               aria-describedby="addrError"
               placeholder="배달 받을 주소를 입력하세요"
             />
@@ -929,7 +995,14 @@
             <label for="payTypeField">
               💳 결제 방식 <span class="req-asterisk" aria-hidden="true">*</span>
             </label>
-            <select id="payTypeField" name="payTypeField" class="form-ctrl" required aria-describedby="payTypeError">
+            <select
+              id="payTypeField"
+              name="payTypeField"
+              class="form-ctrl"
+              required
+              aria-invalid="false"
+              aria-describedby="payTypeError"
+            >
               <option value="">선택하세요</option>
               <option value="간편결제">📱 간편결제</option>
               <option value="카드결제">💳 카드결제</option>
@@ -1068,8 +1141,8 @@
 
   <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
 
-  <footer>
-    <p style="margin:0;">🧺 한바구니픽</p>
+  <footer role="contentinfo">
+    <p style="margin:0;">🧺 한바구니픽 · 웹 접근성(이미지·키보드·대비·폼·구조·미디어) 보완 버전</p>
   </footer>
 
   <script>
@@ -1254,6 +1327,7 @@
     ];
 
     let activeStoreName = null;
+    let lastSelectedStoreBtn = null;
     let selectedCouponValue = 0;
     const cartBasket = new Map();
     const myOrders = [];
@@ -1273,6 +1347,19 @@
       "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 🛵 라이더가 움직입니다.",
       "[3/3] 배달이 완료되면 '🎉 배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
     ];
+    const MEDIA_STEPS = [
+      "STEP 1/3 · 가게 선택",
+      "STEP 2/3 · 쿠폰·결제",
+      "STEP 3/3 · 배달·완료"
+    ];
+
+    function syncMediaGuide(stepIndex) {
+      const idx = Math.max(0, Math.min(MEDIA_STEPS.length - 1, stepIndex));
+      const bar = document.getElementById("mediaStepBar");
+      const label = document.getElementById("mediaStepLabel");
+      if (bar) bar.style.transform = `translateX(${idx * 100}%)`;
+      if (label) label.textContent = MEDIA_STEPS[idx];
+    }
 
     let toastTimeout = null;
     function notify(msg) {
@@ -1390,19 +1477,23 @@
       });
     }
 
-    function showStorePickList(instant = false) {
+    function showStorePickList(instant = false, restoreFocus = false) {
       activeStoreName = null;
       swapSubPane(
         document.getElementById("storeMenuScreen"),
         document.getElementById("storeListScreen"),
         instant
       );
+      if (restoreFocus && lastSelectedStoreBtn) {
+        setTimeout(() => lastSelectedStoreBtn.focus(), 60);
+      }
     }
 
-    function enterStoreMenu(storeName) {
+    function enterStoreMenu(storeName, triggerBtn = null) {
       const info = STORE_INFO[storeName];
       if (!info) return;
       activeStoreName = storeName;
+      if (triggerBtn) lastSelectedStoreBtn = triggerBtn;
 
       document.getElementById("activeStoreTitle").textContent = `${info.icon} ${storeName}`;
       document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원 · 배달팁 ${info.deliveryFee.toLocaleString()}원`;
@@ -1447,13 +1538,25 @@
         document.getElementById("storeMenuScreen")
       );
       switchScreen("shop");
+      setTimeout(() => {
+        const backBtn = document.getElementById("backToStorePickBtn");
+        if (backBtn) backBtn.focus();
+      }, 170);
     }
 
     document.querySelectorAll(".store-pick-card").forEach((card) => {
-      card.addEventListener("click", () => enterStoreMenu(card.dataset.store));
+      card.addEventListener("click", () => enterStoreMenu(card.dataset.store, card));
     });
 
-    document.getElementById("backToStorePickBtn").addEventListener("click", () => showStorePickList(false));
+    document.getElementById("backToStorePickBtn").addEventListener("click", () => showStorePickList(false, true));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activeStoreName && !document.getElementById("viewShop").hidden) {
+        e.preventDefault();
+        showStorePickList(false, true);
+      }
+    });
+
     document.getElementById("tabShop").addEventListener("click", () => {
       showStorePickList(true);
       switchScreen("shop");
@@ -1586,20 +1689,31 @@
       });
     }
 
-    document.querySelectorAll(".coupon-card").forEach((card) => {
+    const couponCards = Array.from(document.querySelectorAll(".coupon-card"));
+    couponCards.forEach((card, idx) => {
       card.addEventListener("click", () => {
         selectedCouponValue = Number(card.dataset.coupon) || 0;
-        document.querySelectorAll(".coupon-card").forEach((c) => {
+        couponCards.forEach((c) => {
           c.setAttribute("aria-pressed", c === card ? "true" : "false");
         });
         renderBasket();
         notify(selectedCouponValue > 0 ? `🎟️ ${selectedCouponValue.toLocaleString()}원 쿠폰 적용!` : "🎟️ 쿠폰을 적용하지 않았어요.");
       });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          couponCards[(idx + 1) % couponCards.length].focus();
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          couponCards[(idx - 1 + couponCards.length) % couponCards.length].focus();
+        }
+      });
     });
 
     function resetCouponSelection() {
       selectedCouponValue = 0;
-      document.querySelectorAll(".coupon-card").forEach((c) => {
+      couponCards.forEach((c) => {
         c.setAttribute("aria-pressed", c.dataset.coupon === "0" ? "true" : "false");
       });
     }
@@ -1830,9 +1944,12 @@
 
       addrErr.textContent = "";
       payErr.textContent = "";
+      addrEl.setAttribute("aria-invalid", "false");
+      payEl.setAttribute("aria-invalid", "false");
 
       if (cartBasket.size === 0) {
         payErr.textContent = "🛒 장바구니에 메뉴를 담아주세요.";
+        payEl.setAttribute("aria-invalid", "true");
         return;
       }
 
@@ -1848,18 +1965,21 @@
       for (const [st, info] of Object.entries(STORE_INFO)) {
         if (sums[st] > 0 && sums[st] < info.minPrice) {
           payErr.textContent = `${info.icon} ${st} 최소주문금액(${info.minPrice.toLocaleString()}원) 이상 담아주세요. (현재 ${sums[st].toLocaleString()}원)`;
+          payEl.setAttribute("aria-invalid", "true");
           return;
         }
       }
 
       if (!addrEl.value.trim()) {
         addrErr.textContent = "📍 배달 주소를 입력하세요.";
+        addrEl.setAttribute("aria-invalid", "true");
         addrEl.focus();
         return;
       }
 
       if (!payEl.value) {
         payErr.textContent = "💳 결제 방식을 선택하세요.";
+        payEl.setAttribute("aria-invalid", "true");
         payEl.focus();
         return;
       }
@@ -1899,9 +2019,13 @@
 
     document.getElementById("ccPlay").addEventListener("click", () => {
       if (ccInterval) return;
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       ccInterval = setInterval(() => {
         ccIdx = (ccIdx + 1) % CC_LINES.length;
         document.getElementById("ccText").textContent = CC_LINES[ccIdx];
+        if (!prefersReduced) {
+          syncMediaGuide(ccIdx);
+        }
       }, 2600);
     });
 
@@ -1915,6 +2039,7 @@
       ccInterval = null;
       ccIdx = 0;
       document.getElementById("ccText").textContent = CC_LINES[0];
+      syncMediaGuide(0);
     });
 
     document.getElementById("soundToggleBtn").addEventListener("click", (e) => {
@@ -1924,6 +2049,7 @@
       notify(soundEnabled ? "🔊 알림음이 켜졌습니다." : "🔇 알림음이 꺼졌습니다.");
     });
 
+    syncMediaGuide(0);
     renderBasket();
     prepareDynamicRoute(orderedStoreList);
   </script>
