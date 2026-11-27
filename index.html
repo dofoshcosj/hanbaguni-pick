@@ -11,10 +11,10 @@
       --bg-subtle: #f1f5f9;
       --text-main: #0f172a;
       --text-sub: #334155;
-      --primary: #0f766e;       /* 명도 대비 5.4:1 이상 (WCAG AA 충족) */
+      --primary: #0f766e;
       --primary-dark: #115e59;
       --primary-soft: #f0fdfa;
-      --accent: #c2410c;        /* 명도 대비 5.1:1 이상 */
+      --accent: #c2410c;
       --accent-dark: #9a3412;
       --border: #cbd5e1;
       --focus-ring: #2563eb;
@@ -36,13 +36,11 @@
       line-height: 1.6;
     }
 
-    /* 2. 키보드 접근성: 포커스 시각 표시 유지 (outline 제거 금지) */
     :focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
     }
 
-    /* 광과민성 예방: 사용자 동작 감소 설정 존중 및 3회 이상 번쩍임 금지 */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         transition: none !important;
@@ -67,7 +65,6 @@
       top: 16px;
     }
 
-    /* 상단 헤더 */
     header {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
@@ -105,14 +102,6 @@
       color: var(--text-sub);
     }
 
-    .header-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* 버튼 공통 스타일 */
     button {
       font-family: inherit;
       font-size: 0.95rem;
@@ -121,7 +110,7 @@
       padding: 10px 16px;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .btn-primary {
@@ -152,7 +141,6 @@
       background-color: var(--accent-dark);
     }
 
-    /* 메인 2단 레이아웃 */
     main {
       max-width: 1180px;
       margin: 24px auto 60px;
@@ -202,7 +190,6 @@
       border-radius: 999px;
     }
 
-    /* 매장 탭 필터 */
     .store-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -216,7 +203,6 @@
       border-color: var(--primary);
     }
 
-    /* 메뉴 카드 그리드 */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -286,7 +272,6 @@
       color: var(--text-main);
     }
 
-    /* 미디어 섹션: 서비스 소개 슬라이드/시뮬레이션 플레이어 (자막 + 재생/정지 제어) */
     .media-box {
       margin-top: 24px;
       border: 1px solid var(--border);
@@ -328,7 +313,6 @@
       margin-right: 8px;
     }
 
-    /* 오른쪽 통합 장바구니 영역 */
     .cart-summary-table {
       width: 100%;
       border-collapse: collapse;
@@ -387,7 +371,6 @@
       color: var(--text-main);
     }
 
-    /* 4. 폼 접근성: 명시적 label, required 시각 표시, 오류 안내 */
     .form-field {
       margin-bottom: 14px;
     }
@@ -422,7 +405,6 @@
       min-height: 20px;
     }
 
-    /* 실시간 픽업·배달 진행 트래커 */
     .tracker-box {
       margin-top: 18px;
       padding: 16px;
@@ -457,7 +439,6 @@
       border-color: var(--primary);
     }
 
-    /* 2. 모달 포커스 이동용 모달 */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -497,7 +478,6 @@
   <header>
     <div class="header-inner">
       <div class="logo-wrap">
-        <!-- 의미 있는 브랜드 로고 SVG: role="img" + aria-label -->
         <svg width="44" height="44" viewBox="0 0 44 44" role="img" aria-label="한바구니픽 로고 아이콘">
           <title>한바구니픽 로고</title>
           <rect width="44" height="44" rx="12" fill="#0f766e" />
@@ -506,18 +486,17 @@
         </svg>
         <div>
           <h1 class="brand-title">한바구니픽 (Hanbaguni Pick)</h1>
-          <p class="brand-desc">김치찜 · 커피 · 과일 가게 메뉴를 삭제 없이 한 장바구니에 담아 통합 주문</p>
+          <p class="brand-desc">김치찜가게 · 커피가게 · 과일가게 메뉴를 삭제 없이 한 장바구니에 담아 통합 주문</p>
         </div>
       </div>
 
-      <div class="header-actions">
+      <div>
         <button type="button" id="openGuideModalBtn" class="btn-secondary">이용 안내 보기</button>
       </div>
     </div>
   </header>
 
   <main id="main-content" tabindex="-1">
-    <!-- 왼쪽 영역: 다중 매장 메뉴 탐색 + 미디어 가이드 -->
     <section class="panel" aria-labelledby="store-section-title">
       <div class="section-head">
         <h2 id="store-section-title">1. 가게별 메뉴 선택</h2>
@@ -533,7 +512,6 @@
 
       <div id="menuGrid" class="menu-grid"></div>
 
-      <!-- 6. 미디어 접근성: 자동 재생 없음 + 재생/정지 버튼 + 자막 제공 + 깜빡임 없음 -->
       <section class="media-box" aria-labelledby="media-guide-title">
         <div class="media-header">
           <h3 id="media-guide-title" style="margin:0; font-size:1.05rem;">통합 주문 단계별 안내 슬라이드 (자막 지원)</h3>
@@ -549,14 +527,12 @@
       </section>
     </section>
 
-    <!-- 오른쪽 영역: 통합 장바구니 및 주문 폼 -->
     <aside class="panel" aria-labelledby="cart-section-title">
       <div class="section-head">
         <h2 id="cart-section-title">2. 나의 통합 장바구니</h2>
         <span id="storeCountBadge" class="badge-info">담긴 가게 0곳</span>
       </div>
 
-      <!-- 5. 구조와 의미: 표에 th 태그와 scope 속성 사용 -->
       <table class="cart-summary-table" aria-label="통합 장바구니 담긴 메뉴 목록">
         <thead>
           <tr>
@@ -589,7 +565,6 @@
         </div>
       </div>
 
-      <!-- 4. 폼 접근성: label 연결, required 시각 표시, 오류 안내 -->
       <form id="checkoutForm" novalidate>
         <div class="form-field">
           <label for="deliveryAddress">
@@ -623,7 +598,6 @@
         </button>
       </form>
 
-      <!-- 주문 완료 후 라이더 픽업·배달 단계 조회 영역 -->
       <section id="deliveryTracker" class="tracker-box" aria-labelledby="tracker-title" hidden>
         <h3 id="tracker-title" style="margin:0 0 6px; font-size:1.05rem; color:#115e59;">
           실시간 통합 주문 · 라이더 이동 현황
@@ -641,7 +615,6 @@
     </aside>
   </main>
 
-  <!-- 이용 안내 모달 (열릴 때 포커스 자동 이동, 닫힐 때 원래 버튼으로 복귀) -->
   <div id="guideModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
     <div class="modal-card">
       <h2 id="modalTitle" style="margin-bottom:10px;">한바구니픽은 무엇이 다른가요?</h2>
@@ -661,7 +634,6 @@
   </footer>
 
   <script>
-    // 1. 다중 매장 메뉴 데이터 (김치찜가게, 커피가게, 과일가게)
     const MENU_ITEMS = [
       {
         id: 1,
@@ -737,7 +709,6 @@
       "[3/3단계] 주문하기를 누르면 다중 매장 조리부터 라이더 일괄 픽업·수령 완료까지 한 번에 확인할 수 있습니다."
     ];
 
-    // 메뉴 카드용 접근성 SVG 생성
     function renderFoodIllustration(item) {
       return `
         <svg width="100%" height="78" viewBox="0 0 220 78" role="img" aria-label="${item.altText}" style="background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0;">
@@ -750,7 +721,6 @@
       `;
     }
 
-    // 기능 1: 가게별 메뉴 목록 렌더링 및 다중 매장 장바구니 담기
     function renderMenuList() {
       const grid = document.getElementById("menuGrid");
       const filtered = currentStoreFilter === "전체"
@@ -783,7 +753,6 @@
       });
     }
 
-    // 기능 2: 장바구니 초기화 없이 메뉴 누적 추가
     function addToUnifiedCart(menuId) {
       const target = MENU_ITEMS.find((m) => m.id === menuId);
       if (!target) return;
@@ -797,7 +766,6 @@
       updateUnifiedCartUI();
     }
 
-    // 기능 3: 통합 장바구니 표 및 총액 계산 업데이트
     function updateUnifiedCartUI() {
       const tbody = document.getElementById("cartTableBody");
       const storeBadge = document.getElementById("storeCountBadge");
@@ -881,7 +849,6 @@
       });
     }
 
-    // 가게 필터 탭 이벤트
     document.querySelectorAll(".store-tab").forEach((tab) => {
       tab.addEventListener("click", () => {
         document.querySelectorAll(".store-tab").forEach((t) => t.setAttribute("aria-pressed", "false"));
@@ -893,7 +860,6 @@
 
     document.getElementById("orderMethod").addEventListener("change", updateUnifiedCartUI);
 
-    // 6. 미디어 자막 안내 재생/정지 제어 (자동 재생 없음, 초당 3회 이상 깜빡임 없음)
     document.getElementById("startGuideBtn").addEventListener("click", () => {
       if (guideTimer) return;
       const captionEl = document.getElementById("guideCaptionText");
@@ -910,7 +876,6 @@
       }
     });
 
-    // 4. 폼 유효성 검사 및 통합 주문 처리
     document.getElementById("checkoutForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const addressInput = document.getElementById("deliveryAddress");
@@ -946,7 +911,6 @@
         `[${methodSelect.value}] ${addressInput.value.trim()} — 선택하신 매장들에서 동시에 조리를 시작했습니다.`;
     });
 
-    // 실시간 배달 진행 단계 업데이트
     function updateTrackerUI() {
       [1, 2, 3].forEach((step) => {
         const el = document.getElementById(`step${step}`);
@@ -967,7 +931,6 @@
       }
     });
 
-    // 2. 모달 키보드 접근성 (열릴 때 포커스 이동, 닫힐 때 원위치 복귀)
     const guideModal = document.getElementById("guideModal");
     const openModalBtn = document.getElementById("openGuideModalBtn");
     const closeModalBtn = document.getElementById("closeGuideModalBtn");
@@ -982,7 +945,6 @@
       openModalBtn.focus();
     });
 
-    // 초기 실행
     renderMenuList();
     updateUnifiedCartUI();
   </script>
