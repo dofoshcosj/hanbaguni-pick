@@ -20,9 +20,10 @@
       --focus: #1d4ed8;
       --radius: 16px;
       --shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+      --anim-ms: 260ms;
     }
 
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -38,6 +39,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      :root { --anim-ms: 0ms; }
       *, *::before, *::after {
         transition: none !important;
         animation: none !important;
@@ -114,8 +116,10 @@
       border-radius: 10px;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     }
+
+    button:active { transform: scale(0.98); }
 
     .btn-mint {
       background: var(--mint-dark);
@@ -149,14 +153,33 @@
     .screen-panel {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.28s ease, transform 0.28s ease;
+      transition: opacity var(--anim-ms) cubic-bezier(0.22, 1, 0.36, 1),
+                  transform var(--anim-ms) cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .screen-panel[hidden] { display: none; }
 
     .screen-entering {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(10px);
+    }
+
+    .screen-leaving {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    .sub-pane {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity var(--anim-ms) ease, transform var(--anim-ms) ease;
+    }
+
+    .sub-pane[hidden] { display: none; }
+
+    .sub-pane-enter {
+      opacity: 0;
+      transform: translateX(12px);
     }
 
     main {
@@ -401,16 +424,16 @@
       background: var(--bg-soft);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       margin-bottom: 12px;
-      font-size: 0.86rem;
+      font-size: 0.88rem;
     }
 
     .cost-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 3px 0;
+      padding: 4px 0;
       color: var(--text-sub);
     }
 
@@ -427,8 +450,62 @@
       margin-top: 6px;
       border-top: 1px solid var(--border);
       font-weight: 800;
-      font-size: 0.98rem;
+      font-size: 1.02rem;
       color: var(--text-main);
+    }
+
+    /* 결제 & 쿠폰 화면 스타일 */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+    }
+
+    .coupon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .coupon-card {
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .coupon-card:hover {
+      border-color: var(--mint-dark);
+      background: var(--mint-bg);
+    }
+
+    .coupon-card[aria-pressed="true"] {
+      border-color: var(--mint-dark);
+      background: var(--mint-bg);
+      box-shadow: 0 0 0 2px var(--mint-border);
+    }
+
+    .coupon-amt {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--mint-dark);
+    }
+
+    .coupon-sub {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      font-weight: 600;
     }
 
     .form-row { margin-bottom: 12px; }
@@ -638,6 +715,7 @@
 
       <nav class="nav-group" role="tablist" aria-label="화면 전환">
         <button type="button" id="tabShop" class="btn-mint" role="tab" aria-selected="true">🏪 가게 선택</button>
+        <button type="button" id="tabCheckout" class="btn-outline" role="tab" aria-selected="false">🎟️ 쿠폰·결제</button>
         <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">🛵 배달현황</button>
         <button type="button" id="tabReceipt" class="btn-outline" role="tab" aria-selected="false" aria-label="주문내역 보기">🧾 주문내역</button>
         <button type="button" id="topCartBtn" class="cart-counter-pill" aria-label="장바구니 담김 수량">
@@ -648,14 +726,14 @@
   </header>
 
   <main id="main-content" tabindex="-1">
-    <!-- [화면 1] 가게 목록(눌러야 메뉴 진입) & 선택한 가게 메뉴 화면 -->
+    <!-- [화면 1] 가게 목록 & 선택한 가게 메뉴 화면 -->
     <section id="viewShop" class="screen-panel shop-layout" role="tabpanel" aria-labelledby="tabShop">
       <div class="card">
         <!-- 1-A. 가게 선택 화면 -->
-        <div id="storeListScreen">
+        <div id="storeListScreen" class="sub-pane">
           <h2 style="margin:0 0 6px; font-size:1.15rem;">🏪 가게를 눌러서 메뉴를 확인하세요</h2>
           <p style="margin:0 0 14px; font-size:0.84rem; color:var(--text-sub);">
-            원하는 가게 카드를 누르면 해당 가게 메뉴 화면으로 넘어갑니다.
+            원하는 가게 카드를 누르면 해당 가게 메뉴 화면으로 부드럽게 넘어갑니다.
           </p>
 
           <div class="store-card-list" role="list">
@@ -722,7 +800,7 @@
         </div>
 
         <!-- 1-B. 선택한 가게의 메뉴 화면 -->
-        <div id="storeMenuScreen" hidden>
+        <div id="storeMenuScreen" class="sub-pane" hidden>
           <div class="store-menu-header">
             <div>
               <h2 id="activeStoreTitle" style="margin:0; font-size:1.12rem; color:var(--mint-dark);">가게 메뉴</h2>
@@ -746,7 +824,7 @@
           </div>
           <div class="cc-box" role="region" aria-live="polite" aria-label="자막">
             <span class="cc-pill">자막(CC)</span>
-            <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰 선택과 배달팁 계산이 총 결제금액에 반영됩니다.</span>
+            <span id="ccText">[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.</span>
           </div>
         </section>
       </div>
@@ -771,36 +849,67 @@
           </tbody>
         </table>
 
-        <div class="form-row">
-          <label for="couponSelect">🎟️ 쿠폰 사용</label>
-          <select id="couponSelect" name="couponSelect" class="form-ctrl">
-            <option value="0">쿠폰 미적용</option>
-            <option value="2000">🎟️ 2,000원 할인 쿠폰</option>
-            <option value="3000">🎟️ 3,000원 할인 쿠폰</option>
-            <option value="4000">🎉 한바구니 4,000원 할인 쿠폰</option>
-          </select>
-        </div>
-
-        <div class="cost-breakdown" aria-label="결제 금액 상세">
+        <div class="cost-breakdown" aria-label="장바구니 금액 요약">
           <div class="cost-row">
             <span>메뉴 금액</span>
-            <span id="menuSumText">0원</span>
+            <span id="shopMenuSumText">0원</span>
           </div>
           <div class="cost-row">
-            <span>🛵 배달팁</span>
-            <span id="deliveryFeeText">0원</span>
+            <span>🛵 예상 배달팁</span>
+            <span id="shopDeliveryFeeText">0원</span>
           </div>
           <div class="cost-row discount">
-            <span>🎟️ 쿠폰 할인</span>
-            <span id="couponDiscountText">-0원</span>
+            <span>🎟️ 선택 쿠폰 할인</span>
+            <span id="shopCouponDiscountText">-0원</span>
           </div>
           <div class="total-line">
-            <span>총 결제금액</span>
-            <span id="totalPayText">0원</span>
+            <span>예상 결제금액</span>
+            <span id="shopTotalPayText">0원</span>
           </div>
         </div>
 
-        <form id="checkoutForm" novalidate>
+        <button type="button" id="goCheckoutBtn" class="btn-mint" style="width:100%; padding:12px; font-size:0.98rem;">
+          🎟️ 쿠폰 선택 & 결제 화면으로 →
+        </button>
+      </aside>
+    </section>
+
+    <!-- [화면 2] 쿠폰 사용 & 결제 화면 -->
+    <section id="viewCheckout" class="screen-panel checkout-layout" role="tabpanel" aria-labelledby="tabCheckout" hidden>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+          <div>
+            <h2 style="margin:0; font-size:1.18rem;">🎟️ 쿠폰 사용 및 주문 결제</h2>
+            <p style="margin:3px 0 0; font-size:0.84rem; color:var(--text-sub);">
+              사용할 쿠폰 카드를 고르고 배달 주소와 결제 방식을 입력하세요.
+            </p>
+          </div>
+          <button type="button" id="backFromCheckoutBtn" class="btn-outline">← 메뉴 더 담기</button>
+        </div>
+
+        <div class="form-row">
+          <span style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:6px;">🎟️ 보유 할인 쿠폰 선택</span>
+          <div class="coupon-grid" role="group" aria-label="할인 쿠폰 목록">
+            <button type="button" class="coupon-card" data-coupon="0" aria-pressed="true">
+              <span class="coupon-amt">쿠폰 미적용</span>
+              <span class="coupon-sub">할인 없이 진행</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="2000" aria-pressed="false">
+              <span class="coupon-amt">🎟️ 2,000원 할인</span>
+              <span class="coupon-sub">한바구니 기본 할인 쿠폰</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="3000" aria-pressed="false">
+              <span class="coupon-amt">🎟️ 3,000원 할인</span>
+              <span class="coupon-sub">다점포 주문 우대 쿠폰</span>
+            </button>
+            <button type="button" class="coupon-card" data-coupon="4000" aria-pressed="false">
+              <span class="coupon-amt">🎉 4,000원 할인</span>
+              <span class="coupon-sub">한바구니 특별 혜택 쿠폰</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="checkoutForm" novalidate style="margin-top:16px;">
           <div class="form-row">
             <label for="addrField">
               📍 배달 주소 <span class="req-asterisk" aria-hidden="true">*</span>
@@ -828,14 +937,54 @@
             <div id="payTypeError" class="field-err" role="alert"></div>
           </div>
 
-          <button type="submit" class="btn-mint" style="width:100%; padding:12px; font-size:0.98rem;">
-            🛵 주문하기
+          <button type="submit" class="btn-mint" style="width:100%; padding:13px; font-size:1rem;">
+            🛵 쿠폰 적용하고 주문하기
           </button>
         </form>
+      </div>
+
+      <aside class="card" aria-labelledby="paySummaryHeading">
+        <h2 id="paySummaryHeading" style="margin:0 0 12px; font-size:1.12rem;">🧾 결제 금액 내역</h2>
+
+        <table class="cart-table" aria-label="결제 대상 메뉴">
+          <thead>
+            <tr>
+              <th scope="col">메뉴</th>
+              <th scope="col">수량</th>
+              <th scope="col">금액</th>
+            </tr>
+          </thead>
+          <tbody id="checkoutCartBody">
+            <tr>
+              <td colspan="3" style="text-align:center; color:#4b5563; padding:16px 6px;">
+                담긴 메뉴가 없습니다.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="cost-breakdown">
+          <div class="cost-row">
+            <span>메뉴 합계</span>
+            <span id="payMenuSumText">0원</span>
+          </div>
+          <div class="cost-row">
+            <span>🛵 가게별 배달팁 합계</span>
+            <span id="payDeliveryFeeText">0원</span>
+          </div>
+          <div class="cost-row discount">
+            <span>🎟️ 쿠폰 할인</span>
+            <span id="payCouponDiscountText">-0원</span>
+          </div>
+          <div class="total-line">
+            <span>최종 결제금액</span>
+            <span id="payFinalTotalText">0원</span>
+          </div>
+        </div>
       </aside>
     </section>
 
-    <!-- [화면 2] 실시간 배달 타이머 & 오토바이 지도 화면 -->
+    <!-- [화면 3] 실시간 배달 타이머 & 오토바이 지도 화면 -->
     <section id="viewTrack" class="screen-panel track-layout" role="tabpanel" aria-labelledby="tabTrack" hidden>
       <div class="card">
         <div id="etaBannerBox" class="eta-banner">
@@ -900,7 +1049,7 @@
       </aside>
     </section>
 
-    <!-- [화면 3] 내가 시킨 주문내역 화면 -->
+    <!-- [화면 4] 내가 시킨 주문내역 화면 -->
     <section id="viewReceipt" class="screen-panel" role="tabpanel" aria-labelledby="tabReceipt" hidden>
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
@@ -1105,6 +1254,7 @@
     ];
 
     let activeStoreName = null;
+    let selectedCouponValue = 0;
     const cartBasket = new Map();
     const myOrders = [];
 
@@ -1119,7 +1269,7 @@
     let ccInterval = null;
     let ccIdx = 0;
     const CC_LINES = [
-      "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰 선택과 배달팁 계산이 총 결제금액에 반영됩니다.",
+      "[1/3] 가게 카드를 누르면 해당 가게 메뉴가 열립니다. 쿠폰·결제 화면에서 할인 쿠폰을 바로 적용할 수 있어요.",
       "[2/3] 주문 시 선택한 가게만 지도에 연결되며 실시간 타이머와 🛵 라이더가 움직입니다.",
       "[3/3] 배달이 완료되면 '🎉 배달이 완료되었어요!'가 뜨고 장바구니가 자동으로 비워집니다."
     ];
@@ -1149,49 +1299,104 @@
         if (STORE_INFO[st]) deliveryFee += STORE_INFO[st].deliveryFee;
       });
 
-      const selectedCoupon = Number(document.getElementById("couponSelect").value) || 0;
-      const discount = menuSum > 0 ? Math.min(selectedCoupon, menuSum) : 0;
+      const discount = menuSum > 0 ? Math.min(selectedCouponValue, menuSum) : 0;
       const finalTotal = menuSum > 0 ? Math.max(0, menuSum + deliveryFee - discount) : 0;
 
       return { qtySum, menuSum, deliveryFee, discount, finalTotal, pickedStores };
     }
 
+    let isSwitchingScreen = false;
     function switchScreen(mode) {
+      if (isSwitchingScreen) return;
+
       const panels = {
         shop: document.getElementById("viewShop"),
+        checkout: document.getElementById("viewCheckout"),
         track: document.getElementById("viewTrack"),
         receipt: document.getElementById("viewReceipt")
       };
       const tabs = {
         shop: document.getElementById("tabShop"),
+        checkout: document.getElementById("tabCheckout"),
         track: document.getElementById("tabTrack"),
         receipt: document.getElementById("tabReceipt")
       };
 
-      Object.keys(panels).forEach((k) => {
+      const currentMode = Object.keys(panels).find((k) => !panels[k].hidden);
+      if (currentMode === mode) {
+        if (mode === "shop" && !activeStoreName) showStorePickList();
+        return;
+      }
+
+      Object.keys(tabs).forEach((k) => {
         const isTarget = k === mode;
-        panels[k].hidden = !isTarget;
         tabs[k].setAttribute("aria-selected", isTarget ? "true" : "false");
         tabs[k].className = isTarget ? "btn-mint" : "btn-outline";
       });
 
-      panels[mode].classList.add("screen-entering");
-      requestAnimationFrame(() => panels[mode].classList.remove("screen-entering"));
+      const prepareModeContent = () => {
+        if (mode === "shop" && !activeStoreName) {
+          showStorePickList(true);
+        } else if (mode === "checkout") {
+          renderBasket();
+        } else if (mode === "track") {
+          prepareDynamicRoute(orderedStoreList);
+          renderCountdownUI();
+        } else if (mode === "receipt") {
+          renderReceiptList();
+        }
+      };
 
-      if (mode === "shop" && !activeStoreName) {
-        showStorePickList();
-      } else if (mode === "track") {
-        prepareDynamicRoute(orderedStoreList);
-        renderCountdownUI();
-      } else if (mode === "receipt") {
-        renderReceiptList();
+      const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!currentMode || isReduced) {
+        Object.keys(panels).forEach((k) => { panels[k].hidden = k !== mode; });
+        prepareModeContent();
+        panels[mode].classList.remove("screen-entering", "screen-leaving");
+        return;
       }
+
+      isSwitchingScreen = true;
+      const outgoing = panels[currentMode];
+      const incoming = panels[mode];
+
+      outgoing.classList.add("screen-leaving");
+      setTimeout(() => {
+        outgoing.hidden = true;
+        outgoing.classList.remove("screen-leaving");
+
+        prepareModeContent();
+        incoming.classList.add("screen-entering");
+        incoming.hidden = false;
+
+        requestAnimationFrame(() => {
+          incoming.classList.remove("screen-entering");
+          isSwitchingScreen = false;
+        });
+      }, 140);
     }
 
-    function showStorePickList() {
+    function swapSubPane(hideEl, showEl, instant = false) {
+      if (instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        hideEl.hidden = true;
+        showEl.hidden = false;
+        showEl.classList.remove("sub-pane-enter");
+        return;
+      }
+      hideEl.hidden = true;
+      showEl.classList.add("sub-pane-enter");
+      showEl.hidden = false;
+      requestAnimationFrame(() => {
+        showEl.classList.remove("sub-pane-enter");
+      });
+    }
+
+    function showStorePickList(instant = false) {
       activeStoreName = null;
-      document.getElementById("storeListScreen").hidden = false;
-      document.getElementById("storeMenuScreen").hidden = true;
+      swapSubPane(
+        document.getElementById("storeMenuScreen"),
+        document.getElementById("storeListScreen"),
+        instant
+      );
     }
 
     function enterStoreMenu(storeName) {
@@ -1199,8 +1404,6 @@
       if (!info) return;
       activeStoreName = storeName;
 
-      document.getElementById("storeListScreen").hidden = true;
-      document.getElementById("storeMenuScreen").hidden = false;
       document.getElementById("activeStoreTitle").textContent = `${info.icon} ${storeName}`;
       document.getElementById("activeStoreMinInfo").textContent = `최소주문금액 ${info.minPrice.toLocaleString()}원 · 배달팁 ${info.deliveryFee.toLocaleString()}원`;
 
@@ -1239,6 +1442,10 @@
         });
       });
 
+      swapSubPane(
+        document.getElementById("storeListScreen"),
+        document.getElementById("storeMenuScreen")
+      );
       switchScreen("shop");
     }
 
@@ -1246,25 +1453,28 @@
       card.addEventListener("click", () => enterStoreMenu(card.dataset.store));
     });
 
-    document.getElementById("backToStorePickBtn").addEventListener("click", showStorePickList);
+    document.getElementById("backToStorePickBtn").addEventListener("click", () => showStorePickList(false));
     document.getElementById("tabShop").addEventListener("click", () => {
-      showStorePickList();
+      showStorePickList(true);
       switchScreen("shop");
     });
+    document.getElementById("tabCheckout").addEventListener("click", () => switchScreen("checkout"));
+    document.getElementById("goCheckoutBtn").addEventListener("click", () => switchScreen("checkout"));
+    document.getElementById("backFromCheckoutBtn").addEventListener("click", () => switchScreen("shop"));
     document.getElementById("tabTrack").addEventListener("click", () => switchScreen("track"));
     document.getElementById("tabReceipt").addEventListener("click", () => switchScreen("receipt"));
     document.getElementById("backToShopBtn").addEventListener("click", () => {
-      showStorePickList();
+      showStorePickList(true);
       switchScreen("shop");
     });
     document.getElementById("backFromReceiptBtn").addEventListener("click", () => {
-      showStorePickList();
+      showStorePickList(true);
       switchScreen("shop");
     });
     document.getElementById("openReceiptFromDoneBtn").addEventListener("click", () => switchScreen("receipt"));
     document.getElementById("topCartBtn").addEventListener("click", () => {
       switchScreen("shop");
-      document.getElementById("cartHeading").focus();
+      setTimeout(() => document.getElementById("cartHeading").focus(), 180);
     });
 
     function addMenuToBasket(id, optIdx) {
@@ -1293,13 +1503,22 @@
 
     function renderBasket() {
       const tbody = document.getElementById("cartBody");
+      const payTbody = document.getElementById("checkoutCartBody");
       tbody.innerHTML = "";
+      payTbody.innerHTML = "";
 
       if (cartBasket.size === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="3" style="text-align:center; color:#4b5563; padding:18px 6px;">
               장바구니가 비어 있습니다. 🍽️
+            </td>
+          </tr>
+        `;
+        payTbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align:center; color:#4b5563; padding:16px 6px;">
+              담긴 메뉴가 없습니다.
             </td>
           </tr>
         `;
@@ -1324,15 +1543,29 @@
             <td><strong>${lineTotal.toLocaleString()}원</strong></td>
           `;
           tbody.appendChild(tr);
+
+          const payTr = document.createElement("tr");
+          payTr.innerHTML = `
+            <td>[${icon} ${item.store}] ${item.name} (${item.optionLabel})</td>
+            <td>${item.qty}개</td>
+            <td><strong>${lineTotal.toLocaleString()}원</strong></td>
+          `;
+          payTbody.appendChild(payTr);
         });
       }
 
       const totals = calculateCartTotals();
       document.getElementById("topCartQty").textContent = String(totals.qtySum);
-      document.getElementById("menuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
-      document.getElementById("deliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
-      document.getElementById("couponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
-      document.getElementById("totalPayText").textContent = `${totals.finalTotal.toLocaleString()}원`;
+
+      document.getElementById("shopMenuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
+      document.getElementById("shopDeliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
+      document.getElementById("shopCouponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
+      document.getElementById("shopTotalPayText").textContent = `${totals.finalTotal.toLocaleString()}원`;
+
+      document.getElementById("payMenuSumText").textContent = `${totals.menuSum.toLocaleString()}원`;
+      document.getElementById("payDeliveryFeeText").textContent = `${totals.deliveryFee.toLocaleString()}원`;
+      document.getElementById("payCouponDiscountText").textContent = `-${totals.discount.toLocaleString()}원`;
+      document.getElementById("payFinalTotalText").textContent = `${totals.finalTotal.toLocaleString()}원`;
 
       document.querySelectorAll(".qty-inc").forEach((b) => {
         b.addEventListener("click", () => {
@@ -1353,11 +1586,23 @@
       });
     }
 
-    document.getElementById("couponSelect").addEventListener("change", () => {
-      renderBasket();
-      const val = Number(document.getElementById("couponSelect").value) || 0;
-      notify(val > 0 ? `🎟️ ${val.toLocaleString()}원 할인 쿠폰이 선택되었습니다.` : "🎟️ 쿠폰 적용이 해제되었습니다.");
+    document.querySelectorAll(".coupon-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        selectedCouponValue = Number(card.dataset.coupon) || 0;
+        document.querySelectorAll(".coupon-card").forEach((c) => {
+          c.setAttribute("aria-pressed", c === card ? "true" : "false");
+        });
+        renderBasket();
+        notify(selectedCouponValue > 0 ? `🎟️ ${selectedCouponValue.toLocaleString()}원 쿠폰 적용!` : "🎟️ 쿠폰을 적용하지 않았어요.");
+      });
     });
+
+    function resetCouponSelection() {
+      selectedCouponValue = 0;
+      document.querySelectorAll(".coupon-card").forEach((c) => {
+        c.setAttribute("aria-pressed", c.dataset.coupon === "0" ? "true" : "false");
+      });
+    }
 
     function prepareDynamicRoute(stores) {
       const pathGroup = document.getElementById("routePathGroup");
@@ -1444,7 +1689,7 @@
 
         if (cartBasket.size > 0) {
           cartBasket.clear();
-          document.getElementById("couponSelect").value = "0";
+          resetCouponSelection();
           renderBasket();
         }
 
@@ -1638,7 +1883,7 @@
       });
 
       cartBasket.clear();
-      document.getElementById("couponSelect").value = "0";
+      resetCouponSelection();
       renderBasket();
 
       totalEtaSeconds = orderedStoreList.length * 360 + 300;
