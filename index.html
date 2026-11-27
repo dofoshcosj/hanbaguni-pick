@@ -1174,7 +1174,6 @@
     </section>
   </main>
 
-  <!-- 안내 모달 -->
   <div id="kbdModalBackdrop" class="modal-backdrop" hidden>
     <div
       id="kbdModalDialog"
@@ -2261,6 +2260,29 @@
       e.target.textContent = soundEnabled ? "🔊 알림음 켜짐" : "🔇 알림음 꺼짐";
       notify(soundEnabled ? "🔊 알림음이 켜졌습니다." : "🔇 알림음이 꺼졌습니다.");
     });
+
+    function clearBasketItems() {
+      cartBasket.clear();
+      resetCouponSelection();
+      renderBasket();
+      notify("🗑️ 장바구니를 비웠어요.");
+    }
+
+    const cartActionRow = document.createElement("div");
+    cartActionRow.style.cssText = "display:flex; gap:8px; margin-bottom:10px;";
+    const clearCartBtn = document.createElement("button");
+    clearCartBtn.type = "button";
+    clearCartBtn.id = "clearCartBtn";
+    clearCartBtn.className = "btn-outline";
+    clearCartBtn.style.cssText = "flex:1; padding:8px; font-size:0.84rem;";
+    clearCartBtn.textContent = "🗑️ 장바구니 비우기";
+    clearCartBtn.addEventListener("click", clearBasketItems);
+    cartActionRow.appendChild(clearCartBtn);
+
+    const goCheckoutBtnEl = document.getElementById("goCheckoutBtn");
+    if (goCheckoutBtnEl && goCheckoutBtnEl.parentNode) {
+      goCheckoutBtnEl.parentNode.insertBefore(cartActionRow, goCheckoutBtnEl);
+    }
 
     syncMediaGuide(0);
     renderBasket();
