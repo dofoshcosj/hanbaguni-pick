@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니픽 - 치킨·커피·와플·피자·김치찜 다중 매장 통합 웹앱</title>
+  <title>한바구니픽 - 일러스트 그리기 · 오토바이 실시간 배달 웹앱</title>
   <style>
     :root {
       --bg-page: #f4f6f9;
@@ -19,7 +19,7 @@
       --border: #e5e7eb;
       --focus: #1d4ed8;
       --radius: 16px;
-      --shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+      --shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
     }
 
     * { box-sizing: border-box; }
@@ -70,7 +70,7 @@
     }
 
     .header-inner {
-      max-width: 1180px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 12px 20px;
       display: flex;
@@ -88,21 +88,25 @@
 
     .brand-title {
       margin: 0;
-      font-size: 1.3rem;
+      font-size: 1.28rem;
       font-weight: 800;
       color: var(--mint-dark);
     }
 
-    .brand-desc {
-      margin: 0;
+    .live-clock-badge {
+      background: #111827;
+      color: #2dd4bf;
       font-size: 0.8rem;
-      color: var(--text-sub);
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
     }
 
     .nav-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
     }
 
@@ -118,8 +122,8 @@
     .btn-mint {
       background: var(--mint);
       color: #ffffff;
-      padding: 8px 14px;
-      font-size: 0.88rem;
+      padding: 8px 13px;
+      font-size: 0.85rem;
     }
 
     .btn-mint:hover { background: var(--mint-dark); }
@@ -128,8 +132,8 @@
       background: #ffffff;
       color: var(--text-main);
       border-color: #d1d5db;
-      padding: 8px 14px;
-      font-size: 0.88rem;
+      padding: 8px 13px;
+      font-size: 0.85rem;
     }
 
     .btn-outline:hover { background: var(--bg-soft); }
@@ -140,7 +144,7 @@
       border: 1.5px solid var(--mint);
       padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 800;
     }
 
@@ -158,19 +162,19 @@
     }
 
     main {
-      max-width: 1180px;
+      max-width: 1200px;
       margin: 20px auto 96px;
       padding: 0 20px;
     }
 
     .shop-layout {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1.52fr 1fr;
       gap: 20px;
       align-items: start;
     }
 
-    @media (max-width: 940px) {
+    @media (max-width: 960px) {
       .shop-layout { grid-template-columns: 1fr; }
     }
 
@@ -182,29 +186,22 @@
       box-shadow: var(--shadow);
     }
 
-    /* 선택된 메뉴 히어로 일러스트 배너 */
-    .spotlight-banner {
-      background: linear-gradient(135deg, #f0fdfa 0%, #eff6ff 100%);
-      border: 1px solid var(--mint-border);
-      border-radius: 14px;
-      padding: 14px 16px;
+    .filter-toolbar {
       display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 16px;
+      grid-template-columns: 1fr 165px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     @media (max-width: 560px) {
-      .spotlight-banner { grid-template-columns: 1fr; text-align: center; }
+      .filter-toolbar { grid-template-columns: 1fr; }
     }
 
-    /* 5개 가게 필터 탭 */
     .store-tabs {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .store-tab-btn {
@@ -223,12 +220,13 @@
     }
 
     .min-summary-strip {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
+      background: var(--mint-bg);
+      border: 1px solid var(--mint-border);
       border-radius: 10px;
       padding: 9px 12px;
       font-size: 0.82rem;
-      color: var(--text-sub);
+      color: var(--mint-dark);
+      font-weight: 700;
       margin-bottom: 14px;
       display: flex;
       justify-content: space-between;
@@ -250,6 +248,15 @@
       grid-template-columns: 1fr 104px;
       gap: 14px;
       align-items: center;
+      background: #ffffff;
+    }
+
+    .custom-menu-img {
+      width: 104px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
       background: #ffffff;
     }
 
@@ -305,6 +312,20 @@
       font-size: 0.84rem;
       background: #ffffff;
       color: var(--text-main);
+    }
+
+    .fav-btn {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      color: var(--text-sub);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+    }
+
+    .fav-btn[aria-pressed="true"] {
+      background: #fff1f2;
+      border-color: #fda4af;
+      color: #be123c;
     }
 
     /* 6. 미디어 접근성: 자막(CC) + 재생/일시정지/정지 */
@@ -367,14 +388,14 @@
     .store-min-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
 
     .min-item {
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 700;
@@ -396,19 +417,39 @@
       color: var(--danger);
     }
 
+    .coupon-box {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .summary-box {
+      background: var(--bg-soft);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 0.86rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     /* 4. 폼 접근성 */
     .form-row { margin-bottom: 12px; }
 
     label {
       display: block;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       margin-bottom: 4px;
     }
 
     .req-asterisk { color: var(--danger); font-weight: 800; }
 
     input[type="text"],
+    input[type="number"],
     select.form-ctrl {
       width: 100%;
       padding: 9px 12px;
@@ -425,7 +466,7 @@
       margin-top: 3px;
     }
 
-    /* [화면 2] 배달 타임라인 & 실시간 라이더 지도 (스크린샷 2026-11-27 224551.jpg 영감) */
+    /* [화면 2] 실시간 타이머 & 오토바이 이모지 라이더 지도 */
     .track-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
@@ -433,7 +474,7 @@
       align-items: start;
     }
 
-    @media (max-width: 940px) {
+    @media (max-width: 960px) {
       .track-layout { grid-template-columns: 1fr; }
     }
 
@@ -452,14 +493,15 @@
 
     .eta-big {
       margin: 2px 0 0;
-      font-size: 1.55rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: #2dd4bf;
+      font-variant-numeric: tabular-nums;
     }
 
     .timeline-steps {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 14px;
       font-size: 0.82rem;
@@ -487,7 +529,7 @@
     }
 
     #riderPin {
-      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .cook-list {
@@ -518,9 +560,123 @@
       border-radius: 999px;
     }
 
-    .s-prep { background: #fef3c7; color: #92400e; }
     .s-cook { background: #ffedd5; color: #9a3412; }
     .s-done { background: #ccfbf1; color: #0f766e; }
+
+    /* [화면 3] 직접 그림·일러스트 그리기 스튜디오 */
+    .draw-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .draw-layout { grid-template-columns: 1fr; }
+    }
+
+    .canvas-stage {
+      border: 2px dashed #9ca3af;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 10px;
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    #illustCanvas {
+      width: 100%;
+      max-width: 520px;
+      height: 360px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fffbeb;
+      touch-action: none;
+      cursor: crosshair;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .swatch-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 1.5px #9ca3af;
+      padding: 0;
+    }
+
+    .swatch-btn[aria-pressed="true"] {
+      box-shadow: 0 0 0 3px #111827;
+      transform: scale(1.08);
+    }
+
+    /* [화면 4] 기말 프로젝트 제출자료 */
+    .report-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin-top: 10px;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .doc-table th {
+      background: var(--bg-soft);
+      font-weight: 800;
+    }
+
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .flow-node {
+      border: 1.5px solid var(--mint);
+      background: var(--mint-bg);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 0.88rem;
+    }
+
+    .flow-arrow {
+      text-align: center;
+      font-weight: 800;
+      color: var(--mint-dark);
+    }
+
+    pre.code-snippet {
+      background: #111827;
+      color: #f9fafb;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
 
     .toast-bar {
       position: fixed;
@@ -538,7 +694,7 @@
     .toast-bar[hidden] { display: none; }
 
     footer {
-      max-width: 1180px;
+      max-width: 1200px;
       margin: 0 auto 40px;
       padding: 0 20px;
       font-size: 0.84rem;
@@ -552,7 +708,7 @@
   <header>
     <div class="header-inner">
       <div class="brand-wrap">
-        <svg width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="한바구니픽 로고">
+        <svg width="38" height="38" viewBox="0 0 40 40" role="img" aria-label="한바구니픽 로고">
           <title>한바구니픽 로고</title>
           <rect width="40" height="40" rx="11" fill="#0d9488" />
           <path d="M10 17h20l-2 12H12L10 17z" fill="#ffffff" />
@@ -560,13 +716,15 @@
         </svg>
         <div>
           <h1 class="brand-title">한바구니픽</h1>
-          <p class="brand-desc">치킨·커피·와플·피자·김치찜 5개 가게 통합 장바구니 & 배달 트래킹</p>
         </div>
+        <span id="liveClockBadge" class="live-clock-badge" aria-label="현재 시각">현재 시각 00:00:00</span>
       </div>
 
-      <nav class="nav-group" role="tablist" aria-label="화면 전환">
+      <nav class="nav-group" role="tablist" aria-label="주요 화면 전환">
         <button type="button" id="tabShop" class="btn-mint" role="tab" aria-selected="true">가게·메뉴 담기</button>
-        <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">배달 현황·라이더</button>
+        <button type="button" id="tabDraw" class="btn-outline" role="tab" aria-selected="false">그림·일러스트 그리기</button>
+        <button type="button" id="tabTrack" class="btn-outline" role="tab" aria-selected="false">실시간 배달·타이머</button>
+        <button type="button" id="tabReport" class="btn-outline" role="tab" aria-selected="false">기말 제출자료</button>
         <button type="button" id="topCartBtn" class="cart-counter-pill" aria-label="장바구니 담김 수량 보기">
           바구니 <span id="topCartQty">0</span>
         </button>
@@ -576,26 +734,39 @@
 
   <main id="main-content" tabindex="-1">
     <!-- ============================================================
-         [화면 1] 5개 가게 × 5개 메뉴(총 25개 일러스트 메뉴) & 통합 장바구니
+         [화면 1] 5개 가게 × 5개 일러스트 메뉴 & 통합 장바구니
          ============================================================ -->
     <section id="viewShop" class="screen-panel shop-layout" role="tabpanel" aria-labelledby="tabShop">
       <div class="card">
-        <!-- 현재 선택된 메뉴 일러스트 미리보기 -->
-        <div id="spotlightBox" class="spotlight-banner" aria-live="polite"></div>
+        <div class="filter-toolbar">
+          <div>
+            <label for="searchMenuInput" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">메뉴 또는 가게 검색</label>
+            <input type="text" id="searchMenuInput" placeholder="메뉴명 또는 가게명 검색 (예: 후라이드, 아메리카노, 페퍼로니)" />
+          </div>
+          <div>
+            <label for="sortSelect" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">정렬 기준</label>
+            <select id="sortSelect" class="form-ctrl">
+              <option value="default">기본 추천순</option>
+              <option value="priceAsc">가격 낮은순</option>
+              <option value="priceDesc">가격 높은순</option>
+              <option value="prepFast">준비시간 빠른순</option>
+            </select>
+          </div>
+        </div>
 
-        <!-- 5개 지정 가게 필터 -->
-        <div class="store-tabs" role="group" aria-label="가게별 메뉴 보기">
-          <button type="button" class="store-tab-btn" data-store="전체" aria-pressed="true">전체 (5개 가게 · 25메뉴)</button>
+        <div class="store-tabs" role="group" aria-label="가게별 필터">
+          <button type="button" class="store-tab-btn" data-store="전체" aria-pressed="true">전체 (5곳 · <span id="totalMenuCount">25</span>메뉴)</button>
           <button type="button" class="store-tab-btn" data-store="치킨" aria-pressed="false">치킨 (최소 16,000원)</button>
           <button type="button" class="store-tab-btn" data-store="커피" aria-pressed="false">커피 (최소 14,000원)</button>
           <button type="button" class="store-tab-btn" data-store="와플" aria-pressed="false">와플 (최소 14,000원)</button>
           <button type="button" class="store-tab-btn" data-store="피자" aria-pressed="false">피자 (최소 18,000원)</button>
           <button type="button" class="store-tab-btn" data-store="김치찜" aria-pressed="false">김치찜 (최소 15,000원)</button>
+          <button type="button" class="store-tab-btn" data-store="찜목록" aria-pressed="false">찜한 메뉴만</button>
         </div>
 
         <div class="min-summary-strip">
-          <span><strong>최소주문금액:</strong> 치킨 16,000원 · 피자 18,000원 · 김치찜 15,000원 · 커피·와플 14,000원</span>
-          <span style="color:#0f766e; font-weight:700;">초기화 팝업 없이 한 바구니에 합산</span>
+          <span>가게별 최소주문금액: 치킨 16,000원 · 피자 18,000원 · 김치찜 15,000원 · 커피·와플 14,000원</span>
+          <span>삭제 팝업 없이 한 바구니 합산</span>
         </div>
 
         <div id="menuListContainer" class="menu-grid"></div>
@@ -612,14 +783,17 @@
           </div>
           <div class="cc-box" role="region" aria-live="polite" aria-label="안내 자막">
             <span class="cc-pill">자막(CC)</span>
-            <span id="ccText">[1/3] 치킨·커피·와플·피자·김치찜 5개 가게 메뉴를 삭제 경고 팝업 없이 한 바구니에 담을 수 있습니다.</span>
+            <span id="ccText">[1/3] 치킨·커피·와플·피자·김치찜 5개 가게 메뉴를 초기화 경고 팝업 없이 한 바구니에 담을 수 있습니다.</span>
           </div>
         </section>
       </div>
 
       <!-- 오른쪽 통합 바구니 -->
       <aside class="card sticky-cart" aria-labelledby="cartHeading">
-        <h2 id="cartHeading" style="margin:0 0 12px; font-size:1.15rem;">통합 장바구니</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h2 id="cartHeading" style="margin:0; font-size:1.15rem;">통합 장바구니</h2>
+          <button type="button" id="clearBasketBtn" class="btn-outline" style="padding:4px 10px; font-size:0.78rem;">비우기</button>
+        </div>
 
         <table class="cart-table" aria-label="통합 장바구니 내역">
           <thead>
@@ -641,7 +815,30 @@
         <div style="font-size:0.84rem; font-weight:700; margin-bottom:6px;">가게별 최소주문금액 충족 여부</div>
         <ul id="minStatusList" class="store-min-list"></ul>
 
-        <!-- 4. 폼 접근성 -->
+        <div class="coupon-box">
+          <label for="couponInput">할인 쿠폰 코드 (테스트 코드: HANBASKET3000)</label>
+          <div style="display:flex; gap:6px;">
+            <input type="text" id="couponInput" placeholder="쿠폰 코드 입력" />
+            <button type="button" id="applyCouponBtn" class="btn-outline" style="white-space:nowrap;">적용</button>
+          </div>
+          <div id="couponMsg" style="font-size:0.8rem; font-weight:700; color:#0f766e; margin-top:4px;"></div>
+        </div>
+
+        <div class="summary-box">
+          <div style="display:flex; justify-content:space-between;">
+            <span>메뉴 합계</span>
+            <strong id="subTotalText">0원</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>쿠폰 할인</span>
+            <strong id="discountText" style="color:#0f766e;">0원</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:1px solid #d1d5db; padding-top:4px; font-size:0.95rem;">
+            <span>최종 결제예정금액</span>
+            <strong id="finalPayText">0원</strong>
+          </div>
+        </div>
+
         <form id="checkoutForm" novalidate>
           <div class="form-row">
             <label for="addrField">
@@ -671,23 +868,112 @@
           </div>
 
           <button type="submit" class="btn-mint" style="width:100%; padding:12px; font-size:0.98rem;">
-            주문하기 · 실시간 배달 보기
+            주문하기 · 🛵 실시간 배달 보기
           </button>
         </form>
       </aside>
     </section>
 
     <!-- ============================================================
-         [화면 2] 배달 타임라인 & 주문한 가게만 연결되는 실시간 라이더 지도
+         [화면 2] 직접 그림·일러스트 그리기 스튜디오 & 나만의 메뉴 등록
+         ============================================================ -->
+    <section id="viewDraw" class="screen-panel draw-layout" role="tabpanel" aria-labelledby="tabDraw" hidden>
+      <div class="card">
+        <h2 style="margin:0 0 6px; font-size:1.2rem;">직접 음식 일러스트 그리기 캔버스</h2>
+        <p style="margin:0 0 12px; font-size:0.86rem; color:var(--text-sub);">
+          마우스나 터치(아이패드·모바일)로 자유롭게 그림을 그리고, PNG로 저장하거나 가게 메뉴 일러스트로 바로 등록하세요.
+        </p>
+
+        <!-- 색상 팔레트 -->
+        <div class="tool-row" role="group" aria-label="브러시 색상 선택">
+          <span style="font-size:0.84rem; font-weight:700;">색상:</span>
+          <button type="button" class="swatch-btn" data-color="#111827" style="background:#111827;" aria-pressed="true" aria-label="검정색"></button>
+          <button type="button" class="swatch-btn" data-color="#dc2626" style="background:#dc2626;" aria-pressed="false" aria-label="빨간색"></button>
+          <button type="button" class="swatch-btn" data-color="#ea580c" style="background:#ea580c;" aria-pressed="false" aria-label="주황색"></button>
+          <button type="button" class="swatch-btn" data-color="#eab308" style="background:#eab308;" aria-pressed="false" aria-label="노란색"></button>
+          <button type="button" class="swatch-btn" data-color="#16a34a" style="background:#16a34a;" aria-pressed="false" aria-label="초록색"></button>
+          <button type="button" class="swatch-btn" data-color="#0d9488" style="background:#0d9488;" aria-pressed="false" aria-label="청록색"></button>
+          <button type="button" class="swatch-btn" data-color="#78350f" style="background:#78350f;" aria-pressed="false" aria-label="갈색"></button>
+          <button type="button" id="eraserBtn" class="btn-outline" style="padding:5px 10px; font-size:0.8rem;">지우개</button>
+        </div>
+
+        <!-- 굵기 & 음식 스탬프 -->
+        <div class="tool-row">
+          <label for="brushSizeRange" style="margin:0; font-size:0.84rem;">굵기 (<span id="brushSizeVal">6</span>px)</label>
+          <input type="range" id="brushSizeRange" min="2" max="24" value="6" style="width:120px;" />
+
+          <span style="font-size:0.84rem; font-weight:700; margin-left:6px;">스탬프:</span>
+          <button type="button" class="btn-outline stamp-btn" data-stamp="🍗" style="padding:5px 9px;">🍗</button>
+          <button type="button" class="btn-outline stamp-btn" data-stamp="☕" style="padding:5px 9px;">☕</button>
+          <button type="button" class="btn-outline stamp-btn" data-stamp="🧇" style="padding:5px 9px;">🧇</button>
+          <button type="button" class="btn-outline stamp-btn" data-stamp="🍕" style="padding:5px 9px;">🍕</button>
+          <button type="button" class="btn-outline stamp-btn" data-stamp="🍲" style="padding:5px 9px;">🍲</button>
+        </div>
+
+        <div class="canvas-stage">
+          <canvas id="illustCanvas" width="520" height="360" aria-label="음식 일러스트를 직접 그리는 캔버스"></canvas>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" id="clearCanvasBtn" class="btn-outline">캔버스 새로 그리기</button>
+          <button type="button" id="downloadPngBtn" class="btn-outline">내 그림 PNG 다운로드</button>
+        </div>
+      </div>
+
+      <!-- 그린 일러스트를 실제 메뉴로 등록하는 폼 -->
+      <aside class="card" aria-labelledby="customMenuHeading">
+        <h2 id="customMenuHeading" style="margin:0 0 8px; font-size:1.15rem;">그린 일러스트로 새 메뉴 등록하기</h2>
+        <p style="margin:0 0 14px; font-size:0.84rem; color:var(--text-sub);">
+          왼쪽 캔버스에 그린 그림이 메뉴 일러스트로 적용되어 [가게·메뉴 담기] 목록에 즉시 추가됩니다.
+        </p>
+
+        <form id="customMenuForm" novalidate>
+          <div class="form-row">
+            <label for="customStoreSel">등록할 가게 <span class="req-asterisk" aria-hidden="true">*</span></label>
+            <select id="customStoreSel" class="form-ctrl" required>
+              <option value="치킨">치킨 (최소 16,000원)</option>
+              <option value="커피">커피 (최소 14,000원)</option>
+              <option value="와플">와플 (최소 14,000원)</option>
+              <option value="피자">피자 (최소 18,000원)</option>
+              <option value="김치찜">김치찜 (최소 15,000원)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="customNameInput">메뉴 이름 <span class="req-asterisk" aria-hidden="true">*</span></label>
+            <input type="text" id="customNameInput" required aria-describedby="customMenuErr" placeholder="예: 나만의 스페셜 일러스트 메뉴" />
+          </div>
+
+          <div class="form-row">
+            <label for="customPriceInput">가격 (원) <span class="req-asterisk" aria-hidden="true">*</span></label>
+            <input type="number" id="customPriceInput" min="1000" step="500" value="16000" required aria-describedby="customMenuErr" />
+          </div>
+
+          <div class="form-row">
+            <label for="customDescInput">메뉴 한줄 설명</label>
+            <input type="text" id="customDescInput" placeholder="예: 직접 그린 일러스트 시그니처 메뉴 · 준비 10분" />
+          </div>
+
+          <div id="customMenuErr" class="field-err" role="alert"></div>
+
+          <button type="submit" class="btn-mint" style="width:100%; padding:11px; font-size:0.95rem;">
+            그림 일러스트 메뉴 등록하고 보러가기
+          </button>
+        </form>
+      </aside>
+    </section>
+
+    <!-- ============================================================
+         [화면 3] 실시간 카운트다운 타이머 & 🛵 오토바이 이모지 라이더 지도
          ============================================================ -->
     <section id="viewTrack" class="screen-panel track-layout" role="tabpanel" aria-labelledby="tabTrack" hidden>
       <div class="card">
         <div class="eta-banner">
           <div>
             <span id="trackAddrBadge" style="font-size:0.82rem; color:#99f6e4; font-weight:700;">배달지 안내</span>
-            <p id="trackEtaTitle" class="eta-big">도착 예정 15분 후</p>
+            <p id="trackEtaTitle" class="eta-big">남은 시간 15:00</p>
             <p id="trackStatusSub" style="margin:4px 0 0; font-size:0.86rem; color:#e5e7eb;">
-              주문 수락됨 → 메뉴 준비중 → 배달중 → 배달 완료 단계로 안내합니다.
+              실시간 타이머가 흐르며 🛵 라이더 위치와 매장 조리 상태를 자동 갱신합니다.
             </p>
           </div>
           <button type="button" id="backToShopBtn" class="btn-outline">가게 화면으로</button>
@@ -696,13 +982,13 @@
         <div class="timeline-steps" aria-label="배달 진행 타임라인">
           <span class="tl-pill active" id="tlStep1">1. 주문 수락됨</span>
           <span class="tl-pill" id="tlStep2">2. 메뉴 준비중</span>
-          <span class="tl-pill" id="tlStep3">3. 배달중</span>
+          <span class="tl-pill" id="tlStep3">3. 🛵 배달중</span>
           <span class="tl-pill" id="tlStep4">4. 배달 완료</span>
         </div>
 
         <div class="map-frame">
-          <svg width="100%" height="310" viewBox="0 0 640 310" role="img" aria-label="주문한 가게만 경유하는 실시간 라이더 이동 지도">
-            <title>한바구니픽 실시간 라이더 이동 지도</title>
+          <svg width="100%" height="310" viewBox="0 0 640 310" role="img" aria-label="주문한 가게만 경유하는 오토바이 이모지 실시간 라이더 지도">
+            <title>한바구니픽 오토바이 라이더 실시간 이동 지도</title>
             <rect width="640" height="310" fill="#eef2f6" />
             <rect x="24" y="20" width="145" height="68" rx="12" fill="#dcfce7" />
             <text x="96" y="58" text-anchor="middle" fill="#166534" font-size="11" font-weight="bold">주례 공원</text>
@@ -715,40 +1001,154 @@
             <g id="routePathGroup"></g>
             <g id="routePinsGroup"></g>
 
+            <!-- 🛵 오토바이 이모지 라이더 핀 -->
             <g id="riderPin" transform="translate(65, 155)">
-              <circle r="24" fill="#1d4ed8" opacity="0.18" />
-              <circle r="17" fill="#ffffff" stroke="#1d4ed8" stroke-width="2.5" />
-              <rect x="-10" y="-4" width="7" height="6" rx="1.5" fill="#c2410c" />
-              <path d="M-8 3 L8 3 L10 -1 L6 -1 L4 5 L-8 5 Z" fill="#0d9488" />
-              <circle cx="2" cy="-6" r="4" fill="#1d4ed8" />
-              <rect x="-36" y="-40" width="72" height="17" rx="8.5" fill="#1d4ed8" />
-              <text id="riderPinText" y="-28" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="bold">주문 수락됨</text>
+              <circle r="25" fill="#0d9488" opacity="0.2" />
+              <circle r="19" fill="#ffffff" stroke="#0d9488" stroke-width="2.5" />
+              <text y="8" text-anchor="middle" font-size="22" aria-hidden="true">🛵</text>
+              <rect x="-38" y="-42" width="76" height="18" rx="9" fill="#111827" />
+              <text id="riderPinText" y="-30" text-anchor="middle" fill="#2dd4bf" font-size="9.5" font-weight="bold">주문 수락됨</text>
             </g>
           </svg>
         </div>
 
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
-          <button type="button" id="autoTrackBtn" class="btn-mint">실시간 이동 재생</button>
-          <button type="button" id="stepTrackBtn" class="btn-outline">다음 단계</button>
-          <button type="button" id="resetTrackBtn" class="btn-outline">초기화</button>
+          <button type="button" id="toggleTimerBtn" class="btn-mint">실시간 타이머 일시정지</button>
+          <button type="button" id="fastForwardBtn" class="btn-outline">1분 빠르게 감기 (+60초)</button>
+          <button type="button" id="resetTrackBtn" class="btn-outline">타이머 초기화</button>
         </div>
       </div>
 
       <aside class="card" aria-labelledby="storeCookHeading">
-        <h2 id="storeCookHeading" style="margin:0 0 12px; font-size:1.12rem;">주문한 가게 조리·준비 상태</h2>
+        <h2 id="storeCookHeading" style="margin:0 0 12px; font-size:1.12rem;">주문한 가게 실시간 조리 타이머</h2>
         <ul id="orderedStoresList" class="cook-list"></ul>
       </aside>
+    </section>
+
+    <!-- ============================================================
+         [화면 4] 기말 프로젝트 제출자료 (체크리스트 · 흐름도 · 기능별 코드)
+         ============================================================ -->
+    <section id="viewReport" class="screen-panel report-grid" role="tabpanel" aria-labelledby="tabReport" hidden>
+      <article class="card">
+        <h2 style="margin:0 0 6px; font-size:1.2rem;">1. 웹 접근성 체크리스트 점검표</h2>
+        <table class="doc-table" aria-label="웹 접근성 체크리스트 점검표">
+          <thead>
+            <tr>
+              <th scope="col">영역</th>
+              <th scope="col">점검 항목</th>
+              <th scope="col">결과</th>
+              <th scope="col">확인 방법 및 적용 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. 이미지 대체 텍스트</td>
+              <td>의미 있는 이미지 alt / 아이콘 버튼 aria-label</td>
+              <td><strong>충족</strong></td>
+              <td>25개 음식 SVG 일러스트 및 사용자 등록 이미지에 <code>alt</code>·<code>aria-label</code> 제공, 상단·색상 버튼에 <code>aria-label</code> 명시</td>
+            </tr>
+            <tr>
+              <td>2. 키보드 접근성</td>
+              <td>Tab 이동, :focus-visible 유지, 본문 바로가기</td>
+              <td><strong>충족</strong></td>
+              <td><code>outline: none</code> 제거 후 <code>:focus-visible</code> 스타일 적용 및 상단 스킵 링크 제공</td>
+            </tr>
+            <tr>
+              <td>3. 색상 및 대비</td>
+              <td>명도 대비 4.5:1 이상 및 텍스트 병행 안내</td>
+              <td><strong>충족</strong></td>
+              <td>청록 버튼(<code>#0d9488</code>)과 진한 텍스트(<code>#111827</code>)로 4.5:1 이상 확보, 최소주문금액 상태를 색상+텍스트로 함께 표시</td>
+            </tr>
+            <tr>
+              <td>4. 폼 접근성</td>
+              <td>label 연결, required 필수 표시, role="alert" 오류 안내</td>
+              <td><strong>충족</strong></td>
+              <td>배달 주소·수령 방식·커스텀 메뉴 등록 폼에 <code>label for</code>, <code>required</code>, <code>aria-describedby</code> 및 오류 메시지 연결</td>
+            </tr>
+            <tr>
+              <td>5. 구조와 의미</td>
+              <td>제목 계층(h1~h3), 시맨틱 태그, 표 th[scope]</td>
+              <td><strong>충족</strong></td>
+              <td><code>header</code>, <code>nav</code>, <code>main</code>, <code>aside</code>, <code>footer</code> 구조화 및 장바구니 표 <code>&lt;th scope="col"&gt;</code> 사용</td>
+            </tr>
+            <tr>
+              <td>6. 미디어</td>
+              <td>자막(CC) 제공, 재생/정지 제어, 깜빡임 예방</td>
+              <td><strong>충족</strong></td>
+              <td>가이드 자막(CC) 영역과 재생·일시정지·정지 버튼 구현, <code>prefers-reduced-motion</code> 반영</td>
+            </tr>
+            <tr>
+              <td>6. 미디어 (영상)</td>
+              <td>동영상 파일 직접 삽입 항목</td>
+              <td><strong>해당 없음</strong></td>
+              <td>실시간 🛵 오토바이 벡터 지도와 자막 가이드를 사용하여 별도 동영상 파일은 포함하지 않음</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h2 style="margin:0 0 6px; font-size:1.2rem;">2. 웹앱의 전체 흐름도</h2>
+        <div class="flow-diagram">
+          <div class="flow-node"><strong>① 시작 및 초기 화면:</strong> 현재 시각 시계 작동, 5개 가게(치킨·커피·와플·피자·김치찜) 25개 일러스트 메뉴 및 그림 일러스트 스튜디오 준비</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node"><strong>② 사용자 입력 및 기능 선택:</strong> 가게 필터/검색/정렬, 그림 캔버스에서 직접 일러스트 그리기 및 메뉴 등록, 옵션 선택 후 [담기], 할인 쿠폰·주소 입력</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node"><strong>③ 조건에 따른 처리 과정과 분기:</strong><br />
+            · <em>분기 A (통합 장바구니):</em> 다른 가게 메뉴를 담아도 초기화 경고 팝업 없이 한 바구니에 합산<br />
+            · <em>분기 B (주문 검증):</em> 장바구니 비어있음 / 선택 가게별 최소주문금액 미달 / 필수 폼 미입력 시 <code>role="alert"</code> 안내 후 중단
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node"><strong>④ 처리 결과 표시:</strong> 주문한 가게만 연결된 동적 경로 생성, 실시간 카운트다운 타이머(분:초)와 🛵 오토바이 라이더 이동 표시</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node"><strong>⑤ 반복 또는 종료:</strong> 타이머 00:00 도달 시 '배달 완료' 표시 후 [가게 화면으로] 이동하여 추가 주문 반복 또는 종료</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 style="margin:0 0 10px; font-size:1.2rem;">3. 주요 기능별 코드 및 설명</h2>
+        <h3 style="margin:0 0 6px; font-size:1rem;">① 기능명: 직접 그린 캔버스 일러스트 메뉴 등록 (<code>registerCustomIllustMenu</code>)</h3>
+        <pre class="code-snippet">function registerCustomIllustMenu(store, name, price, desc) {
+  const dataUrl = illustCanvas.toDataURL("image/png");
+  ALL_MENUS.unshift({
+    id: Date.now(),
+    store,
+    name,
+    desc: desc || "직접 그린 일러스트 스페셜 메뉴 · 준비 10분",
+    prep: 10,
+    options: [{ label: "기본 구성", price }],
+    customImg: dataUrl
+  });
+  renderMenuList();
+}</pre>
+        <ul style="font-size:0.88rem; margin:8px 0 0;">
+          <li><strong>함수의 역할:</strong> 사용자가 캔버스에 그린 일러스트 그림을 PNG 데이터 URL로 변환해 새 메뉴 카드로 추가하는 함수입니다.</li>
+          <li><strong>호출 시점:</strong> [그림·일러스트 그리기] 화면에서 [그림 일러스트 메뉴 등록하고 보러가기] 폼을 제출할 때 호출됩니다.</li>
+          <li><strong>처리 과정:</strong> <code>canvas.toDataURL("image/png")</code>로 그림 이미지 추출 → 가게명·메뉴명·가격과 함께 <code>ALL_MENUS</code> 배열 맨 앞에 추가 → <code>renderMenuList()</code>로 화면 갱신.</li>
+          <li><strong>실행 결과:</strong> 방금 그린 그림이 <code>alt</code> 속성이 포함된 메뉴 카드로 즉시 표시되어 장바구니에 담고 주문할 수 있습니다.</li>
+        </ul>
+      </article>
     </section>
   </main>
 
   <div id="toastNotice" class="toast-bar" role="status" aria-live="polite" hidden></div>
 
   <footer>
-    <p style="margin:0;">한바구니픽 · 치킨·커피·와플·피자·김치찜 5개 가게 각 5메뉴 일러스트 & 웹 접근성 체크리스트(1~6번) 준수</p>
+    <p style="margin:0;">한바구니픽 · 일러스트 그리기 · 🛵 실시간 타이머 배달 · 웹 접근성 체크리스트 준수</p>
   </footer>
 
   <script>
-    // 5개 지정 가게의 최소주문금액
+    // 1. 상단 실시간 현재 시각 타이머 (매초 갱신)
+    function updateLiveClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const ss = String(now.getSeconds()).padStart(2, "0");
+      document.getElementById("liveClockBadge").textContent = `현재 시각 ${hh}:${mm}:${ss}`;
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+
     const STORE_MIN_PRICE = {
       "치킨": 16000,
       "커피": 14000,
@@ -758,172 +1158,176 @@
     };
 
     const STORE_MAP_INFO = {
-      "치킨": { x: 185, y: 84, badge: "치킨", color: "#ea580c", prep: 14 },
-      "커피": { x: 265, y: 155, badge: "커피", color: "#0d9488", prep: 5 },
-      "와플": { x: 345, y: 88, badge: "와플", color: "#d97706", prep: 7 },
-      "피자": { x: 425, y: 155, badge: "피자", color: "#dc2626", prep: 15 },
-      "김치찜": { x: 485, y: 84, badge: "김치찜", color: "#991b1b", prep: 12 }
+      "치킨": { x: 185, y: 84, badge: "치킨", color: "#ea580c", prepMin: 14 },
+      "커피": { x: 265, y: 155, badge: "커피", color: "#0d9488", prepMin: 5 },
+      "와플": { x: 345, y: 88, badge: "와플", color: "#d97706", prepMin: 7 },
+      "피자": { x: 425, y: 155, badge: "피자", color: "#dc2626", prepMin: 15 },
+      "김치찜": { x: 485, y: 84, badge: "김치찜", color: "#991b1b", prepMin: 12 }
     };
 
     const START_PT = { x: 65, y: 155 };
     const END_PT = { x: 565, y: 215 };
 
-    // 5개 가게 × 5개 메뉴 = 총 25개 메뉴 (각각 고유 SVG 일러스트 포함)
+    // 5개 가게 × 5개 메뉴 = 총 25개 일러스트 메뉴
     const ALL_MENUS = [
       // 1. 치킨 (5개)
       {
-        id: 101, store: "치킨", name: "황금 바삭 후라이드 치킨", desc: "겉바속촉 국내산 닭다리살 후라이드 · 준비 14분",
+        id: 101, store: "치킨", name: "황금 바삭 후라이드 치킨", desc: "겉바속촉 국내산 닭다리살 후라이드 · 준비 14분", prep: 14,
         options: [{ label: "한마리 (치킨무+소스)", price: 18000 }, { label: "순살 한마리", price: 19500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바삭한 황금 후라이드 치킨 일러스트"><title>후라이드 치킨</title><rect width="104" height="82" rx="10" fill="#fef3c7"/><rect x="20" y="44" width="18" height="8" rx="4" fill="#ffffff" transform="rotate(-20 29 48)"/><ellipse cx="56" cy="41" rx="25" ry="17" fill="#d97706"/></svg>`
       },
       {
-        id: 102, store: "치킨", name: "매콤달콤 양념 치킨", desc: "특제 고추장 양념이 윤기 흐르는 치킨 · 준비 14분",
+        id: 102, store: "치킨", name: "매콤달콤 양념 치킨", desc: "특제 고추장 양념이 윤기 흐르는 치킨 · 준비 14분", prep: 14,
         options: [{ label: "순살 양념", price: 19000 }, { label: "뼈 양념", price: 18500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="빨간 양념 치킨 일러스트"><title>양념 치킨</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><ellipse cx="52" cy="44" rx="28" ry="18" fill="#dc2626"/><circle cx="42" cy="38" r="3" fill="#fef08a"/><circle cx="62" cy="40" r="3" fill="#fef08a"/></svg>`
       },
       {
-        id: 103, store: "치킨", name: "단짠 간장마늘 치킨", desc: "마늘향 가득한 간장 소스 치킨 · 준비 15분",
+        id: 103, store: "치킨", name: "단짠 간장마늘 치킨", desc: "마늘향 가득한 간장 소스 치킨 · 준비 15분", prep: 15,
         options: [{ label: "기본 세트", price: 19000 }, { label: "마늘칩 추가", price: 20500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="간장마늘 치킨 일러스트"><title>간장마늘 치킨</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="40" cy="45" r="14" fill="#78350f"/><circle cx="62" cy="45" r="14" fill="#92400e"/><circle cx="51" cy="33" r="13" fill="#78350f"/></svg>`
       },
       {
-        id: 104, store: "치킨", name: "허니버터 시즈닝 치킨", desc: "달콤고소한 버터 시즈닝 치킨 · 준비 14분",
+        id: 104, store: "치킨", name: "허니버터 시즈닝 치킨", desc: "달콤고소한 버터 시즈닝 치킨 · 준비 14분", prep: 14,
         options: [{ label: "순살 허니버터", price: 19500 }, { label: "윙봉 세트", price: 20000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="허니버터 치킨 일러스트"><title>허니버터 치킨</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="44" rx="27" ry="17" fill="#f59e0b"/><circle cx="44" cy="36" r="2.5" fill="#78350f"/><circle cx="58" cy="38" r="2.5" fill="#78350f"/></svg>`
       },
       {
-        id: 105, store: "치킨", name: "치즈볼 & 감자튀김 박스", desc: "바삭한 치즈볼과 통감자튀김 모둠 · 준비 10분",
+        id: 105, store: "치킨", name: "치즈볼 & 감자튀김 박스", desc: "바삭한 치즈볼과 통감자튀김 모둠 · 준비 10분", prep: 10,
         options: [{ label: "치즈볼 6개+감튀", price: 16000 }, { label: "치즈볼 10개 세트", price: 18000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈볼과 감자튀김 일러스트"><title>치즈볼 감자튀김</title><rect width="104" height="82" rx="10" fill="#f8fafc"/><circle cx="38" cy="48" r="12" fill="#facc15"/><circle cx="64" cy="48" r="12" fill="#eab308"/><rect x="44" y="22" width="16" height="22" rx="3" fill="#f59e0b"/></svg>`
       },
 
       // 2. 커피 (5개)
       {
-        id: 201, store: "커피", name: "스페셜티 아이스 아메리카노", desc: "깔끔한 산미와 고소함의 아메리카노 · 준비 5분",
+        id: 201, store: "커피", name: "스페셜티 아이스 아메리카노", desc: "깔끔한 산미와 고소함의 아메리카노 · 준비 5분", prep: 5,
         options: [{ label: "ICE 4잔 세트", price: 14400 }, { label: "1L 대용량 2병", price: 15600 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="아이스 아메리카노 일러스트"><title>아이스 아메리카노</title><rect width="104" height="82" rx="10" fill="#f0fdfa"/><path d="M56 22 L65 9" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/><path d="M36 24 L68 24 L64 68 L40 68 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/><path d="M38 34 L66 34 L63 66 L41 66 Z" fill="#451a03"/></svg>`
       },
       {
-        id: 202, store: "커피", name: "바닐라빈 카페라떼 세트", desc: "부드러운 우유와 바닐라빈 라떼 · 준비 6분",
+        id: 202, store: "커피", name: "바닐라빈 카페라떼 세트", desc: "부드러운 우유와 바닐라빈 라떼 · 준비 6분", prep: 6,
         options: [{ label: "ICE 덜달게 3잔", price: 14700 }, { label: "HOT 기본 3잔", price: 14700 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바닐라빈 카페라떼 일러스트"><title>바닐라빈 라떼</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><path d="M35 24 L69 24 L65 68 L39 68 Z" fill="#fef3c7" stroke="#9ca3af" stroke-width="1.5"/><path d="M37 36 L67 36 L64 54 L40 54 Z" fill="#b45309"/></svg>`
       },
       {
-        id: 203, store: "커피", name: "헤이즐넛 콜드브루 세트", desc: "저온 추출 콜드브루와 헤이즐넛 향 · 준비 5분",
+        id: 203, store: "커피", name: "헤이즐넛 콜드브루 세트", desc: "저온 추출 콜드브루와 헤이즐넛 향 · 준비 5분", prep: 5,
         options: [{ label: "콜드브루 3병 세트", price: 15000 }, { label: "디카페인 변경", price: 15300 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="콜드브루 커피 일러스트"><title>콜드브루</title><rect width="104" height="82" rx="10" fill="#ecfeff"/><rect x="34" y="18" width="36" height="48" rx="8" fill="#2c1810"/><rect x="38" y="14" width="28" height="6" rx="3" fill="#cbd5e1"/></svg>`
       },
       {
-        id: 204, store: "커피", name: "초코모카 & 크루아상 세트", desc: "진한 초코 모카와 바삭한 크루아상 · 준비 7분",
+        id: 204, store: "커피", name: "초코모카 & 크루아상 세트", desc: "진한 초코 모카와 바삭한 크루아상 · 준비 7분", prep: 7,
         options: [{ label: "모카 2잔+크루아상 2개", price: 15800 }, { label: "아이스 초코 변경", price: 15800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="초코모카와 크루아상 일러스트"><title>초코모카 크루아상</title><rect width="104" height="82" rx="10" fill="#fdf2f8"/><ellipse cx="52" cy="48" rx="24" ry="13" fill="#d97706"/><path d="M34 44 Q52 30 70 44" stroke="#92400e" stroke-width="4" fill="none"/></svg>`
       },
       {
-        id: 205, store: "커피", name: "복숭아 아이스티 & 스콘 박스", desc: "시원한 아이스티와 버터 스콘 세트 · 준비 6분",
+        id: 205, store: "커피", name: "복숭아 아이스티 & 스콘 박스", desc: "시원한 아이스티와 버터 스콘 세트 · 준비 6분", prep: 6,
         options: [{ label: "아이스티 3잔+스콘 2개", price: 14500 }, { label: "블루베리 스콘 추가", price: 16500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="복숭아 아이스티와 스콘 일러스트"><title>아이스티 스콘</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="36" r="14" fill="#fb7185"/><rect x="32" y="52" width="40" height="14" rx="5" fill="#f59e0b"/></svg>`
       },
 
       // 3. 와플 (5개)
       {
-        id: 301, store: "와플", name: "생크림 사과잼 벨기에 와플", desc: "바삭한 와플에 생크림과 사과잼 가득 · 준비 7분",
+        id: 301, store: "와플", name: "생크림 사과잼 벨기에 와플", desc: "바삭한 와플에 생크림과 사과잼 가득 · 준비 7분", prep: 7,
         options: [{ label: "4개 세트", price: 14400 }, { label: "6개 세트", price: 20400 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="생크림 사과잼 와플 일러스트"><title>생크림 사과잼 와플</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><rect x="26" y="24" width="52" height="36" rx="8" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/><circle cx="52" cy="38" r="10" fill="#ffffff"/></svg>`
       },
       {
-        id: 302, store: "와플", name: "딸기 누텔라 젤라또 와플", desc: "생딸기와 누텔라 초코, 젤라또 조합 · 준비 8분",
+        id: 302, store: "와플", name: "딸기 누텔라 젤라또 와플", desc: "생딸기와 누텔라 초코, 젤라또 조합 · 준비 8분", prep: 8,
         options: [{ label: "와플 2개+젤라또", price: 14800 }, { label: "생딸기 추가", price: 16800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="딸기 누텔라 와플 일러스트"><title>딸기 누텔라 와플</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><rect x="26" y="28" width="52" height="34" rx="8" fill="#d97706"/><path d="M28 32 Q52 46 76 32 L76 42 Q52 54 28 42 Z" fill="#451a03"/><circle cx="42" cy="28" r="7" fill="#ef4444"/><circle cx="62" cy="28" r="7" fill="#ef4444"/></svg>`
       },
       {
-        id: 303, store: "와플", name: "바나나 카라멜 크로플 세트", desc: "달콤한 카라멜 소스와 바나나 크로플 · 준비 7분",
+        id: 303, store: "와플", name: "바나나 카라멜 크로플 세트", desc: "달콤한 카라멜 소스와 바나나 크로플 · 준비 7분", prep: 7,
         options: [{ label: "3개 세트", price: 14200 }, { label: "아이스크림 추가", price: 16200 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="바나나 카라멜 크로플 일러스트"><title>바나나 크로플</title><rect width="104" height="82" rx="10" fill="#fefce8"/><ellipse cx="52" cy="46" rx="26" ry="15" fill="#d97706"/><path d="M36 42 Q52 28 68 42" stroke="#facc15" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`
       },
       {
-        id: 304, store: "와플", name: "말차 화이트초코 와플", desc: "제주 말차 크림과 화이트초코 와플 · 준비 7분",
+        id: 304, store: "와플", name: "말차 화이트초코 와플", desc: "제주 말차 크림과 화이트초코 와플 · 준비 7분", prep: 7,
         options: [{ label: "3개 세트", price: 14500 }, { label: "팥 토핑 추가", price: 15800 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="말차 화이트초코 와플 일러스트"><title>말차 와플</title><rect width="104" height="82" rx="10" fill="#f0fdf4"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#16a34a"/><circle cx="52" cy="42" r="9" fill="#ffffff"/></svg>`
       },
       {
-        id: 305, store: "와플", name: "로투스 비스코프 와플 박스", desc: "로투스 크럼블과 시나몬 풍미 와플 · 준비 7분",
+        id: 305, store: "와플", name: "로투스 비스코프 와플 박스", desc: "로투스 크럼블과 시나몬 풍미 와플 · 준비 7분", prep: 7,
         options: [{ label: "4개 박스", price: 15000 }, { label: "로투스 잼 추가", price: 16200 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="로투스 비스코프 와플 일러스트"><title>로투스 와플</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><rect x="26" y="26" width="52" height="34" rx="8" fill="#b45309"/><circle cx="38" cy="38" r="4" fill="#fde68a"/><circle cx="66" cy="44" r="4" fill="#fde68a"/></svg>`
       },
 
       // 4. 피자 (5개)
       {
-        id: 401, store: "피자", name: "페퍼로니 듬뿍 클래식 피자", desc: "바삭한 도우에 짭짤한 페퍼로니 가득 · 준비 15분",
+        id: 401, store: "피자", name: "페퍼로니 듬뿍 클래식 피자", desc: "바삭한 도우에 짭짤한 페퍼로니 가득 · 준비 15분", prep: 15,
         options: [{ label: "M 사이즈", price: 19000 }, { label: "L 사이즈", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="페퍼로니 피자 일러스트"><title>페퍼로니 피자</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="20" fill="#fef08a"/><circle cx="44" cy="36" r="5" fill="#dc2626"/><circle cx="58" cy="40" r="5" fill="#dc2626"/><circle cx="50" cy="50" r="5" fill="#dc2626"/></svg>`
       },
       {
-        id: 402, store: "피자", name: "불고기 버섯 하프앤하프 피자", desc: "달콤한 불고기와 풍성한 토핑 피자 · 준비 15분",
+        id: 402, store: "피자", name: "불고기 버섯 하프앤하프 피자", desc: "달콤한 불고기와 풍성한 토핑 피자 · 준비 15분", prep: 15,
         options: [{ label: "M 사이즈", price: 20000 }, { label: "치즈크러스트 추가", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="불고기 피자 일러스트"><title>불고기 피자</title><rect width="104" height="82" rx="10" fill="#fffbeb"/><circle cx="52" cy="42" r="25" fill="#eab308"/><circle cx="52" cy="42" r="19" fill="#fde047"/><rect x="40" y="34" width="12" height="6" rx="2" fill="#78350f"/><rect x="54" y="44" width="12" height="6" rx="2" fill="#78350f"/></svg>`
       },
       {
-        id: 403, store: "피자", name: "고구마 무스 크림 피자", desc: "부드러운 고구마 무스가 듬뿍 올라간 피자 · 준비 15분",
+        id: 403, store: "피자", name: "고구마 무스 크림 피자", desc: "부드러운 고구마 무스가 듬뿍 올라간 피자 · 준비 15분", prep: 15,
         options: [{ label: "M 사이즈", price: 19500 }, { label: "L 사이즈", price: 23500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="고구마 피자 일러스트"><title>고구마 피자</title><rect width="104" height="82" rx="10" fill="#faf5ff"/><circle cx="52" cy="42" r="25" fill="#f59e0b"/><circle cx="52" cy="42" r="19" fill="#fef9c3"/><circle cx="46" cy="38" r="5" fill="#a855f7"/><circle cx="58" cy="46" r="5" fill="#a855f7"/></svg>`
       },
       {
-        id: 404, store: "피자", name: "콰트로 치즈 멜트 피자", desc: "4가지 치즈가 고소하게 녹아내린 피자 · 준비 14분",
+        id: 404, store: "피자", name: "콰트로 치즈 멜트 피자", desc: "4가지 치즈가 고소하게 녹아내린 피자 · 준비 14분", prep: 14,
         options: [{ label: "M 사이즈", price: 18500 }, { label: "꿀 소스 2개 추가", price: 19500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="치즈 피자 일러스트"><title>치즈 피자</title><rect width="104" height="82" rx="10" fill="#fefce8"/><circle cx="52" cy="42" r="25" fill="#d97706"/><circle cx="52" cy="42" r="20" fill="#fef08a"/></svg>`
       },
       {
-        id: 405, store: "피자", name: "콤비네이션 & 오븐스파게티 세트", desc: "콤비네이션 피자와 치즈 오븐스파게티 · 준비 16분",
+        id: 405, store: "피자", name: "콤비네이션 & 오븐스파게티 세트", desc: "콤비네이션 피자와 치즈 오븐스파게티 · 준비 16분", prep: 16,
         options: [{ label: "기본 세트", price: 22000 }, { label: "갈릭디핑 추가", price: 23000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="피자와 오븐스파게티 일러스트"><title>피자 스파게티 세트</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><circle cx="44" cy="42" r="20" fill="#f59e0b"/><ellipse cx="74" cy="48" rx="16" ry="12" fill="#dc2626"/></svg>`
       },
 
       // 5. 김치찜 (5개)
       {
-        id: 501, store: "김치찜", name: "묵은지 돼지목살 김치찜", desc: "숙성 묵은지와 두툼한 돼지목살 뚝배기찜 · 준비 12분",
+        id: 501, store: "김치찜", name: "묵은지 돼지목살 김치찜", desc: "숙성 묵은지와 두툼한 돼지목살 뚝배기찜 · 준비 12분", prep: 12,
         options: [{ label: "2인분 (공기밥 2개)", price: 16500 }, { label: "3인분 대자", price: 24000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="묵은지 돼지목살 김치찜 일러스트"><title>묵은지 김치찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="5" fill="#fb923c"/><circle cx="60" cy="35" r="5" fill="#fef3c7"/></svg>`
       },
       {
-        id: 502, store: "김치찜", name: "통삼겹 묵은지 김치찜", desc: "부드러운 통삼겹살을 통째로 넣은 김치찜 · 준비 13분",
+        id: 502, store: "김치찜", name: "통삼겹 묵은지 김치찜", desc: "부드러운 통삼겹살을 통째로 넣은 김치찜 · 준비 13분", prep: 13,
         options: [{ label: "2인분 기본", price: 17500 }, { label: "라면사리 추가", price: 19000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="통삼겹 김치찜 일러스트"><title>통삼겹 김치찜</title><rect width="104" height="82" rx="10" fill="#fef2f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#b91c1c"/><rect x="38" y="30" width="28" height="8" rx="3" fill="#fda4af"/></svg>`
       },
       {
-        id: 503, store: "김치찜", name: "참치 묵은지 두부 김치찜", desc: "고소한 참치와 손두부가 어우러진 김치찜 · 준비 11분",
+        id: 503, store: "김치찜", name: "참치 묵은지 두부 김치찜", desc: "고소한 참치와 손두부가 어우러진 김치찜 · 준비 11분", prep: 11,
         options: [{ label: "2인분 기본", price: 15500 }, { label: "두부 추가", price: 17000 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="참치 두부 김치찜 일러스트"><title>참치 두부 김치찜</title><rect width="104" height="82" rx="10" fill="#fff7ed"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#ef4444"/><rect x="44" y="30" width="16" height="8" rx="2" fill="#ffffff"/></svg>`
       },
       {
-        id: 504, store: "김치찜", name: "대왕 계란말이 & 김치찜 반상", desc: "김치찜과 촉촉한 계란말이 정식 구성 · 준비 12분",
+        id: 504, store: "김치찜", name: "대왕 계란말이 & 김치찜 반상", desc: "김치찜과 촉촉한 계란말이 정식 구성 · 준비 12분", prep: 12,
         options: [{ label: "반상 세트", price: 16000 }, { label: "치즈 계란말이 변경", price: 17500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="계란말이 김치찜 반상 일러스트"><title>계란말이 반상</title><rect width="104" height="82" rx="10" fill="#fefce8"/><rect x="24" y="30" width="56" height="24" rx="6" fill="#facc15"/><line x1="43" y1="30" x2="43" y2="54" stroke="#eab308" stroke-width="2"/><line x1="61" y1="30" x2="61" y2="54" stroke="#eab308" stroke-width="2"/></svg>`
       },
       {
-        id: 505, store: "김치찜", name: "얼큰 묵은지 부대찌개 스타일 찜", desc: "햄·소시지·묵은지가 조화된 얼큰 찜 · 준비 12분",
+        id: 505, store: "김치찜", name: "얼큰 묵은지 부대찌개 스타일 찜", desc: "햄·소시지·묵은지가 조화된 얼큰 찜 · 준비 12분", prep: 12,
         options: [{ label: "2인분 기본", price: 17000 }, { label: "치즈장 추가", price: 18500 }],
         svg: `<svg width="104" height="82" viewBox="0 0 104 82" role="img" aria-label="얼큰 묵은지 찜 일러스트"><title>얼큰 묵은지 찜</title><rect width="104" height="82" rx="10" fill="#fff1f2"/><path d="M22 36 L82 36 L75 66 L29 66 Z" fill="#1f2937"/><ellipse cx="52" cy="36" rx="30" ry="8" fill="#dc2626"/><circle cx="42" cy="34" r="4.5" fill="#f472b6"/><circle cx="62" cy="34" r="4.5" fill="#fde047"/></svg>`
       }
     ];
 
     let selectedStore = "전체";
-    let spotlightMenuId = 501;
+    let searchKeyword = "";
+    let sortMode = "default";
+    const favoriteIds = new Set();
     const cartBasket = new Map();
+    let discountAmount = 0;
 
-    // 실제 주문한 가게 목록 (기본값: 김치찜)
+    // 실시간 배달 카운트다운 상태
     let orderedStoreList = ["김치찜"];
     let orderAddrText = "부산 사상구 주례동";
-    let trackStepIdx = 0;
-    let trackStepsData = [];
-    let autoPlayTimer = null;
+    let totalEtaSeconds = 900;
+    let remainingSeconds = 900;
+    let countdownRunning = true;
+    let routeCoords = [];
 
     // 자막 제어
     let ccInterval = null;
     let ccIdx = 0;
     const CC_LINES = [
-      "[1/3] 치킨·커피·와플·피자·김치찜 5개 가게 메뉴를 삭제 경고 팝업 없이 한 바구니에 담을 수 있습니다.",
-      "[2/3] 주문한 가게만 지도에 경유 핀으로 표시되며, 선택하지 않은 가게 경로는 거치지 않습니다.",
-      "[3/3] 주문 수락됨 → 메뉴 준비중 → 배달중 → 배달 완료 단계와 매장별 조리 상태를 확인해 보세요."
+      "[1/3] 치킨·커피·와플·피자·김치찜 5개 가게 메뉴를 초기화 경고 팝업 없이 한 바구니에 담을 수 있습니다.",
+      "[2/3] [그림·일러스트 그리기] 탭에서 직접 그림을 그려 새 메뉴로 등록할 수 있습니다.",
+      "[3/3] 주문한 가게만 지도에 경유 핀으로 표시되며, 🛵 오토바이 라이더와 타이머가 실시간 작동합니다."
     ];
 
     let toastTimeout = null;
@@ -936,68 +1340,74 @@
     }
 
     function switchScreen(mode) {
-      const vShop = document.getElementById("viewShop");
-      const vTrack = document.getElementById("viewTrack");
-      const bShop = document.getElementById("tabShop");
-      const bTrack = document.getElementById("tabTrack");
+      const panels = {
+        shop: document.getElementById("viewShop"),
+        draw: document.getElementById("viewDraw"),
+        track: document.getElementById("viewTrack"),
+        report: document.getElementById("viewReport")
+      };
+      const tabs = {
+        shop: document.getElementById("tabShop"),
+        draw: document.getElementById("tabDraw"),
+        track: document.getElementById("tabTrack"),
+        report: document.getElementById("tabReport")
+      };
+
+      Object.keys(panels).forEach((k) => {
+        panels[k].hidden = k !== mode;
+        tabs[k].setAttribute("aria-selected", k === mode ? "true" : "false");
+        tabs[k].className = k === mode ? "btn-mint" : "btn-outline";
+      });
+
+      panels[mode].classList.add("screen-entering");
+      requestAnimationFrame(() => panels[mode].classList.remove("screen-entering"));
 
       if (mode === "track") {
-        vShop.hidden = true;
-        vTrack.hidden = false;
-        vTrack.classList.add("screen-entering");
-        requestAnimationFrame(() => vTrack.classList.remove("screen-entering"));
-        bShop.setAttribute("aria-selected", "false");
-        bTrack.setAttribute("aria-selected", "true");
-        bShop.className = "btn-outline";
-        bTrack.className = "btn-mint";
         prepareDynamicRoute(orderedStoreList);
-        renderTracking();
-      } else {
-        vTrack.hidden = true;
-        vShop.hidden = false;
-        vShop.classList.add("screen-entering");
-        requestAnimationFrame(() => vShop.classList.remove("screen-entering"));
-        bShop.setAttribute("aria-selected", "true");
-        bTrack.setAttribute("aria-selected", "false");
-        bShop.className = "btn-mint";
-        bTrack.className = "btn-outline";
+        renderCountdownUI();
       }
     }
 
     document.getElementById("tabShop").addEventListener("click", () => switchScreen("shop"));
+    document.getElementById("tabDraw").addEventListener("click", () => switchScreen("draw"));
     document.getElementById("tabTrack").addEventListener("click", () => switchScreen("track"));
+    document.getElementById("tabReport").addEventListener("click", () => switchScreen("report"));
     document.getElementById("backToShopBtn").addEventListener("click", () => switchScreen("shop"));
     document.getElementById("topCartBtn").addEventListener("click", () => {
       switchScreen("shop");
       document.getElementById("cartHeading").focus();
     });
 
-    function renderSpotlight() {
-      const m = ALL_MENUS.find((x) => x.id === spotlightMenuId) || ALL_MENUS[0];
-      const minP = STORE_MIN_PRICE[m.store];
-      document.getElementById("spotlightBox").innerHTML = `
-        <div>${m.svg}</div>
-        <div>
-          <div class="badge-row">
-            <span class="tag-store">${m.store} 가게</span>
-            <span class="tag-min">최소주문금액 ${minP.toLocaleString()}원</span>
-          </div>
-          <h2 style="margin:0 0 4px; font-size:1.1rem;">${m.name}</h2>
-          <p style="margin:0; font-size:0.84rem; color:#4b5563;">${m.desc} · ${m.options[0].price.toLocaleString()}원~</p>
-        </div>
-      `;
-    }
-
     function renderMenuList() {
       const box = document.getElementById("menuListContainer");
-      const filtered = selectedStore === "전체"
-        ? ALL_MENUS
-        : ALL_MENUS.filter((m) => m.store === selectedStore);
+      document.getElementById("totalMenuCount").textContent = String(ALL_MENUS.length);
+
+      let list = ALL_MENUS.filter((m) => {
+        const storeMatch =
+          selectedStore === "전체" ? true :
+          selectedStore === "찜목록" ? favoriteIds.has(m.id) :
+          m.store === selectedStore;
+        const kwMatch = !searchKeyword || m.name.toLowerCase().includes(searchKeyword) || m.store.toLowerCase().includes(searchKeyword);
+        return storeMatch && kwMatch;
+      });
+
+      if (sortMode === "priceAsc") list = [...list].sort((a, b) => a.options[0].price - b.options[0].price);
+      else if (sortMode === "priceDesc") list = [...list].sort((a, b) => b.options[0].price - a.options[0].price);
+      else if (sortMode === "prepFast") list = [...list].sort((a, b) => a.prep - b.prep);
 
       box.innerHTML = "";
-      filtered.forEach((m) => {
+      if (list.length === 0) {
+        box.innerHTML = `<p style="text-align:center; color:#6b7280; padding:24px;">조건에 맞는 메뉴가 없습니다.</p>`;
+        return;
+      }
+
+      list.forEach((m) => {
         const minP = STORE_MIN_PRICE[m.store];
+        const isFav = favoriteIds.has(m.id);
         const optHtml = m.options.map((o, idx) => `<option value="${idx}">${o.label} (${o.price.toLocaleString()}원)</option>`).join("");
+        const mediaHtml = m.customImg
+          ? `<img src="${m.customImg}" alt="${m.name} 직접 그린 일러스트" class="custom-menu-img" />`
+          : m.svg;
 
         const article = document.createElement("article");
         article.className = "menu-card";
@@ -1013,10 +1423,12 @@
               <label for="opt-sel-${m.id}" class="skip-link" style="position:static; padding:0; background:none; color:#374151; font-size:0.8rem;">옵션</label>
               <select id="opt-sel-${m.id}" class="opt-select">${optHtml}</select>
               <button type="button" class="btn-mint add-menu-btn" data-id="${m.id}">담기</button>
-              <button type="button" class="btn-outline preview-btn" data-id="${m.id}">일러스트 보기</button>
+              <button type="button" class="fav-btn" data-id="${m.id}" aria-pressed="${isFav}" aria-label="${m.name} 찜하기">
+                ${isFav ? "♥ 찜됨" : "♡ 찜"}
+              </button>
             </div>
           </div>
-          <div>${m.svg}</div>
+          <div>${mediaHtml}</div>
         `;
         box.appendChild(article);
       });
@@ -1029,21 +1441,19 @@
         });
       });
 
-      document.querySelectorAll(".preview-btn").forEach((btn) => {
+      document.querySelectorAll(".fav-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
-          spotlightMenuId = Number(btn.dataset.id);
-          renderSpotlight();
+          const id = Number(btn.dataset.id);
+          if (favoriteIds.has(id)) favoriteIds.delete(id);
+          else favoriteIds.add(id);
+          renderMenuList();
         });
       });
     }
 
-    // 삭제 경고 팝업 없이 모든 가게 메뉴를 한 바구니에 합산
     function addMenuToBasket(id, optIdx) {
       const m = ALL_MENUS.find((x) => x.id === id);
       if (!m) return;
-      spotlightMenuId = id;
-      renderSpotlight();
-
       const opt = m.options[optIdx] || m.options[0];
       const key = `${id}__${opt.label}`;
 
@@ -1068,6 +1478,7 @@
       const tbody = document.getElementById("cartBody");
       const minList = document.getElementById("minStatusList");
       let qtySum = 0;
+      let subTotal = 0;
 
       const storeTotals = {};
       Object.keys(STORE_MIN_PRICE).forEach((s) => { storeTotals[s] = 0; });
@@ -1087,6 +1498,7 @@
         cartBasket.forEach((item) => {
           qtySum += item.qty;
           const lineTotal = item.price * item.qty;
+          subTotal += lineTotal;
           storeTotals[item.store] = (storeTotals[item.store] || 0) + lineTotal;
 
           const tr = document.createElement("tr");
@@ -1109,6 +1521,10 @@
       }
 
       document.getElementById("topCartQty").textContent = String(qtySum);
+      const appliedDiscount = subTotal >= discountAmount ? discountAmount : 0;
+      document.getElementById("subTotalText").textContent = `${subTotal.toLocaleString()}원`;
+      document.getElementById("discountText").textContent = appliedDiscount > 0 ? `-${appliedDiscount.toLocaleString()}원` : "0원";
+      document.getElementById("finalPayText").textContent = `${Math.max(0, subTotal - appliedDiscount).toLocaleString()}원`;
 
       Object.entries(STORE_MIN_PRICE).forEach(([st, minVal]) => {
         const cur = storeTotals[st] || 0;
@@ -1145,22 +1561,184 @@
       });
     }
 
-    // 주문한 가게만 연결하는 동적 경로 생성
+    document.getElementById("clearBasketBtn").addEventListener("click", () => {
+      cartBasket.clear();
+      discountAmount = 0;
+      document.getElementById("couponMsg").textContent = "";
+      renderBasket();
+      notify("장바구니를 비웠습니다.");
+    });
+
+    document.getElementById("applyCouponBtn").addEventListener("click", () => {
+      const code = document.getElementById("couponInput").value.trim().toUpperCase();
+      const msgEl = document.getElementById("couponMsg");
+      if (code === "HANBASKET3000") {
+        discountAmount = 3000;
+        msgEl.style.color = "#0f766e";
+        msgEl.textContent = "3,000원 통합 배달 할인 쿠폰이 적용되었습니다!";
+      } else {
+        discountAmount = 0;
+        msgEl.style.color = "#b91c1c";
+        msgEl.textContent = "유효하지 않은 코드입니다. (HANBASKET3000 입력)";
+      }
+      renderBasket();
+    });
+
+    // ============================================================
+    // 직접 음식 일러스트 그리기 캔버스 (마우스/터치 + 스탬프 + 메뉴 등록)
+    // ============================================================
+    const illustCanvas = document.getElementById("illustCanvas");
+    const ctx = illustCanvas.getContext("2d");
+    let isDrawing = false;
+    let brushColor = "#111827";
+    let brushSize = 6;
+
+    function initCanvasBg() {
+      ctx.fillStyle = "#fffbeb";
+      ctx.fillRect(0, 0, illustCanvas.width, illustCanvas.height);
+    }
+    initCanvasBg();
+
+    function getCanvasPos(e) {
+      const rect = illustCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (illustCanvas.width / rect.width),
+        y: (clientY - rect.top) * (illustCanvas.height / rect.height)
+      };
+    }
+
+    function startStroke(e) {
+      isDrawing = true;
+      const p = getCanvasPos(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = brushColor;
+      ctx.lineWidth = brushSize;
+    }
+
+    function moveStroke(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const p = getCanvasPos(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+
+    function endStroke() {
+      isDrawing = false;
+    }
+
+    illustCanvas.addEventListener("mousedown", startStroke);
+    illustCanvas.addEventListener("mousemove", moveStroke);
+    window.addEventListener("mouseup", endStroke);
+    illustCanvas.addEventListener("touchstart", startStroke, { passive: false });
+    illustCanvas.addEventListener("touchmove", moveStroke, { passive: false });
+    window.addEventListener("touchend", endStroke);
+
+    document.querySelectorAll(".swatch-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".swatch-btn").forEach((b) => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        brushColor = btn.dataset.color;
+      });
+    });
+
+    document.getElementById("eraserBtn").addEventListener("click", () => {
+      brushColor = "#fffbeb";
+    });
+
+    document.getElementById("brushSizeRange").addEventListener("input", (e) => {
+      brushSize = Number(e.target.value);
+      document.getElementById("brushSizeVal").textContent = String(brushSize);
+    });
+
+    document.querySelectorAll(".stamp-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        ctx.font = "54px serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const rx = 140 + Math.random() * 240;
+        const ry = 100 + Math.random() * 160;
+        ctx.fillText(btn.dataset.stamp, rx, ry);
+      });
+    });
+
+    document.getElementById("clearCanvasBtn").addEventListener("click", () => {
+      initCanvasBg();
+      notify("캔버스를 깨끗하게 비웠습니다.");
+    });
+
+    document.getElementById("downloadPngBtn").addEventListener("click", () => {
+      const link = document.createElement("a");
+      link.download = "한바구니픽_음식일러스트.png";
+      link.href = illustCanvas.toDataURL("image/png");
+      link.click();
+    });
+
+    document.getElementById("customMenuForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const store = document.getElementById("customStoreSel").value;
+      const name = document.getElementById("customNameInput").value.trim();
+      const price = Number(document.getElementById("customPriceInput").value);
+      const desc = document.getElementById("customDescInput").value.trim();
+      const errEl = document.getElementById("customMenuErr");
+      errEl.textContent = "";
+
+      if (!name) {
+        errEl.textContent = "메뉴 이름을 입력해 주세요. (필수 입력)";
+        document.getElementById("customNameInput").focus();
+        return;
+      }
+      if (!price || price < 1000) {
+        errEl.textContent = "1,000원 이상의 올바른 가격을 입력해 주세요.";
+        document.getElementById("customPriceInput").focus();
+        return;
+      }
+
+      const dataUrl = illustCanvas.toDataURL("image/png");
+      ALL_MENUS.unshift({
+        id: Date.now(),
+        store,
+        name,
+        desc: desc || "직접 그린 일러스트 스페셜 메뉴 · 준비 10분",
+        prep: 10,
+        options: [{ label: "기본 구성", price }],
+        customImg: dataUrl
+      });
+
+      document.getElementById("customNameInput").value = "";
+      document.getElementById("customDescInput").value = "";
+      selectedStore = "전체";
+      document.querySelectorAll(".store-tab-btn").forEach((b) => {
+        b.setAttribute("aria-pressed", b.dataset.store === "전체" ? "true" : "false");
+      });
+      renderMenuList();
+      switchScreen("shop");
+      notify(`[${store}] '${name}' 일러스트 메뉴가 등록되었습니다!`);
+    });
+
+    // ============================================================
+    // 주문한 가게만 경유하는 동적 경로 생성 & 🛵 오토바이 라이더 타이머
+    // ============================================================
     function prepareDynamicRoute(stores) {
       const pathGroup = document.getElementById("routePathGroup");
       const pinsGroup = document.getElementById("routePinsGroup");
       pathGroup.innerHTML = "";
       pinsGroup.innerHTML = "";
 
-      const pts = [START_PT];
+      routeCoords = [START_PT];
       stores.forEach((st) => {
         if (STORE_MAP_INFO[st]) {
-          pts.push({ x: STORE_MAP_INFO[st].x, y: STORE_MAP_INFO[st].y });
+          routeCoords.push({ x: STORE_MAP_INFO[st].x, y: STORE_MAP_INFO[st].y, store: st });
         }
       });
-      pts.push(END_PT);
+      routeCoords.push(END_PT);
 
-      const dPath = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
+      const dPath = routeCoords.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
       const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
       pathEl.setAttribute("d", dPath);
       pathEl.setAttribute("fill", "none");
@@ -1190,72 +1768,110 @@
         <text y="32" text-anchor="middle" fill="#b91c1c" font-size="10.5" font-weight="bold">수령 위치</text>
       `;
       pinsGroup.appendChild(endG);
-
-      trackStepsData = [
-        {
-          x: START_PT.x, y: START_PT.y, tag: "주문 수락됨", tl: 1,
-          eta: `도착 예정 ${stores.length * 8 + 7}분 후`,
-          sub: `${stores.join(", ")}에서 주문을 수락했습니다.`,
-          picked: 0
-        }
-      ];
-
-      stores.forEach((st, idx) => {
-        const info = STORE_MAP_INFO[st];
-        trackStepsData.push({
-          x: info.x, y: info.y, tag: `${info.badge} 픽업`, tl: idx < stores.length - 1 ? 2 : 3,
-          eta: `도착 예정 ${Math.max(5, (stores.length - idx) * 7)}분 후`,
-          sub: `${st} 메뉴 준비 완료! 라이더가 픽업했습니다.`,
-          picked: idx + 1
-        });
-      });
-
-      trackStepsData.push({
-        x: END_PT.x, y: END_PT.y, tag: "배달 완료", tl: 4,
-        eta: "배달 완료",
-        sub: `주문하신 ${stores.join(", ")} 메뉴가 도착했습니다!`,
-        picked: stores.length + 1
-      });
     }
 
-    function renderTracking() {
-      if (trackStepsData.length === 0) prepareDynamicRoute(orderedStoreList);
-      const cur = trackStepsData[trackStepIdx] || trackStepsData[0];
+    function renderCountdownUI() {
+      if (routeCoords.length < 2) prepareDynamicRoute(orderedStoreList);
 
-      document.getElementById("riderPin").setAttribute("transform", `translate(${cur.x}, ${cur.y})`);
-      document.getElementById("riderPinText").textContent = cur.tag;
-      document.getElementById("trackAddrBadge").textContent = `배달지: ${orderAddrText} · 주문 가게 ${orderedStoreList.length}곳`;
-      document.getElementById("trackEtaTitle").textContent = cur.eta;
-      document.getElementById("trackStatusSub").textContent = cur.sub;
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      const timeFmt = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+      const progress = totalEtaSeconds > 0 ? Math.min(1, Math.max(0, (totalEtaSeconds - remainingSeconds) / totalEtaSeconds)) : 1;
+      const segTotal = routeCoords.length - 1;
+      const exactPos = progress * segTotal;
+      const segIdx = Math.min(segTotal - 1, Math.floor(exactPos));
+      const segRatio = exactPos - segIdx;
+
+      const p1 = routeCoords[segIdx];
+      const p2 = routeCoords[segIdx + 1];
+      const curX = p1.x + (p2.x - p1.x) * segRatio;
+      const curY = p1.y + (p2.y - p1.y) * segRatio;
+
+      document.getElementById("riderPin").setAttribute("transform", `translate(${curX.toFixed(1)}, ${curY.toFixed(1)})`);
+      document.getElementById("trackAddrBadge").textContent = `배달지: ${orderAddrText} · 경유 가게 ${orderedStoreList.length}곳`;
+
+      let tlPhase = 1;
+      let pinText = "주문 수락됨";
+      let etaTitle = `남은 시간 ${timeFmt}`;
+      let statusDesc = `${orderedStoreList.join(", ")}에서 메뉴를 준비하고 있습니다.`;
+
+      if (remainingSeconds === 0) {
+        tlPhase = 4;
+        pinText = "배달 완료";
+        etaTitle = "배달 완료 (00:00)";
+        statusDesc = `주문하신 ${orderedStoreList.join(", ")} 메뉴가 모두 도착했습니다!`;
+      } else if (progress >= 0.65) {
+        tlPhase = 3;
+        pinText = "🛵 배달중";
+        statusDesc = "픽업을 마치고 🛵 오토바이 라이더가 수령 위치로 이동 중입니다.";
+      } else if (progress >= 0.2) {
+        tlPhase = 2;
+        pinText = "메뉴 준비중";
+      }
+
+      document.getElementById("riderPinText").textContent = pinText;
+      document.getElementById("trackEtaTitle").textContent = etaTitle;
+      document.getElementById("trackStatusSub").textContent = statusDesc;
 
       [1, 2, 3, 4].forEach((n) => {
         const pill = document.getElementById(`tlStep${n}`);
-        if (n <= cur.tl) pill.classList.add("active");
+        if (n <= tlPhase) pill.classList.add("active");
         else pill.classList.remove("active");
       });
 
       const listEl = document.getElementById("orderedStoresList");
       listEl.innerHTML = "";
+      const elapsedSec = totalEtaSeconds - remainingSeconds;
 
-      orderedStoreList.forEach((st, i) => {
-        const isDone = cur.picked > i;
-        const isNow = cur.picked === i;
-        const label = isDone ? "배달중·픽업완료" : isNow ? "메뉴 준비중" : "주문 수락됨";
-        const cls = isDone ? "s-done" : isNow ? "s-cook" : "s-prep";
-        const detail = isDone ? "픽업 완료" : isNow ? "조리 진행중" : `예상 준비시간 ${STORE_MAP_INFO[st].prep}분`;
+      orderedStoreList.forEach((st, idx) => {
+        const storePrepSec = Math.min(totalEtaSeconds - 60, (idx + 1) * 180);
+        const leftSec = Math.max(0, storePrepSec - elapsedSec);
+        const isDone = leftSec === 0 || remainingSeconds === 0;
+        const lMin = Math.floor(leftSec / 60);
+        const lSec = leftSec % 60;
 
         const li = document.createElement("li");
         li.className = `cook-card ${isDone ? "done" : ""}`;
         li.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <strong style="font-size:0.95rem;">${st} (최소 ${STORE_MIN_PRICE[st].toLocaleString()}원)</strong>
-            <span class="st-badge ${cls}">${label}</span>
+            <span class="st-badge ${isDone ? "s-done" : "s-cook"}">${isDone ? "조리완료 · 🛵 픽업" : "조리중"}</span>
           </div>
-          <div style="font-size:0.82rem; color:#4b5563; margin-top:4px;">${detail}</div>
+          <div style="font-size:0.84rem; color:#4b5563; margin-top:4px;">
+            ${isDone ? "오토바이 라이더 픽업 완료" : `남은 조리 타이머: ${String(lMin).padStart(2, "0")}:${String(lSec).padStart(2, "0")}`}
+          </div>
         `;
         listEl.appendChild(li);
       });
     }
+
+    setInterval(() => {
+      if (!countdownRunning) return;
+      if (remainingSeconds > 0) {
+        remainingSeconds -= 1;
+        if (!document.getElementById("viewTrack").hidden) {
+          renderCountdownUI();
+        }
+      }
+    }, 1000);
+
+    document.getElementById("toggleTimerBtn").addEventListener("click", (e) => {
+      countdownRunning = !countdownRunning;
+      e.target.textContent = countdownRunning ? "실시간 타이머 일시정지" : "실시간 타이머 재개";
+    });
+
+    document.getElementById("fastForwardBtn").addEventListener("click", () => {
+      remainingSeconds = Math.max(0, remainingSeconds - 60);
+      renderCountdownUI();
+    });
+
+    document.getElementById("resetTrackBtn").addEventListener("click", () => {
+      remainingSeconds = totalEtaSeconds;
+      countdownRunning = true;
+      document.getElementById("toggleTimerBtn").textContent = "실시간 타이머 일시정지";
+      renderCountdownUI();
+    });
 
     document.getElementById("checkoutForm").addEventListener("submit", (e) => {
       e.preventDefault();
@@ -1302,37 +1918,13 @@
 
       orderedStoreList = Array.from(pickedSet);
       orderAddrText = addrEl.value.trim();
-      trackStepIdx = 0;
+      totalEtaSeconds = orderedStoreList.length * 420 + 300;
+      remainingSeconds = totalEtaSeconds;
+      countdownRunning = true;
+
       prepareDynamicRoute(orderedStoreList);
-      notify(`${orderedStoreList.join(" · ")} 주문 완료!`);
+      notify(`${orderedStoreList.join(" · ")} 주문 완료! 🛵 배달 시작`);
       switchScreen("track");
-    });
-
-    document.getElementById("stepTrackBtn").addEventListener("click", () => {
-      if (trackStepIdx < trackStepsData.length - 1) {
-        trackStepIdx += 1;
-        renderTracking();
-      }
-    });
-
-    document.getElementById("resetTrackBtn").addEventListener("click", () => {
-      clearInterval(autoPlayTimer);
-      autoPlayTimer = null;
-      trackStepIdx = 0;
-      renderTracking();
-    });
-
-    document.getElementById("autoTrackBtn").addEventListener("click", () => {
-      if (autoPlayTimer) return;
-      autoPlayTimer = setInterval(() => {
-        if (trackStepIdx < trackStepsData.length - 1) {
-          trackStepIdx += 1;
-          renderTracking();
-        } else {
-          clearInterval(autoPlayTimer);
-          autoPlayTimer = null;
-        }
-      }, 2000);
     });
 
     document.querySelectorAll(".store-tab-btn").forEach((btn) => {
@@ -1342,6 +1934,16 @@
         selectedStore = btn.dataset.store;
         renderMenuList();
       });
+    });
+
+    document.getElementById("searchMenuInput").addEventListener("input", (e) => {
+      searchKeyword = e.target.value.trim().toLowerCase();
+      renderMenuList();
+    });
+
+    document.getElementById("sortSelect").addEventListener("change", (e) => {
+      sortMode = e.target.value;
+      renderMenuList();
     });
 
     document.getElementById("ccPlay").addEventListener("click", () => {
@@ -1364,7 +1966,6 @@
       document.getElementById("ccText").textContent = CC_LINES[0];
     });
 
-    renderSpotlight();
     renderMenuList();
     renderBasket();
     prepareDynamicRoute(orderedStoreList);
