@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 주문 웹앱</title>
+  <title>한바구니픽 (Hanbaguni Pick) - 다중 매장 통합 주문 & 실시간 라이더 트래킹</title>
   <style>
     :root {
-      --bg-page: #f8fafc;
-      --bg-card: #ffffff;
-      --bg-subtle: #f1f5f9;
+      --bg-page: #f3f6fa;
+      --bg-surface: #ffffff;
+      --bg-muted: #f1f5f9;
       --text-main: #0f172a;
       --text-sub: #334155;
-      --primary: #0f766e;
-      --primary-dark: #115e59;
-      --primary-soft: #f0fdfa;
-      --accent: #c2410c;
+      --brand: #0f766e;         /* 명도 대비 5.4:1 이상 (WCAG AA 충족) */
+      --brand-dark: #115e59;
+      --brand-soft: #f0fdfa;
+      --brand-border: #99f6e4;
+      --accent: #c2410c;        /* 명도 대비 5.1:1 이상 */
       --accent-dark: #9a3412;
       --border: #cbd5e1;
       --focus-ring: #2563eb;
+      --shadow-sm: 0 3px 12px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 14px 32px rgba(15, 23, 42, 0.10);
+      --radius-xl: 22px;
       --radius-lg: 16px;
       --radius-md: 10px;
-      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.12);
     }
 
     * {
@@ -30,17 +32,19 @@
 
     body {
       margin: 0;
-      font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
       background-color: var(--bg-page);
       color: var(--text-main);
       line-height: 1.6;
     }
 
+    /* 2. 키보드 접근성: 명확한 포커스 표시 */
     :focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
     }
 
+    /* 6. 광과민성 예방: 3회 이상 번쩍임 금지 & 사용자 모션 감소 설정 존중 */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         transition: none !important;
@@ -52,9 +56,9 @@
       position: absolute;
       top: -60px;
       left: 16px;
-      background: var(--primary);
+      background: var(--brand);
       color: #ffffff;
-      padding: 10px 16px;
+      padding: 10px 18px;
       border-radius: 8px;
       font-weight: 700;
       text-decoration: none;
@@ -65,24 +69,29 @@
       top: 16px;
     }
 
+    /* 상단 헤더 */
     header {
-      background: var(--bg-card);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
       box-shadow: var(--shadow-sm);
     }
 
     .header-inner {
-      max-width: 1180px;
+      max-width: 1260px;
       margin: 0 auto;
-      padding: 18px 24px;
+      padding: 14px 24px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .logo-wrap {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -90,36 +99,80 @@
 
     .brand-title {
       margin: 0;
-      font-size: 1.55rem;
+      font-size: 1.48rem;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--brand);
       letter-spacing: -0.02em;
     }
 
-    .brand-desc {
+    .brand-sub {
       margin: 2px 0 0;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-sub);
+    }
+
+    /* 화면 전환 내비게이션 탭 */
+    .view-switcher {
+      display: inline-flex;
+      background: var(--bg-muted);
+      padding: 4px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+
+    .view-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      padding: 8px 16px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .view-tab[aria-selected="true"] {
+      background: var(--brand);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 자연스러운 화면 전환 애니메이션 */
+    .view-section {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.34s ease, transform 0.34s ease;
+    }
+
+    .view-section[hidden] {
+      display: none;
+    }
+
+    .view-entering {
+      opacity: 0;
+      transform: translateY(10px);
     }
 
     button {
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 700;
       border-radius: var(--radius-md);
       padding: 10px 16px;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     }
 
     .btn-primary {
-      background-color: var(--primary);
+      background-color: var(--brand);
       color: #ffffff;
     }
 
     .btn-primary:hover {
-      background-color: var(--primary-dark);
+      background-color: var(--brand-dark);
     }
 
     .btn-secondary {
@@ -129,7 +182,7 @@
     }
 
     .btn-secondary:hover {
-      background-color: var(--bg-subtle);
+      background-color: var(--bg-muted);
     }
 
     .btn-accent {
@@ -141,226 +194,357 @@
       background-color: var(--accent-dark);
     }
 
-    main {
-      max-width: 1180px;
-      margin: 24px auto 60px;
+    /* 히어로 배너 (스쿠터 라이더 일러스트 포함) */
+    .hero-wrap {
+      max-width: 1260px;
+      margin: 20px auto 0;
       padding: 0 24px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(125deg, #0f766e 0%, #115e59 60%, #134e4a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 20px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-text-box {
+      flex: 1 1 420px;
+    }
+
+    .hero-banner h2 {
+      margin: 0 0 6px;
+      font-size: 1.32rem;
+      font-weight: 800;
+    }
+
+    .hero-banner p {
+      margin: 0 0 12px;
+      font-size: 0.95rem;
+      color: #e6fffa;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* 메인 레이아웃 */
+    main {
+      max-width: 1260px;
+      margin: 22px auto 64px;
+      padding: 0 24px;
+    }
+
+    .order-layout {
       display: grid;
-      grid-template-columns: 1.55fr 1fr;
+      grid-template-columns: 1.6fr 1fr;
       gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 920px) {
-      main {
+    @media (max-width: 960px) {
+      .order-layout {
         grid-template-columns: 1fr;
       }
     }
 
     .panel {
-      background: var(--bg-card);
+      background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 22px;
+      border-radius: var(--radius-xl);
+      padding: 24px;
       box-shadow: var(--shadow-sm);
     }
 
-    .section-head {
+    .panel-top {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
-    h2 {
+    .panel-title {
       margin: 0;
-      font-size: 1.25rem;
-      color: var(--text-main);
+      font-size: 1.24rem;
+      font-weight: 800;
     }
 
-    .badge-info {
-      font-size: 0.85rem;
+    .chip {
+      font-size: 0.84rem;
       font-weight: 700;
-      color: var(--primary-dark);
-      background: var(--primary-soft);
-      border: 1px solid #99f6e4;
-      padding: 4px 10px;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
+      padding: 4px 12px;
       border-radius: 999px;
+    }
+
+    /* 검색 및 가게 필터 */
+    .filter-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .store-tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 18px;
     }
 
     .store-tab[aria-pressed="true"] {
-      background-color: var(--primary);
+      background-color: var(--brand);
       color: #ffffff;
-      border-color: var(--primary);
+      border-color: var(--brand);
     }
 
+    /* 메뉴 카드 */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 18px;
     }
 
     .menu-card {
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 15px;
+      border-radius: var(--radius-lg);
+      padding: 16px;
       background: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 12px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.2s ease;
     }
 
     .menu-card:hover {
-      border-color: var(--primary);
-      box-shadow: var(--shadow-sm);
+      border-color: var(--brand);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
-    .store-pill {
+    .food-illus-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    .store-tag {
       display: inline-block;
       font-size: 0.8rem;
       font-weight: 700;
       padding: 3px 10px;
       border-radius: 999px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
-    .pill-kimchi {
+    .tag-kimchi {
       background: #fef2f2;
       color: #991b1b;
       border: 1px solid #fecaca;
     }
 
-    .pill-coffee {
+    .tag-coffee {
       background: #f0fdfa;
       color: #115e59;
       border: 1px solid #99f6e4;
     }
 
-    .pill-fruit {
+    .tag-fruit {
       background: #fffbeb;
       color: #92400e;
       border: 1px solid #fde68a;
     }
 
-    .menu-title {
+    .menu-name {
       margin: 6px 0 4px;
       font-size: 1.08rem;
       font-weight: 800;
     }
 
     .menu-desc {
-      margin: 0 0 8px;
-      font-size: 0.9rem;
+      margin: 0 0 10px;
+      font-size: 0.89rem;
       color: var(--text-sub);
     }
 
+    .menu-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     .menu-price {
-      margin: 0;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 800;
-      color: var(--text-main);
     }
 
-    .media-box {
-      margin-top: 24px;
+    .prep-badge {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--bg-muted);
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    .option-select {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 0.88rem;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 8px;
       background: #f8fafc;
-      padding: 16px;
+      margin-bottom: 8px;
     }
 
-    .media-header {
+    /* 6. 고퀄리티 미디어 섹션: 자막(CC) + 진행 바 + 재생/일시정지/정지 제어 */
+    .media-showcase {
+      margin-top: 26px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .media-top-bar {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
-    .media-controls {
+    .media-stage {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .media-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #334155;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .media-progress-fill {
+      height: 100%;
+      width: 33.3%;
+      background: #2dd4bf;
+      transition: width 0.35s ease;
+    }
+
+    .cc-box {
       display: flex;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    .caption-screen {
-      background: #0f172a;
-      color: #ffffff;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 0.98rem;
-    }
-
-    .caption-badge {
-      display: inline-block;
+    .cc-pill {
       background: #2dd4bf;
       color: #0f172a;
       font-size: 0.78rem;
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 6px;
-      margin-right: 8px;
+      white-space: nowrap;
+      margin-top: 2px;
     }
 
-    .cart-summary-table {
+    /* 오른쪽 통합 장바구니 */
+    .sticky-box {
+      position: sticky;
+      top: 86px;
+    }
+
+    .cart-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       font-size: 0.92rem;
     }
 
-    .cart-summary-table th,
-    .cart-summary-table td {
+    .cart-table th,
+    .cart-table td {
       border-bottom: 1px solid #e2e8f0;
       padding: 10px 6px;
       text-align: left;
       vertical-align: middle;
     }
 
-    .cart-summary-table th {
-      background: var(--bg-subtle);
-      color: var(--text-main);
+    .cart-table th {
+      background: var(--bg-muted);
       font-weight: 700;
     }
 
-    .qty-group {
+    .qty-box {
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-mini {
+    .btn-xs {
       padding: 4px 9px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
     }
 
-    .price-box {
-      background: var(--bg-subtle);
+    .promo-strip {
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
+      color: var(--brand-dark);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .bill-card {
+      background: var(--bg-muted);
       border-radius: 12px;
       padding: 14px 16px;
       margin-bottom: 16px;
     }
 
-    .price-row {
+    .bill-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       color: var(--text-sub);
+      margin-bottom: 6px;
     }
 
-    .price-total {
+    .bill-total {
       display: flex;
       justify-content: space-between;
       border-top: 1px solid var(--border);
@@ -368,10 +552,10 @@
       margin-top: 8px;
       font-size: 1.15rem;
       font-weight: 800;
-      color: var(--text-main);
     }
 
-    .form-field {
+    /* 4. 폼 접근성 */
+    .form-group {
       margin-bottom: 14px;
     }
 
@@ -379,6 +563,7 @@
       display: block;
       font-weight: 700;
       margin-bottom: 6px;
+      font-size: 0.94rem;
     }
 
     .req-star {
@@ -387,7 +572,7 @@
     }
 
     input[type="text"],
-    select {
+    select.form-input {
       width: 100%;
       padding: 10px 12px;
       font-size: 0.95rem;
@@ -397,49 +582,174 @@
       color: var(--text-main);
     }
 
-    .field-error {
+    .error-msg {
       color: var(--accent);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
-      margin-top: 5px;
+      margin-top: 4px;
       min-height: 20px;
     }
 
-    .tracker-box {
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: 12px;
-      border: 1.5px solid #14b8a6;
-      background: var(--primary-soft);
+    /* ============================================================
+       배민 스타일 실시간 라이더 위치 & 매장별 조리 상태 트래킹 뷰
+       ============================================================ */
+    .tracking-grid {
+      display: grid;
+      grid-template-columns: 1.38fr 1fr;
+      gap: 24px;
+      align-items: start;
     }
 
-    .tracker-steps {
+    @media (max-width: 960px) {
+      .tracking-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .eta-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .eta-time {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #2dd4bf;
+      margin: 2px 0 0;
+    }
+
+    .map-container {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #e2e8f0;
+      position: relative;
+    }
+
+    /* 스쿠터 라이더 마커 부드러운 이동 트랜지션 */
+    #riderMarkerGroup {
+      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    /* 매장별 조리 상태 카드 (준비시간 -> 조리중 -> 조리완료) */
+    .store-status-list {
       list-style: none;
       padding: 0;
-      margin: 10px 0 12px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      text-align: center;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .tracker-step {
-      background: #ffffff;
+    .store-status-card {
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-sub);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      background: #ffffff;
+      transition: border-color 0.25s ease, background-color 0.25s ease;
     }
 
-    .tracker-step.active {
-      background: var(--primary);
+    .store-status-card.done {
+      border-color: #14b8a6;
+      background: var(--brand-soft);
+    }
+
+    .status-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .cook-badge {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .state-prep {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .state-cooking {
+      background: #ffedd5;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    .state-ready {
+      background: #ccfbf1;
+      color: #115e59;
+      border: 1px solid #5eead4;
+    }
+
+    .cook-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-muted);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .cook-bar-fill {
+      height: 100%;
+      background: var(--brand);
+      transition: width 0.5s ease;
+    }
+
+    .rider-info-box {
+      margin-top: 16px;
+      background: var(--bg-muted);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* 토스트 안내 */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
       color: #ffffff;
-      border-color: var(--primary);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      z-index: 900;
+      transition: opacity 0.25s ease;
     }
 
-    .modal-backdrop {
+    .toast-box[hidden] {
+      display: none;
+    }
+
+    /* 모달 */
+    .modal-overlay {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.55);
@@ -450,24 +760,24 @@
       z-index: 950;
     }
 
-    .modal-backdrop[hidden] {
+    .modal-overlay[hidden] {
       display: none;
     }
 
     .modal-card {
       background: #ffffff;
-      border-radius: 16px;
-      max-width: 460px;
+      border-radius: var(--radius-xl);
+      max-width: 480px;
       width: 100%;
-      padding: 24px;
+      padding: 26px;
       box-shadow: var(--shadow-md);
     }
 
     footer {
-      max-width: 1180px;
+      max-width: 1260px;
       margin: 0 auto 40px;
       padding: 0 24px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-sub);
     }
   </style>
@@ -477,374 +787,850 @@
 
   <header>
     <div class="header-inner">
-      <div class="logo-wrap">
-        <svg width="44" height="44" viewBox="0 0 44 44" role="img" aria-label="한바구니픽 로고 아이콘">
-          <title>한바구니픽 로고</title>
-          <rect width="44" height="44" rx="12" fill="#0f766e" />
-          <path d="M12 19h20l-2.2 13H14.2L12 19z" fill="#ffffff" />
-          <path d="M17 19l5-7 5 7" stroke="#99f6e4" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      <div class="brand-group">
+        <svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="한바구니픽 로고">
+          <title>한바구니픽 브랜드 로고</title>
+          <rect width="46" height="46" rx="13" fill="#0f766e" />
+          <path d="M12 20h22l-2.4 14H14.4L12 20z" fill="#ffffff" />
+          <path d="M18 20l5-7 5 7" stroke="#99f6e4" stroke-width="2.6" fill="none" stroke-linecap="round" />
         </svg>
         <div>
           <h1 class="brand-title">한바구니픽 (Hanbaguni Pick)</h1>
-          <p class="brand-desc">김치찜가게 · 커피가게 · 과일가게 메뉴를 삭제 없이 한 장바구니에 담아 통합 주문</p>
+          <p class="brand-sub">진국김치찜 · 모닝브루 카페 · 싱싱과일바구니 다중 매장 통합 주문</p>
         </div>
       </div>
 
+      <!-- 화면 전환 탭 -->
+      <nav class="view-switcher" role="tablist" aria-label="서비스 화면 전환">
+        <button type="button" id="tabOrderView" class="view-tab" role="tab" aria-selected="true" aria-controls="orderViewSection">
+          1. 다중 매장 메뉴·장바구니
+        </button>
+        <button type="button" id="tabTrackingView" class="view-tab" role="tab" aria-selected="false" aria-controls="trackingViewSection">
+          2. 실시간 라이더·조리 현황
+        </button>
+      </nav>
+
       <div>
-        <button type="button" id="openGuideModalBtn" class="btn-secondary">이용 안내 보기</button>
+        <button type="button" id="openCompareBtn" class="btn-secondary">기존 앱과 비교</button>
       </div>
     </div>
   </header>
 
+  <!-- 히어로 배너 (스쿠터 라이더 일러스트 포함) -->
+  <section class="hero-wrap" aria-label="서비스 핵심 요약">
+    <div class="hero-banner">
+      <div class="hero-text-box">
+        <h2>다른 가게 메뉴를 담아도 장바구니가 지워지지 않아요!</h2>
+        <p>진국김치찜 식사 + 모닝브루 커피 + 싱싱과일 디저트를 한 장바구니에 담아 라이더 1명이 한 번에 픽업해 배달합니다.</p>
+        <span class="hero-badge">2곳 이상 통합 주문 시 배달비 1,000원 즉시 할인</span>
+      </div>
+
+      <!-- 예쁜 배달 라이더 일러스트 (의미 있는 대체 텍스트 포함) -->
+      <svg width="210" height="106" viewBox="0 0 210 106" role="img" aria-label="한바구니픽 스쿠터 배달 라이더 일러스트">
+        <title>한바구니픽 통합 배달 라이더 일러스트</title>
+        <rect x="4" y="6" width="202" height="94" rx="16" fill="rgba(255,255,255,0.12)" />
+        <!-- 도로 선 -->
+        <line x1="20" y1="88" x2="190" y2="88" stroke="#5eead4" stroke-width="3" stroke-linecap="round" stroke-dasharray="12 6" />
+        <!-- 배달통 (민트/오렌지 투톤) -->
+        <rect x="42" y="34" width="34" height="28" rx="6" fill="#ea580c" stroke="#ffffff" stroke-width="2" />
+        <text x="59" y="51" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="bold">한바구니</text>
+        <!-- 스쿠터 차체 -->
+        <path d="M52 64 L118 64 L132 46 L142 46 L136 74 L48 74 Z" fill="#ffffff" />
+        <circle cx="62" cy="76" r="11" fill="#0f172a" stroke="#99f6e4" stroke-width="2.5" />
+        <circle cx="62" cy="76" r="4" fill="#ffffff" />
+        <circle cx="132" cy="76" r="11" fill="#0f172a" stroke="#99f6e4" stroke-width="2.5" />
+        <circle cx="132" cy="76" r="4" fill="#ffffff" />
+        <!-- 라이더 몸통 & 헬멧 -->
+        <path d="M88 38 C88 38, 106 38, 112 56 L84 58 Z" fill="#2dd4bf" />
+        <circle cx="98" cy="24" r="12" fill="#ffffff" />
+        <path d="M98 14 C106 14, 110 20, 110 26 L96 26 Z" fill="#0f172a" />
+        <!-- 속도 바람 선 -->
+        <line x1="18" y1="42" x2="34" y2="42" stroke="#99f6e4" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="14" y1="54" x2="32" y2="54" stroke="#99f6e4" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </div>
+  </section>
+
   <main id="main-content" tabindex="-1">
-    <section class="panel" aria-labelledby="store-section-title">
-      <div class="section-head">
-        <h2 id="store-section-title">1. 가게별 메뉴 선택</h2>
-        <span class="badge-info">다른 가게를 눌러도 장바구니 유지</span>
-      </div>
+    <!-- ============================================================
+         [화면 1] 다중 매장 메뉴 선택 & 통합 장바구니
+         ============================================================ -->
+    <section id="orderViewSection" class="view-section order-layout" role="tabpanel" aria-labelledby="tabOrderView">
+      <!-- 왼쪽: 메뉴 선택 + 고퀄리티 미디어 가이드 -->
+      <div class="panel">
+        <div class="panel-top">
+          <h2 class="panel-title">가게별 메뉴 담기</h2>
+          <span class="chip">장바구니 초기화 없음</span>
+        </div>
 
-      <div class="store-tabs" role="group" aria-label="가게 선택 필터">
-        <button type="button" class="store-tab btn-secondary" data-store="전체" aria-pressed="true">전체 가게 (6)</button>
-        <button type="button" class="store-tab btn-secondary" data-store="진국김치찜" aria-pressed="false">진국김치찜</button>
-        <button type="button" class="store-tab btn-secondary" data-store="모닝브루 카페" aria-pressed="false">모닝브루 카페</button>
-        <button type="button" class="store-tab btn-secondary" data-store="싱싱과일바구니" aria-pressed="false">싱싱과일바구니</button>
-      </div>
+        <div class="filter-area">
+          <div class="search-box">
+            <label for="searchInput" style="margin:0; white-space:nowrap;">메뉴 검색:</label>
+            <input type="text" id="searchInput" placeholder="김치찜, 아메리카노, 파인애플 검색" />
+          </div>
 
-      <div id="menuGrid" class="menu-grid"></div>
-
-      <section class="media-box" aria-labelledby="media-guide-title">
-        <div class="media-header">
-          <h3 id="media-guide-title" style="margin:0; font-size:1.05rem;">통합 주문 단계별 안내 슬라이드 (자막 지원)</h3>
-          <div class="media-controls">
-            <button type="button" id="startGuideBtn" class="btn-primary btn-mini">안내 재생</button>
-            <button type="button" id="stopGuideBtn" class="btn-secondary btn-mini">정지</button>
+          <div class="store-tabs" role="group" aria-label="가게 필터">
+            <button type="button" class="store-tab btn-secondary" data-store="전체" aria-pressed="true">전체 가게 (6)</button>
+            <button type="button" class="store-tab btn-secondary" data-store="진국김치찜" aria-pressed="false">진국김치찜</button>
+            <button type="button" class="store-tab btn-secondary" data-store="모닝브루 카페" aria-pressed="false">모닝브루 카페</button>
+            <button type="button" class="store-tab btn-secondary" data-store="싱싱과일바구니" aria-pressed="false">싱싱과일바구니</button>
           </div>
         </div>
-        <div class="caption-screen" role="region" aria-live="polite" aria-label="안내 자막 화면">
-          <span class="caption-badge">자막(CC)</span>
-          <span id="guideCaptionText">[1/3단계] 진국김치찜, 모닝브루 카페, 싱싱과일바구니 메뉴를 자유롭게 골라 한 장바구니에 담아보세요.</span>
+
+        <div id="menuGrid" class="menu-grid"></div>
+
+        <!-- 6. 고퀄리티 미디어 섹션: 자막(CC) + 진행 바 + 재생/일시정지/정지 제어 -->
+        <section class="media-showcase" aria-labelledby="mediaGuideHeading">
+          <div class="media-top-bar">
+            <h3 id="mediaGuideHeading" style="margin:0; font-size:1.05rem;">한바구니픽 다중 픽업 원리 모션 가이드 (자막 지원)</h3>
+            <div style="display:flex; gap:8px;">
+              <button type="button" id="playMediaBtn" class="btn-primary btn-xs">재생</button>
+              <button type="button" id="pauseMediaBtn" class="btn-secondary btn-xs">일시정지</button>
+              <button type="button" id="stopMediaBtn" class="btn-secondary btn-xs">정지</button>
+            </div>
+          </div>
+
+          <div class="media-stage">
+            <svg id="guideVisualSvg" width="100%" height="110" viewBox="0 0 640 110" role="img" aria-label="한바구니픽 다중 매장 통합 주문 흐름 시각 가이드">
+              <title>한바구니픽 다중 매장 통합 주문 흐름도</title>
+              <rect x="8" y="15" width="175" height="80" rx="12" fill="#0f766e" />
+              <text x="95" y="48" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">1. 김치찜·커피·과일</text>
+              <text x="95" y="70" text-anchor="middle" fill="#ccfbf1" font-size="12">삭제 없이 한 장바구니 담기</text>
+
+              <path d="M192 55 L224 55" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round" />
+
+              <rect x="232" y="15" width="175" height="80" rx="12" fill="#1e293b" stroke="#2dd4bf" stroke-width="2" />
+              <text x="319" y="48" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">2. 동시 조리 & 일괄 픽업</text>
+              <text x="319" y="70" text-anchor="middle" fill="#94a3b8" font-size="12">매장별 조리시간 동기화</text>
+
+              <path d="M416 55 L448 55" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round" />
+
+              <rect x="456" y="15" width="175" height="80" rx="12" fill="#c2410c" />
+              <text x="543" y="48" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">3. 실시간 라이더 배달</text>
+              <text x="543" y="70" text-anchor="middle" fill="#ffedd5" font-size="12">지도 위치 & 조리상태 확인</text>
+            </svg>
+
+            <div class="media-progress-track" aria-hidden="true">
+              <div id="mediaProgressFill" class="media-progress-fill"></div>
+            </div>
+
+            <div class="cc-box" role="region" aria-live="polite" aria-label="미디어 자막 안내">
+              <span class="cc-pill">자막(CC)</span>
+              <span id="mediaCaptionText">[1/3단계] 진국김치찜, 모닝브루 카페, 싱싱과일바구니 메뉴를 삭제 없이 한 장바구니에 이어 담습니다.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 오른쪽: 통합 장바구니 및 주문 폼 -->
+      <aside class="panel sticky-box" aria-labelledby="cartHeading">
+        <div class="panel-top">
+          <h2 id="cartHeading" class="panel-title">나의 통합 장바구니</h2>
+          <span id="storeCountChip" class="chip">담긴 가게 0곳</span>
         </div>
-      </section>
+
+        <div id="discountInfoBox" class="promo-strip">
+          서로 다른 가게 2곳 이상 담으면 통합 배달비 1,000원이 자동 할인됩니다!
+        </div>
+
+        <table class="cart-table" aria-label="통합 장바구니 담긴 메뉴 목록">
+          <thead>
+            <tr>
+              <th scope="col">가게 / 메뉴(옵션)</th>
+              <th scope="col">수량</th>
+              <th scope="col">금액</th>
+            </tr>
+          </thead>
+          <tbody id="cartTbody">
+            <tr>
+              <td colspan="3" style="text-align:center; color:#475569; padding:22px 8px;">
+                담긴 메뉴가 없습니다. 김치찜·커피·과일을 함께 담아보세요!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="bill-card">
+          <div class="bill-row">
+            <span>메뉴 합계 금액</span>
+            <span id="subtotalVal">0원</span>
+          </div>
+          <div class="bill-row">
+            <span>통합 배달·픽업 수수료</span>
+            <span id="feeVal">0원</span>
+          </div>
+          <div class="bill-total">
+            <span>최종 결제 예정 금액</span>
+            <span id="totalVal">0원</span>
+          </div>
+        </div>
+
+        <form id="checkoutForm" novalidate>
+          <div class="form-group">
+            <label for="addrInput">
+              배달 주소 또는 픽업 지점 <span class="req-star" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="addrInput"
+              name="addrInput"
+              required
+              aria-describedby="addrError"
+              placeholder="예: 부산 사상구 주례동 123-4 (경남정보대 정문)"
+            />
+            <div id="addrError" class="error-msg" role="alert"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="methodSelect">
+              수령 방식 선택 <span class="req-star" aria-hidden="true">*</span>
+            </label>
+            <select id="methodSelect" name="methodSelect" class="form-input" required aria-describedby="methodError">
+              <option value="">수령 방식을 선택하세요</option>
+              <option value="한번에 통합 배달">한번에 통합 배달 (기본 3,000원 / 2곳 이상 2,000원)</option>
+              <option value="매장 동선 통합 픽업">매장 동선 통합 픽업 (수수료 0원)</option>
+            </select>
+            <div id="methodError" class="error-msg" role="alert"></div>
+          </div>
+
+          <button type="submit" class="btn-accent" style="width:100%; font-size:1.05rem; padding:13px;">
+            통합 주문하고 실시간 라이더 위치 보기
+          </button>
+        </form>
+      </aside>
     </section>
 
-    <aside class="panel" aria-labelledby="cart-section-title">
-      <div class="section-head">
-        <h2 id="cart-section-title">2. 나의 통합 장바구니</h2>
-        <span id="storeCountBadge" class="badge-info">담긴 가게 0곳</span>
+    <!-- ============================================================
+         [화면 2] 배민 스타일 실시간 라이더 위치 & 매장별 조리 상태 뷰
+         ============================================================ -->
+    <section id="trackingViewSection" class="view-section tracking-grid" role="tabpanel" aria-labelledby="tabTrackingView" hidden>
+      <!-- 왼쪽: 배민형 실시간 라이더 지도 -->
+      <div class="panel">
+        <div class="eta-header">
+          <div>
+            <span style="font-size:0.88rem; color:#99f6e4; font-weight:700;" id="trackingOrderSummary">실시간 다중 매장 통합 배달</span>
+            <p class="eta-time" id="etaHeadline">도착 예정 22분 후</p>
+            <p style="margin:4px 0 0; font-size:0.92rem; color:#e2e8f0;" id="riderStatusSubtitle">
+              매장들이 동시에 조리를 시작했습니다. 라이더가 첫 번째 매장으로 이동 중입니다.
+            </p>
+          </div>
+          <button type="button" id="backToOrderBtn" class="btn-secondary">메뉴 더 담기</button>
+        </div>
+
+        <!-- 배민 스타일 벡터 지도 (매장 핀 + 경로 + 스쿠터 라이더 일러스트 마커) -->
+        <div class="map-container">
+          <svg id="liveRiderMap" width="100%" height="350" viewBox="0 0 680 350" role="img" aria-label="실시간 라이더 이동 경로 및 매장 위치 지도">
+            <title>한바구니픽 실시간 라이더 이동 지도</title>
+
+            <!-- 지도 배경 도로망 & 공원 -->
+            <rect width="680" height="350" fill="#eef2f6" />
+            <rect x="28" y="26" width="175" height="96" rx="14" fill="#dcfce7" opacity="0.8" />
+            <text x="115" y="78" text-anchor="middle" fill="#166534" font-size="12" font-weight="bold">주례 공원 녹지</text>
+
+            <rect x="470" y="24" width="180" height="72" rx="14" fill="#e0f2fe" opacity="0.8" />
+            <text x="560" y="64" text-anchor="middle" fill="#0369a1" font-size="12" font-weight="bold">사상 캠퍼스 타운</text>
+
+            <!-- 도로 라인 -->
+            <path d="M0 180 L680 180" stroke="#ffffff" stroke-width="24" />
+            <path d="M210 0 L210 350" stroke="#ffffff" stroke-width="18" />
+            <path d="M460 0 L460 350" stroke="#ffffff" stroke-width="18" />
+            <path d="M90 180 L210 100 L350 180 L460 115 L590 240" fill="none" stroke="#cbd5e1" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- 라이더 예정 이동 경로 (점선) -->
+            <path d="M90 180 L210 100 L350 180 L460 115 L590 240" fill="none" stroke="#0f766e" stroke-width="5" stroke-dasharray="10 8" stroke-linecap="round" />
+
+            <!-- 핀 1: 진국김치찜 -->
+            <g transform="translate(210, 100)">
+              <circle r="21" fill="#dc2626" stroke="#ffffff" stroke-width="2.5" />
+              <text y="5" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">찜</text>
+              <rect x="-46" y="-45" width="92" height="22" rx="6" fill="#0f172a" />
+              <text y="-30" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">진국김치찜</text>
+            </g>
+
+            <!-- 핀 2: 모닝브루 카페 -->
+            <g transform="translate(350, 180)">
+              <circle r="21" fill="#0f766e" stroke="#ffffff" stroke-width="2.5" />
+              <text y="5" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">커피</text>
+              <rect x="-48" y="27" width="96" height="22" rx="6" fill="#0f172a" />
+              <text y="42" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">모닝브루 카페</text>
+            </g>
+
+            <!-- 핀 3: 싱싱과일바구니 -->
+            <g transform="translate(460, 115)">
+              <circle r="21" fill="#d97706" stroke="#ffffff" stroke-width="2.5" />
+              <text y="5" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">과일</text>
+              <rect x="-52" y="-45" width="104" height="22" rx="6" fill="#0f172a" />
+              <text y="-30" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">싱싱과일바구니</text>
+            </g>
+
+            <!-- 핀 4: 고객 도착지 -->
+            <g transform="translate(590, 240)">
+              <circle r="23" fill="#c2410c" stroke="#ffffff" stroke-width="2.5" />
+              <text y="5" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">도착</text>
+              <rect x="-44" y="29" width="88" height="22" rx="6" fill="#c2410c" />
+              <text y="44" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">내 수령 위치</text>
+            </g>
+
+            <!-- 실시간 움직이는 스쿠터 라이더 일러스트 마커 -->
+            <g id="riderMarkerGroup" transform="translate(90, 180)">
+              <circle r="30" fill="#2563eb" opacity="0.18" />
+              <circle r="22" fill="#ffffff" stroke="#2563eb" stroke-width="3" />
+              <!-- 미니 스쿠터 & 헬멧 라이더 일러스트 -->
+              <rect x="-13" y="-6" width="9" height="8" rx="2" fill="#ea580c" />
+              <path d="M-10 4 L10 4 L13 -2 L8 -2 L6 6 L-10 6 Z" fill="#0f766e" />
+              <circle cx="-6" cy="8" r="3.5" fill="#0f172a" />
+              <circle cx="8" cy="8" r="3.5" fill="#0f172a" />
+              <circle cx="2" cy="-8" r="5" fill="#2563eb" />
+              <path d="M2 -12 C6 -12, 7 -8, 7 -6 L1 -6 Z" fill="#ffffff" />
+              <!-- 상태 말풍선 -->
+              <rect x="-44" y="-48" width="88" height="21" rx="10" fill="#2563eb" />
+              <text id="riderTagText" y="-34" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">픽업 출발</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="sim-controls" role="group" aria-label="실시간 배달 단계 제어">
+          <button type="button" id="autoSimulateBtn" class="btn-primary">자동 실시간 진행 재생</button>
+          <button type="button" id="nextStageBtn" class="btn-secondary">다음 단계로 이동</button>
+          <button type="button" id="resetSimBtn" class="btn-secondary">처음 단계로</button>
+        </div>
       </div>
 
-      <table class="cart-summary-table" aria-label="통합 장바구니 담긴 메뉴 목록">
-        <thead>
-          <tr>
-            <th scope="col">가게 / 메뉴</th>
-            <th scope="col">수량</th>
-            <th scope="col">금액</th>
-          </tr>
-        </thead>
-        <tbody id="cartTableBody">
-          <tr>
-            <td colspan="3" style="text-align:center; color:#475569; padding:20px 8px;">
-              담긴 메뉴가 없습니다. 여러 가게 메뉴를 함께 담아보세요.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="price-box">
-        <div class="price-row">
-          <span>메뉴 합계 금액</span>
-          <span id="menuSubtotal">0원</span>
-        </div>
-        <div class="price-row">
-          <span>통합 배달·픽업 수수료 (1회 통합 적용)</span>
-          <span id="deliveryFee">0원</span>
-        </div>
-        <div class="price-total">
-          <span>최종 결제 예정 금액</span>
-          <span id="finalTotalPrice">0원</span>
-        </div>
-      </div>
-
-      <form id="checkoutForm" novalidate>
-        <div class="form-field">
-          <label for="deliveryAddress">
-            수령 주소 또는 픽업 지점 <span class="req-star" aria-hidden="true">*</span>
-          </label>
-          <input
-            type="text"
-            id="deliveryAddress"
-            name="deliveryAddress"
-            required
-            aria-describedby="addressError"
-            placeholder="예: 부산 사상구 주례동 123-4 (또는 주례역 픽업존)"
-          />
-          <div id="addressError" class="field-error" role="alert"></div>
+      <!-- 오른쪽: 매장별 준비시간 · 조리중 · 조리완료 실시간 현황 -->
+      <aside class="panel" aria-labelledby="storeCookHeading">
+        <div class="panel-top">
+          <h2 id="storeCookHeading" class="panel-title">매장별 조리 · 준비시간 현황</h2>
+          <span id="overallCookChip" class="chip">동시 조리 진행 중</span>
         </div>
 
-        <div class="form-field">
-          <label for="orderMethod">
-            주문 수령 방식 <span class="req-star" aria-hidden="true">*</span>
-          </label>
-          <select id="orderMethod" name="orderMethod" required aria-describedby="methodError">
-            <option value="">수령 방식을 선택하세요</option>
-            <option value="한번에 통합 배달">한번에 통합 배달 (배달비 2,000원)</option>
-            <option value="매장 동선 통합 픽업">매장 동선 통합 픽업 (수수료 0원)</option>
-          </select>
-          <div id="methodError" class="field-error" role="alert"></div>
+        <ul id="storeStatusList" class="store-status-list"></ul>
+
+        <div class="rider-info-box">
+          <!-- 라이더 프로필 아바타 일러스트 -->
+          <svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="전담 통합 라이더 캐릭터 일러스트">
+            <title>김민준 라이더 파트너 일러스트</title>
+            <circle cx="28" cy="28" r="28" fill="#ccfbf1" />
+            <circle cx="28" cy="24" r="11" fill="#0f766e" />
+            <path d="M20 22 C20 15, 36 15, 36 22 Z" fill="#ffffff" />
+            <rect x="22" y="21" width="12" height="5" rx="2.5" fill="#0f172a" />
+            <path d="M14 48 C14 38, 42 38, 42 48 Z" fill="#0f766e" />
+          </svg>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <strong style="font-size:0.98rem;">전담 통합 라이더: 김민준 파트너</strong>
+              <span class="chip">평점 4.9 ★</span>
+            </div>
+            <p id="riderRouteDetail" style="margin:0; font-size:0.86rem; color:var(--text-sub);">
+              보온·보냉 분리 가방으로 김치찜과 아이스 음료, 신선 과일을 안전하게 일괄 픽업합니다.
+            </p>
+          </div>
         </div>
-
-        <button type="submit" class="btn-accent" style="width:100%; font-size:1.05rem;">
-          다중 매장 한 번에 주문하기
-        </button>
-      </form>
-
-      <section id="deliveryTracker" class="tracker-box" aria-labelledby="tracker-title" hidden>
-        <h3 id="tracker-title" style="margin:0 0 6px; font-size:1.05rem; color:#115e59;">
-          실시간 통합 주문 · 라이더 이동 현황
-        </h3>
-        <p id="trackerMessage" style="margin:0; font-size:0.92rem; font-weight:700;"></p>
-        <ol class="tracker-steps">
-          <li id="step1" class="tracker-step active">1. 다중 매장 조리</li>
-          <li id="step2" class="tracker-step">2. 라이더 일괄 픽업</li>
-          <li id="step3" class="tracker-step">3. 수령 완료</li>
-        </ol>
-        <button type="button" id="nextStepBtn" class="btn-primary btn-mini" style="width:100%;">
-          다음 진행 단계 확인하기
-        </button>
-      </section>
-    </aside>
+      </aside>
+    </section>
   </main>
 
-  <div id="guideModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div id="toastNotice" class="toast-box" role="status" aria-live="polite" hidden></div>
+
+  <!-- 기존 앱 비교 안내 모달 -->
+  <div id="compareModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="compareTitle" hidden>
     <div class="modal-card">
-      <h2 id="modalTitle" style="margin-bottom:10px;">한바구니픽은 무엇이 다른가요?</h2>
+      <h2 id="compareTitle" style="margin:0 0 10px;">왜 한바구니픽을 만들었을까요?</h2>
       <p style="margin:0 0 10px; color:var(--text-sub);">
-        기존 배달 앱에서는 <strong>김치찜</strong>을 담은 뒤 <strong>커피</strong>나 <strong>과일</strong>을 담으려 하면
-        <em>“이전에 담은 메뉴가 삭제됩니다”</em>라는 경고와 함께 장바구니가 초기화됩니다.
+        <strong>기존 배달 앱:</strong> <em>“장바구니에는 같은 가게의 메뉴만 담을 수 있습니다. 선택하신 메뉴를 장바구니에 담을 경우 이전에 담은 메뉴가 삭제됩니다.”</em>라는 경고와 함께 장바구니가 초기화됩니다.
       </p>
       <p style="margin:0 0 18px; color:var(--text-sub);">
-        <strong>한바구니픽</strong>은 서로 다른 가게의 메뉴를 하나의 장바구니에 이어 담아 한 번에 결제하고 수령할 수 있습니다.
+        <strong>한바구니픽:</strong> <strong>진국김치찜</strong>, <strong>모닝브루 카페</strong>, <strong>싱싱과일바구니</strong> 메뉴를 한 장바구니에 담아 결제하고, 매장별 조리 완료 시점과 라이더 위치를 실시간으로 확인할 수 있습니다.
       </p>
-      <button type="button" id="closeGuideModalBtn" class="btn-primary" style="width:100%;">확인하고 메뉴 담기</button>
+      <button type="button" id="closeCompareBtn" class="btn-primary" style="width:100%;">확인하고 돌아가기</button>
     </div>
   </div>
 
   <footer>
-    <p>한바구니픽 (Hanbaguni Pick) · 웹 접근성 체크리스트(대체 텍스트, 키보드 포커스, 4.5:1 명도 대비, 폼 레이블, 시맨틱 구조, 자막·정지 제어) 준수 프로토타입</p>
+    <p>한바구니픽 (Hanbaguni Pick) · 웹 접근성 체크리스트(대체 텍스트, 키보드 탐색, 명도 대비 4.5:1 이상, 폼 레이블, 시맨틱 구조, 자막·정지 제어 및 깜빡임 방지) 준수 웹앱</p>
   </footer>
 
   <script>
-    const MENU_ITEMS = [
+    const MENU_DATA = [
       {
         id: 1,
         store: "진국김치찜",
-        categoryClass: "pill-kimchi",
+        tagClass: "tag-kimchi",
         name: "묵은지 돼지목살 김치찜",
-        desc: "국내산 묵은지와 두툼한 목살을 푹 끓인 대표 메뉴",
+        desc: "국내산 숙성 묵은지와 두툼한 목살을 푹 끓인 대표 메뉴",
         price: 13000,
-        altText: "진국김치찜 묵은지 돼지목살 김치찜 뚝배기 일러스트",
-        color: "#dc2626"
+        prepMinutes: 15,
+        options: ["기본 맛 (공기밥 포함)", "얼큰한 맛 (공기밥 포함)", "고기 추가 (+3,000원)"],
+        altText: "보글보글 끓는 뚝배기 묵은지 돼지목살 김치찜 일러스트",
+        illusType: "kimchiStew"
       },
       {
         id: 2,
         store: "진국김치찜",
-        categoryClass: "pill-kimchi",
-        name: "왕계란말이 & 공기밥 세트",
-        desc: "김치찜과 찰떡궁합인 부드러운 수제 계란말이",
+        tagClass: "tag-kimchi",
+        name: "왕계란말이 & 스팸구이",
+        desc: "매콤한 김치찜과 찰떡궁합인 도톰한 수제 대왕 계란말이",
         price: 6500,
-        altText: "진국김치찜 왕계란말이 일러스트",
-        color: "#ea580c"
+        prepMinutes: 10,
+        options: ["케첩 기본 제공", "케첩 따로 포장"],
+        altText: "노릇하게 말아 썬 왕계란말이와 케첩 일러스트",
+        illusType: "eggRoll"
       },
       {
         id: 3,
         store: "모닝브루 카페",
-        categoryClass: "pill-coffee",
+        tagClass: "tag-coffee",
         name: "아이스 아메리카노 (L)",
-        desc: "식사 후 깔끔하게 즐기는 고소한 원두 커피",
+        desc: "식사 후 입안을 깔끔하게 정리해 주는 고소한 원두 커피",
         price: 3800,
-        altText: "모닝브루 카페 아이스 아메리카노 컵 일러스트",
-        color: "#0f766e"
+        prepMinutes: 5,
+        options: ["ICE (기본)", "HOT (따뜻하게)", "연하게 (샷 1개)"],
+        altText: "얼음이 담긴 시원한 아이스 아메리카노 컵 일러스트",
+        illusType: "americano"
       },
       {
         id: 4,
         store: "모닝브루 카페",
-        categoryClass: "pill-coffee",
+        tagClass: "tag-coffee",
         name: "달콤 바닐라빈 라떼",
-        desc: "천연 바닐라빈 시럽이 어우러진 부드러운 라떼",
+        desc: "천연 바닐라빈 시럽이 어우러진 부드러운 우유 라떼",
         price: 4500,
-        altText: "모닝브루 카페 바닐라빈 라떼 일러스트",
-        color: "#0d9488"
+        prepMinutes: 6,
+        options: ["ICE (덜 달게)", "ICE (기본 당도)", "HOT (기본 당도)"],
+        altText: "부드러운 우유 층과 휘핑크림이 올라간 바닐라빈 라떼 일러스트",
+        illusType: "latte"
       },
       {
         id: 5,
         store: "싱싱과일바구니",
-        categoryClass: "pill-fruit",
+        tagClass: "tag-fruit",
         name: "한입 손질 파인애플 스틱",
-        desc: "바로 먹기 좋게 컷팅된 달콤한 생파인애플",
+        desc: "껍질 손질 없이 바로 먹기 좋게 컷팅한 고당도 파인애플",
         price: 4900,
-        altText: "싱싱과일바구니 손질 파인애플 일러스트",
-        color: "#d97706"
+        prepMinutes: 5,
+        options: ["포크 1개 포함", "포크 2개 포함"],
+        altText: "먹기 좋게 자른 노란 파인애플 스틱 일러스트",
+        illusType: "pineapple"
       },
       {
         id: 6,
         store: "싱싱과일바구니",
-        categoryClass: "pill-fruit",
-        name: "제철 모둠 컵과일",
-        desc: "딸기·샤인머스캣·오렌지를 한 컵에 담은 디저트",
+        tagClass: "tag-fruit",
+        name: "제철 모둠 컵과일 디저트",
+        desc: "딸기·샤인머스캣·오렌지를 한 컵에 담은 신선 디저트",
         price: 5500,
-        altText: "싱싱과일바구니 모둠 컵과일 일러스트",
-        color: "#b45309"
+        prepMinutes: 5,
+        options: ["기본 구성", "요거트 드레싱 추가"],
+        altText: "딸기, 청포도, 오렌지가 담긴 신선한 컵과일 일러스트",
+        illusType: "fruitCup"
       }
     ];
 
-    let currentStoreFilter = "전체";
-    const unifiedCart = new Map();
-    let deliveryStep = 1;
-    let guideTimer = null;
-    let guideIndex = 0;
+    // 메뉴별 예쁜 맞춤형 음식 SVG 일러스트 생성기
+    function buildFoodIllustration(item) {
+      const illustrations = {
+        kimchiStew: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <defs>
+              <linearGradient id="bgKimchi" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#fff1f2" />
+                <stop offset="100%" stop-color="#ffe4e6" />
+              </linearGradient>
+            </defs>
+            <rect width="260" height="118" fill="url(#bgKimchi)" />
+            <!-- 모락모락 김 -->
+            <path d="M106 28 Q101 20 106 13" stroke="#fb7185" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <path d="M130 25 Q125 17 130 10" stroke="#fb7185" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <path d="M154 28 Q149 20 154 13" stroke="#fb7185" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <!-- 뚝배기 손잡이 -->
+            <rect x="68" y="54" width="18" height="9" rx="4" fill="#1e293b" />
+            <rect x="174" y="54" width="18" height="9" rx="4" fill="#1e293b" />
+            <!-- 뚝배기 몸체 -->
+            <path d="M82 56 L178 56 L168 96 C166 102 158 104 130 104 C102 104 94 102 92 96 Z" fill="#1e293b" />
+            <!-- 빨간 김치찜 국물 & 재료 -->
+            <ellipse cx="130" cy="56" rx="48" ry="13" fill="#dc2626" />
+            <path d="M102 55 C110 47, 126 48, 132 56 Z" fill="#f97316" />
+            <path d="M128 56 C138 47, 152 49, 156 57 Z" fill="#fb923c" />
+            <rect x="116" y="49" width="14" height="8" rx="3" fill="#fef3c7" />
+            <circle cx="144" cy="52" r="4" fill="#22c55e" />
+          </svg>
+        `,
+        eggRoll: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <rect width="260" height="118" fill="#fff7ed" />
+            <!-- 흰 접시 -->
+            <ellipse cx="130" cy="84" rx="76" ry="18" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <!-- 도톰한 계란말이 3조각 -->
+            <g transform="translate(82, 48)">
+              <rect x="0" y="6" width="30" height="28" rx="7" fill="#facc15" stroke="#eab308" stroke-width="2" />
+              <circle cx="15" cy="20" r="6" fill="none" stroke="#f97316" stroke-width="2" />
+              <rect x="33" y="3" width="30" height="30" rx="7" fill="#fde047" stroke="#eab308" stroke-width="2" />
+              <circle cx="48" cy="18" r="6" fill="none" stroke="#f97316" stroke-width="2" />
+              <rect x="66" y="6" width="30" height="28" rx="7" fill="#facc15" stroke="#eab308" stroke-width="2" />
+              <circle cx="81" cy="20" r="6" fill="none" stroke="#f97316" stroke-width="2" />
+              <!-- 지그재그 케첩 -->
+              <path d="M8 14 Q24 8 42 15 T76 13 T90 16" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round" />
+            </g>
+          </svg>
+        `,
+        americano: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <rect width="260" height="118" fill="#f0fdfa" />
+            <!-- 빨대 -->
+            <path d="M138 34 L152 10" stroke="#0f766e" stroke-width="4.5" stroke-linecap="round" />
+            <!-- 테이크아웃 투명 컵 -->
+            <path d="M104 36 L156 36 L149 102 C148 105 144 106 130 106 C116 106 112 105 111 102 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+            <!-- 진한 아메리카노 액체 -->
+            <path d="M107 48 L153 48 L147 100 L113 100 Z" fill="#451a03" />
+            <!-- 얼음 조각 -->
+            <rect x="115" y="52" width="12" height="12" rx="3" fill="#bae6fd" opacity="0.85" transform="rotate(-12 121 58)" />
+            <rect x="131" y="54" width="12" height="12" rx="3" fill="#e0f2fe" opacity="0.85" transform="rotate(15 137 60)" />
+            <!-- 돔 리드 뚜껑 -->
+            <path d="M101 36 C101 23, 159 23, 159 36 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+          </svg>
+        `,
+        latte: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <rect width="260" height="118" fill="#ecfdf5" />
+            <!-- 빨대 -->
+            <path d="M124 34 L112 10" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" />
+            <!-- 컵 몸체 -->
+            <path d="M104 38 L156 38 L149 102 L111 102 Z" fill="#fef3c7" stroke="#94a3b8" stroke-width="2" />
+            <!-- 에스프레소 그라데이션 층 -->
+            <path d="M106 54 L154 54 L151 82 L109 82 Z" fill="#b45309" opacity="0.85" />
+            <!-- 우유 하단 층 -->
+            <path d="M109 82 L151 82 L149 101 L111 101 Z" fill="#fffbeb" />
+            <!-- 크림 폼 상단 -->
+            <path d="M102 38 C102 24, 158 24, 158 38 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <circle cx="130" cy="26" r="3" fill="#d97706" />
+          </svg>
+        `,
+        pineapple: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <rect width="260" height="118" fill="#fefce8" />
+            <!-- 접시 -->
+            <ellipse cx="130" cy="92" rx="74" ry="14" fill="#ffffff" stroke="#fde047" stroke-width="2" />
+            <!-- 파인애플 스틱 3조각 -->
+            <rect x="92" y="34" width="20" height="54" rx="6" fill="#facc15" stroke="#eab308" stroke-width="2" transform="rotate(-10 102 61)" />
+            <rect x="120" y="30" width="20" height="58" rx="6" fill="#fde047" stroke="#eab308" stroke-width="2" />
+            <rect x="148" y="34" width="20" height="54" rx="6" fill="#facc15" stroke="#eab308" stroke-width="2" transform="rotate(10 158 61)" />
+            <!-- 파인애플 결 무늬 -->
+            <line x1="125" y1="42" x2="135" y2="52" stroke="#ca8a04" stroke-width="1.8" />
+            <line x1="125" y1="58" x2="135" y2="68" stroke="#ca8a04" stroke-width="1.8" />
+            <!-- 나무 포크 -->
+            <line x1="176" y1="22" x2="162" y2="56" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
+          </svg>
+        `,
+        fruitCup: `
+          <svg width="100%" height="118" viewBox="0 0 260 118" role="img" aria-label="${item.altText}">
+            <title>${item.altText}</title>
+            <rect width="260" height="118" fill="#fffbeb" />
+            <!-- 컵 속 알록달록 과일들 -->
+            <!-- 오렌지 -->
+            <circle cx="114" cy="44" r="14" fill="#f97316" />
+            <!-- 딸기 -->
+            <path d="M134 30 C144 30, 148 42, 134 52 C120 42, 124 30, 134 30 Z" fill="#ef4444" />
+            <path d="M129 30 L134 34 L139 30" stroke="#16a34a" stroke-width="2.5" fill="none" />
+            <!-- 샤인머스캣 청포도 -->
+            <circle cx="148" cy="46" r="10" fill="#84cc16" />
+            <circle cx="122" cy="54" r="9" fill="#a3e635" />
+            <!-- 투명 컵 -->
+            <path d="M102 48 L158 48 L149 102 L111 102 Z" fill="rgba(255,255,255,0.72)" stroke="#94a3b8" stroke-width="2" />
+            <!-- 컵 내부 과일 실루엣 -->
+            <circle cx="124" cy="72" r="10" fill="#fb923c" opacity="0.85" />
+            <circle cx="139" cy="76" r="9" fill="#f87171" opacity="0.85" />
+            <circle cx="130" cy="90" r="9" fill="#a3e635" opacity="0.9" />
+          </svg>
+        `
+      };
 
-    const GUIDE_CAPTIONS = [
-      "[1/3단계] 진국김치찜, 모닝브루 카페, 싱싱과일바구니 메뉴를 자유롭게 골라 한 장바구니에 담아보세요.",
-      "[2/3단계] 다른 가게 메뉴를 담아도 이전 메뉴가 삭제되지 않으며, 통합 배달비 1회만 적용됩니다.",
-      "[3/3단계] 주문하기를 누르면 다중 매장 조리부터 라이더 일괄 픽업·수령 완료까지 한 번에 확인할 수 있습니다."
-    ];
-
-    function renderFoodIllustration(item) {
-      return `
-        <svg width="100%" height="78" viewBox="0 0 220 78" role="img" aria-label="${item.altText}" style="background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0;">
-          <title>${item.altText}</title>
-          <circle cx="42" cy="39" r="22" fill="${item.color}" opacity="0.16" />
-          <circle cx="42" cy="39" r="13" fill="${item.color}" />
-          <text x="76" y="34" font-size="13" font-weight="bold" fill="#0f172a">${item.store}</text>
-          <text x="76" y="53" font-size="12" fill="#334155">${item.price.toLocaleString()}원</text>
-        </svg>
-      `;
+      return `<div class="food-illus-wrap">${illustrations[item.illusType] || ""}</div>`;
     }
 
-    function renderMenuList() {
+    let activeStore = "전체";
+    let searchKeyword = "";
+    const cartMap = new Map();
+
+    // 미디어 가이드 상태
+    let mediaTimer = null;
+    let mediaStep = 0;
+    const MEDIA_CAPTIONS = [
+      "[1/3단계] 진국김치찜, 모닝브루 카페, 싱싱과일바구니 메뉴를 삭제 없이 한 장바구니에 이어 담습니다.",
+      "[2/3단계] 통합 주문 시 세 매장이 동시에 조리를 시작하며, 매장별 남은 준비시간과 조리 상태를 실시간 안내합니다.",
+      "[3/3단계] 조리 완료 타이밍에 맞춰 라이더가 매장을 순차 픽업하고 지도로 실시간 이동 위치를 보여줍니다."
+    ];
+
+    // 실시간 배달 시뮬레이션 단계 (0 ~ 4)
+    let simStage = 0;
+    let autoSimTimer = null;
+    let currentOrderAddress = "부산 사상구 주례동 (경남정보대 정문)";
+    let currentOrderStores = ["진국김치찜", "모닝브루 카페", "싱싱과일바구니"];
+
+    const RIDER_STAGES = [
+      {
+        x: 90,
+        y: 180,
+        tag: "매장 이동중",
+        eta: "도착 예정 22분 후",
+        subtitle: "주문 접수 완료! 세 매장에서 동시에 조리를 시작했습니다.",
+        chip: "조리 준비 및 시작",
+        kimchi: { status: "조리중", cls: "state-cooking", time: "남은 준비시간 12분", pct: 30 },
+        coffee: { status: "준비대기", cls: "state-prep", time: "픽업 5분 전 추출 예정", pct: 15 },
+        fruit: { status: "준비중", cls: "state-prep", time: "남은 준비시간 4분", pct: 40 }
+      },
+      {
+        x: 210,
+        y: 100,
+        tag: "김치찜 픽업",
+        eta: "도착 예정 15분 후",
+        subtitle: "진국김치찜 조리 완료! 라이더가 첫 번째 매장에서 메뉴를 픽업했습니다.",
+        chip: "1차 픽업 완료",
+        kimchi: { status: "조리완료 · 픽업됨", cls: "state-ready", time: "보온 가방 적재 완료", pct: 100 },
+        coffee: { status: "조리중", cls: "state-cooking", time: "남은 준비시간 2분", pct: 70 },
+        fruit: { status: "조리완료", cls: "state-ready", time: "냉장 포장 완료", pct: 100 }
+      },
+      {
+        x: 350,
+        y: 180,
+        tag: "카페 픽업",
+        eta: "도착 예정 10분 후",
+        subtitle: "모닝브루 카페 음료 제조 완료! 라이더가 두 번째 매장을 경유했습니다.",
+        chip: "2차 픽업 완료",
+        kimchi: { status: "조리완료 · 픽업됨", cls: "state-ready", time: "보온 가방 적재 완료", pct: 100 },
+        coffee: { status: "조리완료 · 픽업됨", cls: "state-ready", time: "음료 캐리어 적재 완료", pct: 100 },
+        fruit: { status: "조리완료", cls: "state-ready", time: "라이더 도착 대기 중", pct: 100 }
+      },
+      {
+        x: 460,
+        y: 115,
+        tag: "과일 픽업",
+        eta: "도착 예정 5분 후",
+        subtitle: "싱싱과일바구니까지 모든 메뉴 일괄 픽업 완료! 수령지로 직행 중입니다.",
+        chip: "전 매장 픽업 완료",
+        kimchi: { status: "조리완료 · 이동중", cls: "state-ready", time: "배달 이동 중", pct: 100 },
+        coffee: { status: "조리완료 · 이동중", cls: "state-ready", time: "배달 이동 중", pct: 100 },
+        fruit: { status: "조리완료 · 픽업됨", cls: "state-ready", time: "보냉 가방 적재 완료", pct: 100 }
+      },
+      {
+        x: 590,
+        y: 240,
+        tag: "배달 완료!",
+        eta: "도착 완료",
+        subtitle: "김치찜 · 커피 · 과일 통합 주문이 모두 안전하게 도착했습니다!",
+        chip: "통합 배달 완료",
+        kimchi: { status: "수령 완료", cls: "state-ready", time: "전달 완료", pct: 100 },
+        coffee: { status: "수령 완료", cls: "state-ready", time: "전달 완료", pct: 100 },
+        fruit: { status: "수령 완료", cls: "state-ready", time: "전달 완료", pct: 100 }
+      }
+    ];
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const box = document.getElementById("toastNotice");
+      box.textContent = msg;
+      box.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.hidden = true;
+      }, 2600);
+    }
+
+    // 부드러운 화면 전환 함수
+    function switchView(target) {
+      const orderSec = document.getElementById("orderViewSection");
+      const trackSec = document.getElementById("trackingViewSection");
+      const tabOrder = document.getElementById("tabOrderView");
+      const tabTrack = document.getElementById("tabTrackingView");
+
+      if (target === "tracking") {
+        orderSec.hidden = true;
+        trackSec.hidden = false;
+        trackSec.classList.add("view-entering");
+        requestAnimationFrame(() => {
+          trackSec.classList.remove("view-entering");
+        });
+        tabOrder.setAttribute("aria-selected", "false");
+        tabTrack.setAttribute("aria-selected", "true");
+        renderTrackingState();
+      } else {
+        trackSec.hidden = true;
+        orderSec.hidden = false;
+        orderSec.classList.add("view-entering");
+        requestAnimationFrame(() => {
+          orderSec.classList.remove("view-entering");
+        });
+        tabTrack.setAttribute("aria-selected", "false");
+        tabOrder.setAttribute("aria-selected", "true");
+      }
+    }
+
+    document.getElementById("tabOrderView").addEventListener("click", () => switchView("order"));
+    document.getElementById("tabTrackingView").addEventListener("click", () => switchView("tracking"));
+    document.getElementById("backToOrderBtn").addEventListener("click", () => switchView("order"));
+
+    function renderMenus() {
       const grid = document.getElementById("menuGrid");
-      const filtered = currentStoreFilter === "전체"
-        ? MENU_ITEMS
-        : MENU_ITEMS.filter((menu) => menu.store === currentStoreFilter);
+      const filtered = MENU_DATA.filter((item) => {
+        const matchStore = activeStore === "전체" || item.store === activeStore;
+        const matchKey =
+          !searchKeyword ||
+          item.name.toLowerCase().includes(searchKeyword) ||
+          item.store.toLowerCase().includes(searchKeyword);
+        return matchStore && matchKey;
+      });
 
       grid.innerHTML = "";
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#475569; padding:24px;">검색 결과가 없습니다.</p>`;
+        return;
+      }
+
       filtered.forEach((item) => {
+        const opts = item.options.map((o) => `<option value="${o}">${o}</option>`).join("");
         const card = document.createElement("article");
         card.className = "menu-card";
         card.innerHTML = `
           <div>
-            ${renderFoodIllustration(item)}
-            <span class="store-pill ${item.categoryClass}">${item.store}</span>
-            <h3 class="menu-title">${item.name}</h3>
+            ${buildFoodIllustration(item)}
+            <span class="store-tag ${item.tagClass}">${item.store}</span>
+            <h3 class="menu-name">${item.name}</h3>
             <p class="menu-desc">${item.desc}</p>
-            <p class="menu-price">${item.price.toLocaleString()}원</p>
+            <div class="menu-meta">
+              <span class="menu-price">${item.price.toLocaleString()}원</span>
+              <span class="prep-badge">준비시간 ${item.prepMinutes}분</span>
+            </div>
           </div>
-          <button type="button" class="btn-primary add-cart-btn" data-id="${item.id}" aria-label="${item.store}의 ${item.name} 장바구니에 추가">
-            한바구니에 담기
-          </button>
+          <div>
+            <label for="opt-${item.id}" style="font-size:0.82rem; margin-bottom:4px;">옵션 선택</label>
+            <select id="opt-${item.id}" class="option-select">${opts}</select>
+            <button type="button" class="btn-primary add-cart-btn" data-id="${item.id}" style="width:100%;" aria-label="${item.store} ${item.name} 장바구니에 담기">
+              한바구니에 담기
+            </button>
+          </div>
         `;
         grid.appendChild(card);
       });
 
       document.querySelectorAll(".add-cart-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
-          addToUnifiedCart(Number(btn.dataset.id));
+          const id = Number(btn.dataset.id);
+          const optVal = document.getElementById(`opt-${id}`).value;
+          addToCart(id, optVal);
         });
       });
     }
 
-    function addToUnifiedCart(menuId) {
-      const target = MENU_ITEMS.find((m) => m.id === menuId);
-      if (!target) return;
+    function addToCart(id, option) {
+      const item = MENU_DATA.find((m) => m.id === id);
+      if (!item) return;
 
-      if (unifiedCart.has(menuId)) {
-        const existing = unifiedCart.get(menuId);
-        existing.qty += 1;
+      const extra = option.includes("+3,000원") ? 3000 : 0;
+      const key = `${id}__${option}`;
+
+      if (cartMap.has(key)) {
+        cartMap.get(key).qty += 1;
       } else {
-        unifiedCart.set(menuId, { ...target, qty: 1 });
+        cartMap.set(key, {
+          key,
+          store: item.store,
+          name: item.name,
+          option,
+          prepMinutes: item.prepMinutes,
+          unitPrice: item.price + extra,
+          qty: 1
+        });
       }
-      updateUnifiedCartUI();
+      renderCart();
+      showToast(`[${item.store}] ${item.name} 추가됨 (기존 메뉴 유지)`);
     }
 
-    function updateUnifiedCartUI() {
-      const tbody = document.getElementById("cartTableBody");
-      const storeBadge = document.getElementById("storeCountBadge");
-      const subtotalEl = document.getElementById("menuSubtotal");
-      const feeEl = document.getElementById("deliveryFee");
-      const totalEl = document.getElementById("finalTotalPrice");
-      const methodSelect = document.getElementById("orderMethod");
+    function renderCart() {
+      const tbody = document.getElementById("cartTbody");
+      const storeChip = document.getElementById("storeCountChip");
+      const discountBox = document.getElementById("discountInfoBox");
+      const subEl = document.getElementById("subtotalVal");
+      const feeEl = document.getElementById("feeVal");
+      const totEl = document.getElementById("totalVal");
+      const method = document.getElementById("methodSelect").value;
 
       tbody.innerHTML = "";
-
-      if (unifiedCart.size === 0) {
+      if (cartMap.size === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="3" style="text-align:center; color:#475569; padding:20px 8px;">
-              담긴 메뉴가 없습니다. 여러 가게 메뉴를 함께 담아보세요.
+            <td colspan="3" style="text-align:center; color:#475569; padding:22px 8px;">
+              담긴 메뉴가 없습니다. 김치찜·커피·과일을 함께 담아보세요!
             </td>
           </tr>
         `;
-        storeBadge.textContent = "담긴 가게 0곳";
-        subtotalEl.textContent = "0원";
+        storeChip.textContent = "담긴 가게 0곳";
+        discountBox.textContent = "서로 다른 가게 2곳 이상 담으면 통합 배달비 1,000원이 자동 할인됩니다!";
+        subEl.textContent = "0원";
         feeEl.textContent = "0원";
-        totalEl.textContent = "0원";
+        totEl.textContent = "0원";
         return;
       }
 
       let subtotal = 0;
-      const storeSet = new Set();
+      const stores = new Set();
 
-      unifiedCart.forEach((item) => {
-        storeSet.add(item.store);
-        const itemTotal = item.price * item.qty;
-        subtotal += itemTotal;
+      cartMap.forEach((entry) => {
+        stores.add(entry.store);
+        const sum = entry.unitPrice * entry.qty;
+        subtotal += sum;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
-            <strong style="color:#0f766e;">[${item.store}]</strong><br />
-            <span>${item.name}</span>
+            <strong style="color:#0f766e;">[${entry.store}]</strong> ${entry.name}<br />
+            <span style="font-size:0.8rem; color:#475569;">${entry.option} · 준비 ${entry.prepMinutes}분</span>
           </td>
           <td>
-            <div class="qty-group">
-              <button type="button" class="btn-secondary btn-mini qty-dec" data-id="${item.id}" aria-label="${item.name} 수량 1 감소">-</button>
-              <span>${item.qty}</span>
-              <button type="button" class="btn-secondary btn-mini qty-inc" data-id="${item.id}" aria-label="${item.name} 수량 1 증가">+</button>
+            <div class="qty-box">
+              <button type="button" class="btn-secondary btn-xs dec-btn" data-key="${entry.key}" aria-label="${entry.name} 수량 줄이기">-</button>
+              <span>${entry.qty}</span>
+              <button type="button" class="btn-secondary btn-xs inc-btn" data-key="${entry.key}" aria-label="${entry.name} 수량 늘리기">+</button>
             </div>
           </td>
-          <td><strong>${itemTotal.toLocaleString()}원</strong></td>
+          <td><strong>${sum.toLocaleString()}원</strong></td>
         `;
         tbody.appendChild(tr);
       });
 
-      const fee = methodSelect.value === "매장 동선 통합 픽업" ? 0 : 2000;
-      storeBadge.textContent = `담긴 가게 ${storeSet.size}곳 통합`;
-      subtotalEl.textContent = `${subtotal.toLocaleString()}원`;
-      feeEl.textContent = `${fee.toLocaleString()}원`;
-      totalEl.textContent = `${(subtotal + fee).toLocaleString()}원`;
+      const storeCount = stores.size;
+      const fee = method === "매장 동선 통합 픽업" ? 0 : storeCount >= 2 ? 2000 : 3000;
 
-      document.querySelectorAll(".qty-inc").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = Number(btn.dataset.id);
-          const item = unifiedCart.get(id);
+      storeChip.textContent = `담긴 가게 ${storeCount}곳 통합`;
+      discountBox.textContent =
+        storeCount >= 2
+          ? `다중 매장(${storeCount}곳) 통합 주문 혜택: 배달비 1,000원 자동 할인 적용됨!`
+          : "다른 가게 메뉴를 1개 더 담으면 통합 배달비 1,000원이 할인됩니다.";
+
+      subEl.textContent = `${subtotal.toLocaleString()}원`;
+      feeEl.textContent = `${fee.toLocaleString()}원`;
+      totEl.textContent = `${(subtotal + fee).toLocaleString()}원`;
+
+      document.querySelectorAll(".inc-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          const item = cartMap.get(b.dataset.key);
           if (item) {
             item.qty += 1;
-            updateUnifiedCartUI();
+            renderCart();
           }
         });
       });
 
-      document.querySelectorAll(".qty-dec").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = Number(btn.dataset.id);
-          const item = unifiedCart.get(id);
+      document.querySelectorAll(".dec-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          const k = b.dataset.key;
+          const item = cartMap.get(k);
           if (!item) return;
-          if (item.qty > 1) {
-            item.qty -= 1;
-          } else {
-            unifiedCart.delete(id);
-          }
-          updateUnifiedCartUI();
+          if (item.qty > 1) item.qty -= 1;
+          else cartMap.delete(k);
+          renderCart();
         });
       });
     }
@@ -853,100 +1639,172 @@
       tab.addEventListener("click", () => {
         document.querySelectorAll(".store-tab").forEach((t) => t.setAttribute("aria-pressed", "false"));
         tab.setAttribute("aria-pressed", "true");
-        currentStoreFilter = tab.dataset.store;
-        renderMenuList();
+        activeStore = tab.dataset.store;
+        renderMenus();
       });
     });
 
-    document.getElementById("orderMethod").addEventListener("change", updateUnifiedCartUI);
-
-    document.getElementById("startGuideBtn").addEventListener("click", () => {
-      if (guideTimer) return;
-      const captionEl = document.getElementById("guideCaptionText");
-      guideTimer = setInterval(() => {
-        guideIndex = (guideIndex + 1) % GUIDE_CAPTIONS.length;
-        captionEl.textContent = GUIDE_CAPTIONS[guideIndex];
-      }, 3000);
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchKeyword = e.target.value.trim().toLowerCase();
+      renderMenus();
     });
 
-    document.getElementById("stopGuideBtn").addEventListener("click", () => {
-      if (guideTimer) {
-        clearInterval(guideTimer);
-        guideTimer = null;
-      }
+    document.getElementById("methodSelect").addEventListener("change", renderCart);
+
+    // 6. 미디어 가이드 재생 / 일시정지 / 정지
+    function updateMediaSlide() {
+      document.getElementById("mediaCaptionText").textContent = MEDIA_CAPTIONS[mediaStep];
+      document.getElementById("mediaProgressFill").style.width = `${((mediaStep + 1) / MEDIA_CAPTIONS.length) * 100}%`;
+    }
+
+    document.getElementById("playMediaBtn").addEventListener("click", () => {
+      if (mediaTimer) return;
+      mediaTimer = setInterval(() => {
+        mediaStep = (mediaStep + 1) % MEDIA_CAPTIONS.length;
+        updateMediaSlide();
+      }, 2800);
     });
 
+    document.getElementById("pauseMediaBtn").addEventListener("click", () => {
+      clearInterval(mediaTimer);
+      mediaTimer = null;
+    });
+
+    document.getElementById("stopMediaBtn").addEventListener("click", () => {
+      clearInterval(mediaTimer);
+      mediaTimer = null;
+      mediaStep = 0;
+      updateMediaSlide();
+    });
+
+    // 주문 제출 -> 실시간 라이더 추적 화면으로 자연스럽게 전환
     document.getElementById("checkoutForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      const addressInput = document.getElementById("deliveryAddress");
-      const methodSelect = document.getElementById("orderMethod");
-      const addressError = document.getElementById("addressError");
-      const methodError = document.getElementById("methodError");
+      const addrInput = document.getElementById("addrInput");
+      const methodSelect = document.getElementById("methodSelect");
+      const addrErr = document.getElementById("addrError");
+      const methodErr = document.getElementById("methodError");
 
-      addressError.textContent = "";
-      methodError.textContent = "";
+      addrErr.textContent = "";
+      methodErr.textContent = "";
 
-      if (unifiedCart.size === 0) {
-        methodError.textContent = "장바구니에 메뉴를 1개 이상 먼저 담아주세요.";
+      if (cartMap.size === 0) {
+        methodErr.textContent = "장바구니에 메뉴를 1개 이상 먼저 담아주세요.";
         return;
       }
 
-      if (!addressInput.value.trim()) {
-        addressError.textContent = "수령 주소 또는 픽업 지점을 입력해 주세요. (필수 입력)";
-        addressInput.focus();
+      if (!addrInput.value.trim()) {
+        addrErr.textContent = "배달 주소 또는 픽업 지점을 입력해 주세요. (필수 입력)";
+        addrInput.focus();
         return;
       }
 
       if (!methodSelect.value) {
-        methodError.textContent = "주문 수령 방식을 선택해 주세요. (필수 선택)";
+        methodErr.textContent = "수령 방식을 선택해 주세요. (필수 선택)";
         methodSelect.focus();
         return;
       }
 
-      deliveryStep = 1;
-      updateTrackerUI();
-      const tracker = document.getElementById("deliveryTracker");
-      tracker.hidden = false;
-      document.getElementById("trackerMessage").textContent =
-        `[${methodSelect.value}] ${addressInput.value.trim()} — 선택하신 매장들에서 동시에 조리를 시작했습니다.`;
+      currentOrderAddress = addrInput.value.trim();
+      const selectedStores = Array.from(new Set(Array.from(cartMap.values()).map((v) => v.store)));
+      currentOrderStores = selectedStores.length > 0 ? selectedStores : ["진국김치찜", "모닝브루 카페", "싱싱과일바구니"];
+
+      simStage = 0;
+      showToast("통합 주문 완료! 실시간 라이더 위치 화면으로 이동합니다.");
+      switchView("tracking");
     });
 
-    function updateTrackerUI() {
-      [1, 2, 3].forEach((step) => {
-        const el = document.getElementById(`step${step}`);
-        el.classList.toggle("active", step === deliveryStep);
+    // 실시간 라이더 지도 및 매장별 조리 상태 렌더링
+    function renderTrackingState() {
+      const stage = RIDER_STAGES[simStage];
+      const marker = document.getElementById("riderMarkerGroup");
+      marker.setAttribute("transform", `translate(${stage.x}, ${stage.y})`);
+      document.getElementById("riderTagText").textContent = stage.tag;
+
+      document.getElementById("trackingOrderSummary").textContent =
+        `수령지: ${currentOrderAddress} · 통합 매장 ${currentOrderStores.length}곳`;
+      document.getElementById("etaHeadline").textContent = stage.eta;
+      document.getElementById("riderStatusSubtitle").textContent = stage.subtitle;
+      document.getElementById("overallCookChip").textContent = stage.chip;
+
+      const storeConfigs = [
+        { name: "진국김치찜", menuSample: "묵은지 돼지목살 김치찜 외", info: stage.kimchi },
+        { name: "모닝브루 카페", menuSample: "아이스 아메리카노 (L) 외", info: stage.coffee },
+        { name: "싱싱과일바구니", menuSample: "한입 손질 파인애플 스틱 외", info: stage.fruit }
+      ];
+
+      const listEl = document.getElementById("storeStatusList");
+      listEl.innerHTML = "";
+
+      storeConfigs.forEach((sc) => {
+        const isOrdered = currentOrderStores.includes(sc.name);
+        const li = document.createElement("li");
+        li.className = `store-status-card ${sc.info.pct === 100 ? "done" : ""}`;
+        li.innerHTML = `
+          <div class="status-row-top">
+            <strong>${sc.name} ${isOrdered ? "(주문 포함)" : "(샘플 동선)"}</strong>
+            <span class="cook-badge ${sc.info.cls}">${sc.info.status}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.86rem; color:#334155;">
+            <span>${sc.menuSample}</span>
+            <strong>${sc.info.time}</strong>
+          </div>
+          <div class="cook-bar-bg" aria-hidden="true">
+            <div class="cook-bar-fill" style="width:${sc.info.pct}%;"></div>
+          </div>
+        `;
+        listEl.appendChild(li);
       });
     }
 
-    document.getElementById("nextStepBtn").addEventListener("click", () => {
-      if (deliveryStep < 3) {
-        deliveryStep += 1;
-        updateTrackerUI();
-        const msgEl = document.getElementById("trackerMessage");
-        if (deliveryStep === 2) {
-          msgEl.textContent = "라이더가 김치찜·카페·과일 매장을 순차 경유하여 한 번에 픽업했습니다.";
-        } else if (deliveryStep === 3) {
-          msgEl.textContent = "통합 주문 메뉴가 모두 안전하게 수령 완료되었습니다!";
-        }
+    document.getElementById("nextStageBtn").addEventListener("click", () => {
+      if (simStage < RIDER_STAGES.length - 1) {
+        simStage += 1;
+        renderTrackingState();
+      } else {
+        showToast("이미 모든 메뉴가 배달 완료되었습니다!");
       }
     });
 
-    const guideModal = document.getElementById("guideModal");
-    const openModalBtn = document.getElementById("openGuideModalBtn");
-    const closeModalBtn = document.getElementById("closeGuideModalBtn");
-
-    openModalBtn.addEventListener("click", () => {
-      guideModal.hidden = false;
-      closeModalBtn.focus();
+    document.getElementById("resetSimBtn").addEventListener("click", () => {
+      clearInterval(autoSimTimer);
+      autoSimTimer = null;
+      simStage = 0;
+      renderTrackingState();
     });
 
-    closeModalBtn.addEventListener("click", () => {
-      guideModal.hidden = true;
-      openModalBtn.focus();
+    document.getElementById("autoSimulateBtn").addEventListener("click", () => {
+      if (autoSimTimer) return;
+      showToast("실시간 라이더 이동 및 조리 상태 시뮬레이션을 시작합니다.");
+      autoSimTimer = setInterval(() => {
+        if (simStage < RIDER_STAGES.length - 1) {
+          simStage += 1;
+          renderTrackingState();
+        } else {
+          clearInterval(autoSimTimer);
+          autoSimTimer = null;
+        }
+      }, 2200);
     });
 
-    renderMenuList();
-    updateUnifiedCartUI();
+    // 모달 키보드 접근성
+    const compareModal = document.getElementById("compareModal");
+    const openCompareBtn = document.getElementById("openCompareBtn");
+    const closeCompareBtn = document.getElementById("closeCompareBtn");
+
+    openCompareBtn.addEventListener("click", () => {
+      compareModal.hidden = false;
+      closeCompareBtn.focus();
+    });
+
+    closeCompareBtn.addEventListener("click", () => {
+      compareModal.hidden = true;
+      openCompareBtn.focus();
+    });
+
+    renderMenus();
+    renderCart();
+    renderTrackingState();
   </script>
 </body>
 </html>
